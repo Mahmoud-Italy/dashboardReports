@@ -1,4 +1,4 @@
-# vue.kzprint.com
+# vue.multitenancy
 
 ## Project setup
 ```

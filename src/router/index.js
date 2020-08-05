@@ -55,16 +55,14 @@ function requireAuth(to, from, next) {
   // store.dispatch('fetchAccessToken');
   // if (!store.state.accessToken) { next('/login'); } 
   // else { next(); }
-  //if(!localStorage.getItem('access_token')) { next('/login'); }
-  //else { next(); }
-  next();
+  if(!localStorage.getItem('access_token')) { next('/login'); }
+  else { next(); }
 }
 
 function requireUnAuth(to, from, next) {
   //store.dispatch('fetchAccessToken');
   // if (store.state.accessToken) { next('/'); } 
   // else { next(); }
-  //if(localStorage.getItem('access_token')) { next('/'); }
-  //else { next(); }
-  next();
+  if(localStorage.getItem('access_token')) { next('/'); }
+  else { next(); }
 }
