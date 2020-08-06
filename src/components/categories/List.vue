@@ -1,457 +1,532 @@
 <template>
     <div class="">
+        <Header v-on:headerToChild="onSearchSubmit"></Header>
 
-      <Header></Header>
+        <!-- Main -->
+        <main class="u-main">
+            <Navigation></Navigation>
 
-        <div class="page-container">
+            <div class="u-content">
 
-            <!-- Content Wrapper START -->
-            <div class="main-content">
-              <div class="container-fluid">
-                <div class="page-header">
-                  
-                  <h2 class="header-title">Categories</h2>
-                  <router-link :to="{ name: 'create-categories' }" 
-                      class="btn btn-primary btn-rounded btn-bold">Add New
-                  </router-link>
+                <div class="u-body min-h-700">
+                    <h1 class="h2 mb-2">Categories
+                       <!--  v-if="permission.hasCreate"  -->
+                        <router-link 
+                            :to="{ name: 'create-categories' }" 
+                            class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
+                            <span>Add New</span>
+                        </router-link>
 
-                    <!-- Role -->
-                    <label class="badge badge-success-soft badge-xl btn-rounded btn-bold pull-right">
-                      {{ auth.role }}
-                    </label>
-
-                  <div class="clearfix"></div>
-                  
-                  <div class="pull-right">
-                    <div class="dropdown">
-                      <div class="dropdown">
-                        <button type="button" data-toggle="dropdown" 
-                            class="btn btn-danger dropdown-toggle btn-bold"
-                            :disabled="bulkLoading">
-                          <span v-if="!bulkLoading">Bulk Actions</span>
-                          <span v-if="bulkLoading">
-                            <div class="loader loader-xs"></div>
-                          </span>
-                        </button> 
-                        <div class="dropdown-menu">
-                          <a v-if="status == 'inactive' || status == ''"
-                             @click="multiActive()"
-                             class="dropdown-item" href="javascript:;">Active
-                          </a>
-                          <a v-if="status == 'active' || status == ''"
-                              @click="multiInactive()"
-                              class="dropdown-item" href="javascript:;">Inactive
-                          </a>
-                          <a v-if="status != 'trash'"
-                              @click="multiMoveToTrash()"
-                              class="dropdown-item" href="javascript:;">Move to Trash
-                          </a>
-                          <a v-if="status == 'trash'"
-                              @click="multiRestoreFromTrash()"
-                              class="dropdown-item" href="javascript:;">Restore
-                          </a>
-                          <a v-if="status == 'trash'"
-                              @click="multiDeletePermanently()"
-                              class="dropdown-item" href="javascript:;">Delete Permanently
-                          </a>
+                        <div class="pull-rights ui-mt-15 pull-right ">
+                            <div class="dropdown">
+                                <span class="badge badge-md badge-pill badge-secondary-soft">
+                                    {{ auth.role }}
+                                </span>
+                            </div>
                         </div>
-                      </div> 
+                    </h1>
 
-                      <div class="dropdown">
-                        <button type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                            class="btn btn-info dropdown-toggle btn-bold">
-                          <span>Export</span>
-                        </button> 
-                        <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
-                          <div id="export_excel" class="dropdown-item cursor-pointer">Excel</div> 
-                          <div id="export_csv" class="dropdown-item cursor-pointer">CSV</div> 
-                          <a href="javascript:;" class="dropdown-item">Print</a>
-                        </div>
-                      </div>
-                      
-                    </div>
-                  </div>
-                        
-                  <!-- Breadcrumb -->
-                  <nav class="breadcrumb breadcrumb-dash">
-                    <router-link :to="{ name: 'dashboard' }" 
-                          class="breadcrumb-item">
-                          <i class="ti-home p-r-5"></i>Dashboard
-                    </router-link>
-                    <span class="breadcrumb-item active">Categories</span>
-                  </nav>
-                            
-                </div>  
-
-                <div class="card">
-
-                  <!-- Status  -->
-                  <div class="card-header">
-                    <h5 class="card-title text-muted f14">
-
-                      <router-link :to="{ name: 'categories' }"
-                        :class="(this.status == '') ? 'active' : '' ">All</router-link> 
-                      <span> ({{all}}) </span> <span class="obstacle"> | </span>
-
-                      <router-link :to="{ name: 'status-categories', params:{ status:'active'} }"
-                        :class="(this.status == 'active') ? 'active' : '' ">Active</router-link> 
-                      <span> ({{active}}) </span> <span class="obstacle"> | </span>
-
-                      <router-link :to="{ name: 'status-categories', params:{ status:'inactive'} }"
-                        :class="(this.status == 'inactive') ? 'active' : '' ">Inactive</router-link> 
-                      <span> ({{inactive}}) </span> <span class="obstacle"> | </span>
-
-                      <router-link :to="{ name: 'status-categories', params:{ status:'trash'} }"
-                        :class="(this.status == 'trash') ? 'active' : '' ">Trash</router-link> 
-                      <span> ({{trash}}) </span>
-
-                    </h5>
-
-                    <!-- Show Entries -->
-                    <div class="dropdown pull-right">
-
-                      <div class="display-inline">
-                        <button type="button" class="btn btn-light btn-sm dropdown-toggle" 
-                              id="dropdownMenuButton4" data-toggle="dropdown">
-                          <span>Show</span>
-                          <span v-if="!showLoading"> {{ show }}</span>
-                          <span v-if="showLoading">
-                            <span class="spinner-grow spinner-grow-sm mr-1" 
-                              role="status" aria-hidden="true"></span>
-                          </span>
-                        </button>
-                        <div class="dropdown-menu ui-min-w120" aria-labelledby="dropdownMenuButton4">
-                          <a class="dropdown-item cursor-pointer"
-                            :class="(this.show == 10) ? 'active' : ''"
-                            @click="onShow(10)">10
-                          </a>
-                          <a class="dropdown-item cursor-pointer"
-                            :class="(this.show == 25) ? 'active' : ''"
-                            @click="onShow(25)">25
-                          </a>
-                          <a class="dropdown-item cursor-pointer"
-                            :class="(this.show == 50) ? 'active' : ''"
-                            @click="onShow(50)">50
-                          </a>
-                          <a class="dropdown-item cursor-pointer"
-                            :class="(this.show == 100) ? 'active' : ''"
-                            @click="onShow(100)">100
-                          </a>
-                        </div>
-                      </div>
-
-                    </div>
-                    <!-- End Show Entries -->
-
+                    <!-- Breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <router-link :to="{ name: 'dashboard' }">Home</router-link>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Categories 
+                                <!-- <span v-if="dataLoading">
+                                    <span class="spinner-grow spinner-grow-sm mr-1" 
+                                        role="status" aria-hidden="true">
+                                    </span>
+                                </span>
+                                <span v-if="!dataLoading && rows.length" class="f12">
+                                    {{rows.length}}
+                                </span> -->
+                            </li>
+                        </ol>
                     
-                  </div>
-                  
-                  <div class="card-body">
-                      <table class="table">
-                        <thead>
-                           <tr class="top-border-none">
-                              <th scope="col" style="width: 5%">
-                                <div class="checkbox">
-                                  <input id="selectbl0" class="custom-control-input" 
-                                         type="checkbox"
-                                         v-model="selectAll" 
-                                         @click="select">
-                                  <label for="selectbl0"></label>
+                    <!-- Build Action button -->
+                    <div class="pull-rights ui-mt-50 pull-right ">
+                        <div class="dropdown display-flex-inline">
+                            <div class="dropdown ui-mr5">
+                                <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false" :disabled="bulkLoading">
+                                    <span v-if="!bulkLoading">Bulk Actions</span>
+                                    <span v-if="bulkLoading">
+                                        <span class="spinner-grow spinner-grow-sm mr-1" 
+                                        role="status" aria-hidden="true"></span>Loading...
+                                    </span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a v-if="status == 'inactive' || status == ''"
+                                        @click="multiActive()"
+                                        class="dropdown-item" href="javascript:;">Active
+                                    </a>
+                                    <a v-if="status == 'active' || status == ''"
+                                        @click="multiInactive()"
+                                        class="dropdown-item" href="javascript:;">Inactive
+                                    </a>
+                                    <!--  && permission.hasDestroy" -->
+                                    <a v-if="status != 'trash'"
+                                        @click="multiMoveToTrash()"
+                                        class="dropdown-item" href="javascript:;">Move to Trash
+                                    </a>
+
+                                    <a v-if="status == 'trash'"
+                                        @click="multiRestoreFromTrash()"
+                                        class="dropdown-item" href="javascript:;">Restore
+                                    </a>
+                                    <a v-if="status == 'trash'"
+                                        @click="multiDeletePermanently()"
+                                        class="dropdown-item" href="javascript:;">Delete Permanently
+                                    </a>
                                 </div>
-                              </th>
-                              <th scope="col" style="width: 25%">Name</th>
-                              <th scope="col" class="text-center" style="width: 15%">Parent</th>
-                              <th scope="col" class="text-center" style="width: 15%">Projects No.</th>
-                              <th scope="col" class="text-center" style="width: 20%">Author</th>
-                              <th scope="col" class="text-center" style="width: 10%">Date</th>
-                              <th scope="col" class="text-center" style="width: 10%">Actions</th>
-                            </tr>
-                        </thead>
-                          
-                          <!-- Loader -->
-                          <tr v-if="dataLoading">
-                            <td colspan="6" class="text-center">
-                              <div class="loader loader-lg mtop20"></div>
-                            </td>
-                          </tr>
+                            </div>
 
-                          <!-- No data found -->
-                          <tr v-if="!dataLoading && !rows.length">
-                            <td colspan="6" class="text-center">
-                                <span>No data found</span>
-                            </td>
-                          </tr>
-
-                        <!-- Rows -->
-                        <tbody v-if="!dataLoading && rows.length">
-                          <tr v-for="(row, index) in rows" :key="index">
-
-                            <td>
-                              <div class="checkbox">
-                                  <input :id="'selectbl'+row.id" class="custom-control-input" 
-                                          type="checkbox" 
-                                          v-model="selected" 
-                                          :value="row.id">
-                                  <label :for="'selectbl'+row.id"></label>
-                              </div>
-                            </td>
-
-                            <td>{{ row.name }}</td>
-
-                            <td class="text-center">
-                              <label class="badge badge-danger-soft badge-xl btn-rounded">No Parent</label>
-                            </td>
-
-                            <td class="text-center">0</td>
-
-                            <td>
-                              <div class="list-media">
-                                <div class="list-item">
-                                  <div class="media-img">
-                                    <img src="/assets/images/avatars/thumb-13.jpg" alt="">
-                                  </div>
-                                  <div class="info">
-                                    <span class="title">Marshall Nichols</span>
-                                    <span class="sub-title">Super admin</span>
-                                  </div>
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
+                                    :disabled="exportLoading"><span v-if="!exportLoading">Export</span>
+                                    <span v-if="exportLoading">
+                                        <span class="spinner-grow spinner-grow-sm mr-1" 
+                                        role="status" aria-hidden="true"></span>Loading...
+                                    </span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <download-excel
+                                        class = "dropdown-item cursor-pointer"
+                                        :fetch = "fetchExport"
+                                        :fields = "exp.json_fields"
+                                        :before-generate = "startDownload"
+                                        :before-finish = "finishDownload"
+                                        worksheet = "Categories"
+                                        name = "Categories.xls">Excel
+                                    </download-excel>
+                                    <download-excel
+                                        class = "dropdown-item cursor-pointer"
+                                        :fetch = "fetchExport"
+                                        :fields = "exp.json_fields"
+                                        :before-generate = "startDownload"
+                                        :before-finish = "finishDownload"
+                                        type = "csv"
+                                        worksheet = "Categories"
+                                        name = "Categories.xls">CSV
+                                    </download-excel>
+                                    <a class="dropdown-item" href="javascript:;" v-print="'#printMe'">Print</a>
                                 </div>
-                              </div>
-                            </td>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                <!-- End Breadcrumb -->
 
-                            
-                            
-                            <td class="text-center">{{ row.dateForHumans }}</td>
+                <!-- Card -->
+                <div class="card">
+                    <header class="card-header">
+                        <h2 class="h4 card-header-title">
+                            <router-link class="pg-hd"
+                                :to="{ name: 'categories' }"
+                                :class="(this.status == '') ? 'active' : '' ">All</router-link> 
+                            <span class="pg-hd no-decoration f14"> ({{count_all}}) </span> &nbsp;|&nbsp; 
 
-                            <td class="text-center">
-                              <div class="dropdown">
-                                <a href="" data-toggle="dropdown" class="text-black f20">
-                                  <span v-if="!row.loading" class="ti-more"></span> 
-                                  <div v-if="row.loading" class="loader loader-xs" style="margin-top: -15px;margin-left: -12px"></div>
-                                </a>
-                                <div class="dropdown-menu ui-min-w120">
-                                  <a v-if="!row.trash" href="javascript:;" 
-                                        @click="editRow(row)"
-                                        class="dropdown-item">Edit
-                                  </a>
-                                  <a v-if="!row.trash && row.status" 
-                                      @click="row.loading = true; activate(row.id)"
-                                      class="dropdown-item" href="javascript:;">Inactive
-                                  </a>
-                                  <a v-if="!row.trash && !row.status" 
-                                      @click="row.loading = true; inactivate(row.id)"
-                                      class="dropdown-item" href="javascript:;">Active
-                                  </a>
-                                  <a v-if="!row.trash" 
-                                      @click="row.loading = true; moveToTrash(row.id)"
-                                      class="dropdown-item" href="javascript:;">Move to Trash
-                                  </a>
-                                  <a v-if="row.trash" 
-                                      @click="row.loading = true; restoreFromTrash(row.id)"
-                                      class="dropdown-item" href="javascript:;">Restore
-                                  </a>
-                                  <a v-if="row.trash" 
-                                      @click="row.loading = true; deletePermanently(row.id)"
-                                      class="dropdown-item" href="javascript:;"> Delete Permanently
-                                  </a>
+                            <router-link class="pg-hd"
+                                :to="{ name: 'status-categories', params:{status: 'active'} }" 
+                                :class="(this.status == 'active') ? 'active' : '' ">Active</router-link>
+                            <span class="pg-hd no-decoration f14"> ({{count_active}}) </span> &nbsp;|&nbsp; 
+
+                            <router-link class="pg-hd"
+                                :to="{ name: 'status-categories', params:{status: 'inactive'} }" 
+                                :class="(this.status == 'inactive') ? 'active' : '' ">Inactive</router-link>
+                            <span class="pg-hd no-decoration f14"> ({{count_inactive}}) </span> &nbsp;|&nbsp; 
+
+                            <router-link class="pg-hd"
+                                :to="{ name: 'status-categories', params:{status: 'trash'} }" 
+                                :class="(this.status == 'trash') ? 'active' : '' ">Trash</router-link>
+                            <span class="pg-hd no-decoration f14"> ({{count_trash}}) </span>
+
+
+                            <!-- Show Entries -->
+                            <div class="dropdown pull-right ui-mt-10">
+                                <button type="button" class="btn btn-light btn-sm dropdown-toggle" 
+                                    id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span>Show</span>
+                                    <span v-if="!showLoading"> {{ show }}</span>
+                                    <span v-if="showLoading">
+                                        <span class="spinner-grow spinner-grow-sm mr-1" 
+                                        role="status" aria-hidden="true"></span>
+                                    </span>
+                                </button>
+                                <div class="dropdown-menu ui-min-w100" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item cursor-pointer"
+                                        :class="(this.show == 10) ? 'active' : ''"
+                                        @click="onShow(10)">10
+                                    </a>
+                                    <a class="dropdown-item cursor-pointer"
+                                        :class="(this.show == 25) ? 'active' : ''"
+                                        @click="onShow(25)">25
+                                    </a>
+                                    <a class="dropdown-item cursor-pointer"
+                                        :class="(this.show == 50) ? 'active' : ''"
+                                        @click="onShow(50)">50
+                                    </a>
+                                    <a class="dropdown-item cursor-pointer"
+                                        :class="(this.show == 100) ? 'active' : ''"
+                                        @click="onShow(100)">100
+                                    </a>
                                 </div>
-                              </div>
-                            </td>
+                            </div>
+                            <!-- End Show Entries -->
 
-                          </tr>
-                        </tbody>
+                        </h2>
+                    </header>
+                    <!-- End Card Header -->
 
-                      </table>
+                    <!-- Crad Body -->
+                    <div class="card-body pt-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%">
+                                            <div class="custom-control custom-checkbox">
+                                                <input id="expBox0" class="custom-control-input" type="checkbox"
+                                                    v-model="selectAll" @click="select">
+                                                <label class="custom-control-label" for="expBox0"></label>
+                                            </div>
+                                        </th>
+                                        <th style="width:30%">Title
+                                            <span v-if="!orderLoading"
+                                                @click="onOrderBy('title')"
+                                                class="cursor-pointer " 
+                                                :class="(this.order == 'DESC') 
+                                                        ? 'ti-arrow-down' 
+                                                        :(this.order == 'ASC') ? 'ti-arrow-up'
+                                                        : 'ti-exchange-vertical'">
+                                            </span>
+                                            <span v-if="orderLoading">
+                                                <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                    role="status" aria-hidden="true"></span>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" style="width: 10%">Destination</th>
+                                        <th class="text-center" style="width: 20%">Author</th>
+                                        <th class="text-center" style="width: 15%">No. Packages</th>
+                                        <th class="text-center" style="width: 15%">Date</th>
+                                        <th class="text-center" style="width: 10%">Actions</th>
+                                    </tr>
+                                </thead>
 
-                      <nav  v-if="rows.length !== 0" aria-label="Page navigation example ui-mt20">
+                                <tbody v-if="dataLoading">
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            <div class="spinner-grow" role="status">
+                                              <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                                <tbody v-if="!dataLoading && !rows.length">
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            <span>No results found.</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                                <tbody v-if="!dataLoading && rows.length">
+                                    <tr v-for="(row, index) in rows" 
+                                        :key="index" 
+                                        class="f14">
+                                    
+                                    <td class="font-weight-semi-bold">
+                                        <div class="custom-control custom-checkbox">
+                                            <input :id="'expBox'+row.id" 
+                                                class="custom-control-input" 
+                                                type="checkbox" 
+                                                v-model="selected" :value="row.id">
+                                            <label class="custom-control-label" :for="'expBox'+row.id">
+                                            </label>
+                                        </div>
+                                    </td>
+
+                                    <td class="font-weight-semi-bold">
+                                        <!-- v-if="permission.hasEdit"  -->
+                                        <router-link 
+                                                :to="{ name: 'edit-categories', params:{id: row.id} }" 
+                                                class="default-color text-decoration-hover">
+                                            {{ row.title }} 
+                                        </router-link>
+                                        <!-- <span v-if="!permission.hasEdit">{{ row.title }}</span> -->
+                                    </td>
+
+                                
+                                    <td class="font-weight-semi-bold text-center">
+                                        <span v-if="!row.destination"> - </span>
+                                        <router-link v-if="row.destination" 
+                                            :to="{ name: 'filter-destination', 
+                                            params:{filter_by: 'destination', 'filter':row.destination} }" 
+                                            class="text-decoration-hover">
+                                            <span class="badge badge-md badge-pill badge-danger-soft">
+                                                {{ row.destination.title }}
+                                            </span>
+                                        </router-link>
+                                    </td>
+
+                                    <td class="font-weight-semi-bold text-center">
+                                        <span v-if="!row.user" class="text-center"> - </span>
+                                        <router-link v-if="row.user" 
+                                            :to="{ name: 'filter-destination', 
+                                                params:{filter_by: 'author', 'filter':row.user.id}}" 
+                                            class="text-decoration-hover black">
+                                            <div v-if="row.user" class="align-items-center">
+                                                <img class="u-avatar-xs rounded-circle mr-2"
+                                                    src="/assets/img/default_avatar.png">
+                                                <span class="media-body">{{ row.user.name }}</span>
+                                            </div>
+                                        </router-link>
+                                    </td>
+
+                                    <td class="font-weight-semi-bold text-center">
+                                        <span> {{ row.packages }} </span>
+                                    </td>
+
+                                    <td v-html="(row.deleted_at) ? row.deleted_at : 
+                                                (row.updated_at) ? row.updated_at : row.created_at"
+                                        class="font-weight-semi-bold text-center f12">
+                                    </td>
+
+                                    <td class="text-center">
+                                        <div class="dropdown">
+                                            <a id="tableWithImage1MenuInvoker" class="u-icon-sm link-muted" 
+                                                href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false"
+                                                data-toggle="dropdown"
+                                                data-offset="8">
+                                                <span v-if="!row.loading" class="ti-more"></span>
+                                                <span v-if="row.loading" class="spinner-grow spinner-grow-sm mr-1" 
+                                                    role="status" aria-hidden="true">
+                                                </span>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right" style="width: 150px">
+                                                <div class="card border-0 p-3">
+                                                    <ul class="list-unstyled mb-0">
+                                                        <li v-if="!row.trash">
+                                                            <!-- v-if="permission.hasEdit" -->
+                                                            <router-link 
+                                                                class="d-block link-dark"
+                                                                :to="{ name: 'edit-categories', 
+                                                                params:{id: row.id}}">
+                                                                Edit
+                                                            </router-link>
+                                                        </li>
+                                                        <li v-if="!row.trash">
+                                                            <a @click="row.loading = true; 
+                                                                inactivate(row.id)"
+                                                                v-html="(row.status) ? 'Inactive' : ''"
+                                                                class="d-block link-dark" href="javascript:;">
+                                                            </a>
+                                                        </li>
+                                                        <li v-if="!row.trash">
+                                                            <a @click="row.loading = true; 
+                                                                activate(row.id)"
+                                                                v-html="(!row.status) ? 'Active' : ''"
+                                                                class="d-block link-dark" href="javascript:;">
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <!-- permission.hasDestroy -->
+                                                            <a v-if="row.trash == 0" 
+                                                                @click="row.loading = true; 
+                                                                moveToTrash(row.id)"
+                                                                class="d-block link-dark" href="javascript:;">Move to Trash
+                                                            </a>
+                                                            <a v-if="row.trash == 1" 
+                                                                @click="row.loading = true; 
+                                                                restoreFromTrash(row.id)"
+                                                                class="d-block link-dark" href="javascript:;">Restore
+                                                            </a>
+                                                            <a v-if="row.trash == 1" 
+                                                                @click="row.loading = true; 
+                                                                deletePermanently(row.id)"
+                                                                class="d-block link-dark" href="javascript:;">Delete Permanently
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>
+                                            <div class="custom-control custom-checkbox">
+                                                <input id="expBox0" class="custom-control-input" type="checkbox"
+                                                    v-model="selectAll" @click="select">
+                                                <label class="custom-control-label" for="expBox0"></label>
+                                            </div>
+                                        </th>
+                                        <th>Title</th>
+                                        <th class="text-center">Destination</th>
+                                        <th class="text-center">Author</th>
+                                        <th class="text-center">No. Packages</th>
+                                        <th class="text-center">Date</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </tfoot>
+
+                            </table>
+                        </div>
+
+                        <nav  v-if="rows.length !== 0" aria-label="Page navigation example ui-mt20">
                             <ul class="pagination">
                                 <li v-bind:class="[{disabled: !pagination.prev_page_url}]" class="page-item">
                                     <a class="page-link" href="javascript:" 
-                                        @click="fetchData(pagination.prev_page_url)">Previous</a>
+                                        @click="fetchData(pagination.prev_page_url, true)">Previous</a>
                                 </li>
                                 <li v-bind:class="[{disabled: !pagination.next_page_url}]" class="page-item">
                                     <a class="page-link" href="javascript:" 
-                                        @click="fetchData(pagination.next_page_url)">Next</a>
+                                        @click="fetchData(pagination.next_page_url, true)">Next</a>
                                 </li>
                             </ul>
-                            <p class="pull-right ui-mt-30 f13">
+                            <p class="pull-right ui-mt-50 f13">
                                 <i>Page {{ pagination.current_page }} or {{ pagination.last_page }}</i>
                             </p>
-                      </nav>
-
+                        </nav>
 
                     </div>
-
-
-                    
                 </div>
-              </div>
             </div>
+            <!-- End Content Body -->
 
-          <Footer></Footer>
+            <Footer></Footer>
         </div>
+        <!-- Content -->
 
-  </div>
+        </main>
+        <!-- End Main -->
+    </div>
 </template>
 
 <script>
-  import Header from '../layouts/Header.vue';
-  import Footer from '../layouts/Footer.vue';
-  import iziToast from 'izitoast';
-
-  export default {
-    name: 'List',
-    components: {
-      Header,
-      Footer
-    },
-    data() {
-      return {
-        // auth
-        auth: {
-          role: 'Super admin',
-          access_token: '',
+    import Header from '../layouts/Header.vue';
+    import Navigation from '../layouts/Navigation';
+    import Footer from '../layouts/Footer.vue';
+    import iziToast from 'izitoast';
+    
+    export default {
+        name: 'List',
+        components: {
+            Header,
+            Navigation,
+            Footer
         },
-        // headers
-        all: 0,
-        active: 0,
-        inactive: 0,
-        trash: 0,
+        data(){
+            return {
+                exp: {
+                   json_fields: {
+                        'id': 'id',
+                        'title': 'title',
+                        'body': 'body',
+                        'created_at': 'created_at',
+                    }, 
+                    json_data: [],
+                    json_meta: [
+                        [
+                            {
+                                'key': 'charset',
+                                'value': 'utf-8'
+                            }
+                        ]
+                    ],
+                },
+                auth: { 
+                    role: '',
+                    access_token: '',
+                },
+                permission: {
+                    hasCreate: '',
+                    hasEdit: '',
+                    hasDestroy: '',
+                },
+                //
+                count_all: 0,
+                count_active: 0,
+                count_inactive: 0,
+                count_trash: 0,
 
-        // extra
-        selectAll: false,
-        selected: [],
-        plural: '',
-        status: '',
-        show: 10,
-        rows: [],
-        total_rows: 0,
-        pagination: {},
-        showLoading: false,
-        bulkLoading: false,
-        dataLoading: true,
-        somethingWrong: false,
-        //
-      }
-    },
-    mounted() {},
-    watch: {
-      $route() {
-        // status By
-        if(this.$route.params.status) {
-          this.status = this.$route.params.status;
-        } else {
-          this.status = '';
-        }
+                search: '',
+                status: '',
+                filter_by: '',
+                filter: '',
+                order: '',
+                order_by: '',
 
-        //
-        this.fetchData('', true);
-      }
-    },
-    computed: {},
-    created() {
-      // access_token & Role
-      if(localStorage.getItem('access_token')) {
-        this.auth.access_token = localStorage.getItem('access_token');
-      }
-      if(localStorage.getItem('role')) {
-        this.auth.role = localStorage.getItem('role');
-      }
+                selected: [],
+                selectAll: false,
+                plural: '',
 
-      // status By
-      if(this.$route.params.status) {
-        this.status = this.$route.params.status;
-      } else {
-        this.status = '';
-      }
+                dataLoading: true,
+                bulkLoading: false,
+                exportLoading: false,
+                sortLoading: false,
+                showLoading: false,
+                orderLoading: false,
+                something_went_wrong: false,
+                rows: [],
+                show: 10,
+                pagination: {},
+            }
+        },
+        mounted() {},
+        watch: {
+          $route() {
+            // Status By
+            if(this.$route.params.status) {
+                this.status = this.$route.params.status;
+            } else {
+                this.status = '';
+            }
 
-      //
-      this.fetchData('', true);
-    },
-    methods: {
-      //
+            // Filters by
+            if(this.$route.params.filter_by) {
+                this.filter_by = this.$route.params.filter_by;
+            }
+            if(this.$route.params.filter) {
+                this.filter = this.$route.params.filter;
+            }
 
-      fetchData(page_url, loading=false) {
-          if(loading) {
-            this.dataLoading = true;
+            this.fetchData('', true);
           }
+        },
+        created() {
+            // AccessToken & Role
+            if(localStorage.getItem('role')) {
+                this.auth.role = localStorage.getItem('role');
+            }
+            if(localStorage.getItem('access_token')) {
+                this.auth.access_token = localStorage.getItem('access_token');
+            }
 
-          this.somethingWrong = false;
-          this.plural = '',
-          this.selectAll = false;
-          this.selected = [];
+            // Status By
+            if(this.$route.params.status) {
+                this.status = this.$route.params.status;
+            }
 
-          this.axios.defaults.headers.common = {
-              'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-              'Authorization': `Bearer ` + this.auth.access_token,
-          };
-          const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-          const options = {
-              url: page_url || window.baseURL+'/categories',
-              method: 'GET',
-              data: {},
-              params: {
-                status: this.status,
-                search: this.search,
-                paginate: this.show,
-                order_by: this.order_by,
-              },
-          }
-          let vm = this;
-          this.axios(options, config)
-              .then(res => {
-                  this.dataLoading = false;
-                  this.sortLoading = false;
-                  this.bulkLoading = false;
-                  this.showLoading = false;
-                  this.orderLoading = false;
+            // Filters by
+            if(this.$route.params.filter_by) {
+                this.filter_by = this.$route.params.filter_by;
+            }
+            if(this.$route.params.filter) {
+                this.filter = this.$route.params.filter;
+            }
 
-                  // headers
-                  this.all = res.data.all;
-                  this.active = res.data.active;
-                  this.inactive = res.data.inactive;
-                  this.trash = res.data.trash;
-
-                  // rows & paginate
-                  this.rows = res.data.rows;
-                  if(res.data.paginate.total) {
-                    this.total_rows = res.data.paginate.total;
-                    vm.makePagination(res.data.paginate)
-                  }
-
-              })
-              .catch(err => {
-
-                  // 403 Forbidden
-                  if(err.response && err.response.status == 403) {
-                    this.removeLocalStorage()
-                    this.$router.push({ name: 'forbidden' })
-
-                  } else {
-                    this.dataLoading = false;
-                    this.somethingWrong = true;
-
-                    iziToast.warning({
-                      icon: 'ti-ban',
-                      title: 'Wow, man',
-                      message: 'Slow down, '+err,
-                    });
-                  }
-
-              })
-              .finally(() => { })
-      },
-
-
-            // Pagination
-            makePagination(meta) {
-                let pagination = {
-                    current_page: meta.current_page,
-                    last_page: meta.last_page,
-                    next_page_url: meta.next_page_url,
-                    prev_page_url: meta.prev_page_url
-                }
-                this.pagination = pagination;
-            },
+            this.fetchData('', true);
+        },
+        methods: {
 
             onSearchSubmit(value) {
                 this.search = value;
@@ -464,28 +539,116 @@
                 this.fetchData('', true);
             },
 
-            onOrderBy(){
+            onOrderBy(column){
                 this.orderLoading = true;
-                if(this.order_by == 'DESC') {
-                    this.order_by = 'ASC';
+                this.order_by = column;
+                if(this.order == 'DESC') {
+                    this.order = 'ASC';
                 } else {
-                    this.order_by = 'DESC';
+                    this.order = 'DESC';
                 }
                 this.fetchData('', true);
             },
 
-            removeLocalStorage() {
-              localStorage.removeItem('access_token');
-              localStorage.removeItem('role_id');
-              localStorage.removeItem('username');
-              localStorage.removeItem('avatar');
-              localStorage.removeItem('id');
+            // Fetch Data
+            fetchData(page_url, loading=false) {
+                if(loading) { this.dataLoading = true; }
+                this.something_went_wrong = false;
+                this.plural = '',
+                this.selectAll = false;
+                this.selected = [];
+
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                let vm = this;
+                const options = {
+                    url: page_url || window.baseURL+'/categories',
+                    method: 'GET',
+                    data: {},
+                    params: {
+                        status: this.status,
+                        filter_by: this.filter_by,
+                        filter: this.filter,
+                        search: this.search,
+                        show: this.show,
+                        order: this.order,
+                        order_by: this.order_by
+                    },
+                }
+                this.axios(options)
+                    .then(res => {
+                        this.dataLoading = false;
+                        this.bulkLoading = false;
+                        this.showLoading = false;
+                        this.orderLoading = false;
+
+                        this.count_all = res.data.all;
+                        this.count_active = res.data.active;
+                        this.count_inactive = res.data.inactive;
+                        this.count_trash = res.data.trash;
+
+                        this.rows = res.data.rows;
+                        if(res.data.pagiante.total) {
+                            this.total_data = res.data.pagiante.total;
+                            vm.makePagination(res.data.pagiante)
+                        }
+                    })
+                    .catch(err => {
+                        // 403 Forbidden
+                        if(err.response && err.response.status == 403) {
+                            this.removeLocalStorage()
+                            this.$router.push({ name: 'forbidden' })
+                        } else {
+                            this.btnLoading = false;
+                            iziToast.warning({
+                                icon: 'ti-alert',
+                                title: 'Wow-man,',
+                                message: err.response.data.message
+                            });
+                        }
+                    })
+                    .finally(() => {})
             },
 
+            // Pagination
+            makePagination(meta) {
+                let pagination = {
+                    current_page: meta.current_page,
+                    last_page: meta.last_page,
+                    next_page_url: meta.next_page_url,
+                    prev_page_url: meta.prev_page_url
+                }
+                this.pagination = pagination;
+            },
+
+            // Fetch Export to Excel, CSV
+            async fetchExport(){
+                const res = await 
+                    this.axios.post(window.baseURL+'/categories/export?id='+this.selected);
+                return res.data.rows;
+            },
+            startDownload(){
+                this.exportLoading = true;
+            },
+            finishDownload(){
+                this.exportLoading = false;
+                iziToast.success({
+                    icon: 'ti-check',
+                    title: 'Great job,',
+                    message: 'File Generated Successfully',
+                });
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+            },
+        
 
 
-      
-      /** Bulk Actions **/
+        /** Bulk Actions **/
           // ON Select
           select() {
             this.selected = [];
@@ -721,33 +884,8 @@
             },
         /** END Bulk Actions **/
 
-      },
 
 
-
-      // Before Enter...
-      // beforeRouteEnter (to, from, next) { 
-      //   next(vm => { 
-      //     next();
-      //   }) 
-      // },
-
-      // Before Leaving..
-      // beforeRouteLeave(to, from, next) { 
-      //   if(this.row.title && !this.isSubmit) {
-      //     const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-      //       if (answer) {
-      //         next()
-      //       } else {
-      //         next(false)
-      //       }
-      //   } else { next() }
-      // },
-
-  }
+        },
+    }
 </script>
-
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped="">
-</style>

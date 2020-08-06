@@ -7,7 +7,7 @@
             <!-- Footer Menu -->
             <ul class="list-inline mb-3 mb-md-0">
                 <li class="list-inline-item mr-4">
-                    Thank you for using <a class="text-muted" href="#">iBlog {{ row.version }}</a>
+                    <!-- Thank you for using <a class="text-muted" href="#">iBlog {{ row.version }}</a> -->
                 </li>
             </ul>
             <!-- End Footer Menu -->

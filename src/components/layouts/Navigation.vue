@@ -32,11 +32,11 @@
 
                         <!-- Destinations -->
                         <li class="u-sidebar-nav-menu__item">
-                            <router-link :to="{ name: 'categories' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/dashboard/categories' || 
-                                        this.$route.path == '/dashboard/categories/status/active' ||
-                                        this.$route.path == '/dashboard/categories/status/inactive' ||
-                                        this.$route.path == '/dashboard/categories/status/trash') ? 'active' : '' ">
+                            <router-link :to="{ name: 'destinations' }" class="u-sidebar-nav-menu__link"
+                                :class="(this.$route.path == '/destinations' || 
+                                        this.$route.path == '/destinations/status/active' ||
+                                        this.$route.path == '/destinations/status/inactive' ||
+                                        this.$route.path == '/destinations/status/trash') ? 'active' : '' ">
                                 <span class="ti-map-alt u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Destinations</span>
                             </router-link>
@@ -46,10 +46,10 @@
                         <!-- Categories -->
                         <li class="u-sidebar-nav-menu__item">
                             <router-link :to="{ name: 'categories' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/dashboard/categories' || 
-                                        this.$route.path == '/dashboard/categories/status/active' ||
-                                        this.$route.path == '/dashboard/categories/status/inactive' ||
-                                        this.$route.path == '/dashboard/categories/status/trash') ? 'active' : '' ">
+                                :class="(this.$route.path == '/categories' || 
+                                        this.$route.path == '/categories/status/active' ||
+                                        this.$route.path == '/categories/status/inactive' ||
+                                        this.$route.path == '/categories/status/trash') ? 'active' : '' ">
                                 <span class="ti-harddrives u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Categories</span>
                             </router-link>
@@ -58,12 +58,12 @@
                         
                         <!-- Writers -->
                         <li class="u-sidebar-nav-menu__item">
-                            <router-link :to="{ name: 'authors' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/blogs/authors' ||
-                                        this.$route.path == '/dashboard/posts/status/published' ||
-                                        this.$route.path == '/dashboard/posts/status/draft' || 
-                                        this.$route.path == '/dashboard/posts/status/trash' ||
-                                        this.$route.path == '/dashboard/posts/create') ? 'active' : '' ">
+                            <router-link :to="{ name: 'writers' }" class="u-sidebar-nav-menu__link"
+                                :class="(this.$route.path == '/writers' ||
+                                        this.$route.path == '/writers/status/active' ||
+                                        this.$route.path == '/writers/status/inactive' || 
+                                        this.$route.path == '/writers/status/trash' ||
+                                        this.$route.path == '/writers/create') ? 'active' : '' ">
                                 <span class="ti-agenda u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Writers</span>
                             </router-link>
@@ -72,12 +72,12 @@
 
                         <!-- Posts -->
                         <li class="u-sidebar-nav-menu__item">
-                            <router-link :to="{ name: 'posts' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/posts' ||
-                                        this.$route.path == '/posts/status/published' ||
-                                        this.$route.path == '/posts/status/draft' || 
-                                        this.$route.path == '/posts/status/trash' ||
-                                        this.$route.path == '/posts/create') ? 'active' : '' ">
+                            <router-link :to="{ name: 'articles' }" class="u-sidebar-nav-menu__link"
+                                :class="(this.$route.path == '/articles' ||
+                                        this.$route.path == '/articles/status/published' ||
+                                        this.$route.path == '/articles/status/draft' || 
+                                        this.$route.path == '/articles/status/trash' ||
+                                        this.$route.path == '/articles/create') ? 'active' : '' ">
                                 <span class="ti-pencil-alt u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Articles</span>
                             </router-link>
@@ -87,12 +87,12 @@
 
                         <!-- Packages -->
                         <li class="u-sidebar-nav-menu__item">
-                            <router-link :to="{ name: 'tags' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/dashboard/tags' || 
-                                        this.$route.path == '/dashboard/tags/status/active' ||
-                                        this.$route.path == '/dashboard/tags/status/inactive' ||
-                                        this.$route.path == '/dashboard/tags/status/trash' ||
-                                        this.$route.path == '/dashboard/tags/create') ? 'active' : '' ">
+                            <router-link :to="{ name: 'packages' }" class="u-sidebar-nav-menu__link"
+                                :class="(this.$route.path == '/packages' || 
+                                        this.$route.path == '/packages/status/active' ||
+                                        this.$route.path == '/packages/status/inactive' ||
+                                        this.$route.path == '/packages/status/trash' ||
+                                        this.$route.path == '/packages/create') ? 'active' : '' ">
                                 <span class="ti-package u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Packages</span>
                             </router-link>
@@ -101,12 +101,12 @@
 
                         <!-- Cruises -->
                         <li class="u-sidebar-nav-menu__item">
-                            <router-link :to="{ name: 'tags' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/dashboard/tags' || 
-                                        this.$route.path == '/dashboard/tags/status/active' ||
-                                        this.$route.path == '/dashboard/tags/status/inactive' ||
-                                        this.$route.path == '/dashboard/tags/status/trash' ||
-                                        this.$route.path == '/dashboard/tags/create') ? 'active' : '' ">
+                            <router-link :to="{ name: 'cruises' }" class="u-sidebar-nav-menu__link"
+                                :class="(this.$route.path == '/cruises' || 
+                                        this.$route.path == '/cruises/status/active' ||
+                                        this.$route.path == '/cruises/status/inactive' ||
+                                        this.$route.path == '/cruises/status/trash' ||
+                                        this.$route.path == '/cruises/create') ? 'active' : '' ">
                                 <span class="ti-gift u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Cruises</span>
                             </router-link>
@@ -116,11 +116,11 @@
                         <!-- Tags -->
                         <li class="u-sidebar-nav-menu__item">
                             <router-link :to="{ name: 'tags' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/dashboard/tags' || 
-                                        this.$route.path == '/dashboard/tags/status/active' ||
-                                        this.$route.path == '/dashboard/tags/status/inactive' ||
-                                        this.$route.path == '/dashboard/tags/status/trash' ||
-                                        this.$route.path == '/dashboard/tags/create') ? 'active' : '' ">
+                                :class="(this.$route.path == '/tags' || 
+                                        this.$route.path == '/tags/status/active' ||
+                                        this.$route.path == '/tags/status/inactive' ||
+                                        this.$route.path == '/tags/status/trash' ||
+                                        this.$route.path == '/tags/create') ? 'active' : '' ">
                                 <span class="ti-tag u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Tags</span>
                             </router-link>
@@ -140,11 +140,11 @@
                         <!-- Pages -->
                         <li class="u-sidebar-nav-menu__item">
                             <router-link :to="{ name: 'pages' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/dashboard/pages' || 
-                                        this.$route.path == '/dashboard/pages/status/active' ||
-                                        this.$route.path == '/dashboard/pages/status/inactive' ||
-                                        this.$route.path == '/dashboard/pages/status/trash' ||
-                                        this.$route.path == '/dashboard/pages/create') ? 'active' : '' ">
+                                :class="(this.$route.path == '/pages' || 
+                                        this.$route.path == '/pages/status/active' ||
+                                        this.$route.path == '/pages/status/inactive' ||
+                                        this.$route.path == '/pages/status/trash' ||
+                                        this.$route.path == '/pages/create') ? 'active' : '' ">
                                 <span class="ti-files u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Pages</span>
                             </router-link>
@@ -154,28 +154,23 @@
                         <!-- Users -->
                         <li class="u-sidebar-nav-menu__item">
                             <router-link :to="{ name: 'users' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/dashboard/users' || 
-                                        this.$route.path == '/dashboard/users/status/administrator' ||
-                                        this.$route.path == '/dashboard/users/status/contributor' ||
-                                        this.$route.path == '/dashboard/users/status/author' ||
-                                        this.$route.path == '/dashboard/users/status/editor' ||
-                                        this.$route.path == '/dashboard/users/status/subscriber' ||
-                                        this.$route.path == '/dashboard/users/status/trash' ||
-                                        this.$route.path == '/dashboard/users/create') ? 'active' : '' ">
+                                :class="(this.$route.path == '/users' || 
+                                        this.$route.path == '/users/status/trash' ||
+                                        this.$route.path == '/users/create') ? 'active' : '' ">
                                 <span class="ti-user u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Users</span>
                             </router-link>
                         </li>
                         <!-- End Users -->
 
-                        <!-- Roles -->
-                        <li v-if="nav_roles == 'show'"
+                        <!-- Roles v-if="nav_roles == 'show'"-->
+                        <li 
                             class="u-sidebar-nav-menu__item">
                             <router-link :to="{ name: 'roles' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/dashboard/roles' || 
-                                        this.$route.path == '/dashboard/roles/status/active' ||
-                                        this.$route.path == '/dashboard/roles/status/inactive' ||
-                                        this.$route.path == '/dashboard/roles/trash') ? 'active' : '' ">
+                                :class="(this.$route.path == '/roles' || 
+                                        this.$route.path == '/roles/status/active' ||
+                                        this.$route.path == '/roles/status/inactive' ||
+                                        this.$route.path == '/roles/trash') ? 'active' : '' ">
                                 <span class="ti-lock u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Roles</span>
                             </router-link>
@@ -187,7 +182,7 @@
                         <li v-if="nav_activity_logs == 'show'"
                             class="u-sidebar-nav-menu__item">
                             <router-link :to="{ name: 'logs' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/dashboard/activity-logs') ? 'active' : '' ">
+                                :class="(this.$route.path == '/activity-logs') ? 'active' : '' ">
                                 <span class="ti-brush-alt u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Activity Logs</span>
                             </router-link>
@@ -197,8 +192,8 @@
                         <!-- Cache Management -->
                         <li v-if="nav_cache_management == 'show'"
                             class="u-sidebar-nav-menu__item">
-                            <router-link :to="{ name: 'cache-management' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/dashboard/cache-management') ? 'active' : '' ">
+                            <router-link :to="{ name: 'settings' }" class="u-sidebar-nav-menu__link"
+                                :class="(this.$route.path == '/cache-management') ? 'active' : '' ">
                                 <span class="ti-pulse u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Cache Management</span>
                             </router-link>

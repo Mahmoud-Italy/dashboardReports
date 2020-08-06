@@ -100,7 +100,7 @@
                            data-toggle="dropdown"
                            data-offset="0">
                             <img class="u-header-avatar img-fluid rounded-circle mr-md-3" 
-                                :src="auth.avatar" alt="User Profile">
+                                src="/assets/img/default_avatar.png" alt="User Profile">
                             <span class="text-dark d-none d-md-inline-flex align-items-center">
                                 {{ auth.username }}
                                 <span class="ti-angle-down text-muted ml-4"></span>
@@ -113,7 +113,7 @@
                                 <div class="card-body p-0">
                                     <ul class="list-unstyled mb-0">
                                         <li class="mb-3">
-                                            <router-link :to="{ name: 'edit-user', params:{id: auth.user_id} }" 
+                                            <router-link :to="{ name: 'edit-users', params:{id: auth.user_id} }" 
                                                     class="link-dark">Update Profile
                                             </router-link>
                                         </li>

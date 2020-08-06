@@ -21,7 +21,7 @@
                                     <input id="email" 
                                         class="form-control" 
                                         type="email" 
-                                        v-model="email" 
+                                        v-model="row.email" 
                                         placeholder="Email Address">
                                 </div>
                                 <!-- End Email Address -->
@@ -32,7 +32,7 @@
                                     <input id="password" 
                                         class="form-control" 
                                         type="password" 
-                                        v-model="password" 
+                                        v-model="row.password" 
                                         placeholder="Password" 
                                         autocomplete="off">
                                 </div>
@@ -121,7 +121,6 @@
                 this.btnLoading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer `,
                 };
                 const options = {
                     url: window.baseURL+'/auth/login',
@@ -137,19 +136,11 @@
                     this.btnLoading = false;
                     this.row.password = '';
 
-                        localStorage.setItem('accessToken', res.data.accessToken);
-                        localStorage.setItem('username', res.data.username);
-                        localStorage.setItem('user_id', res.data.user_id);
-                        localStorage.setItem('avatar', res.data.avatar);
-                        localStorage.setItem('role', res.data.role);
-
-                        // Set default Navigation
-                        localStorage.setItem('nav_roles', 'show');
-                        localStorage.setItem('nav_sliders', 'show');
-                        localStorage.setItem('nav_themes', 'show');
-                        localStorage.setItem('nav_reports', 'hide');
-                        localStorage.setItem('nav_activity_logs', 'show');
-                        localStorage.setItem('nav_cache_management', 'show');
+                        localStorage.setItem('access_token', res.data.access_token);
+                        // localStorage.setItem('username', res.data.username);
+                        // localStorage.setItem('user_id', res.data.user_id);
+                        // localStorage.setItem('avatar', res.data.avatar);
+                        // localStorage.setItem('role', res.data.role);
 
                         this.$router.push({ name: 'dashboard' })
 
@@ -158,11 +149,22 @@
                     this.btnLoading = false;
                     this.row.password = '';
 
-                    iziToast.error({
-                        icon: 'ti-na',
-                        title: 'Wow-wow,',
-                        message: 'Something went wrong '+err,
-                    });
+                    // 401 Unauthorized
+                    if(err.response && err.response.status == 401) {
+                        iziToast.error({
+                            icon: 'ti-na',
+                            title: 'Wow-wow,',
+                            message: err.response.data.error
+                        });
+
+                    } else {
+                        iziToast.error({
+                            icon: 'ti-na',
+                            title: 'Wow-wow,',
+                            message: 'Something went wrong '+err
+                        });
+                    }
+
                 });
             },
 
