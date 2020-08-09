@@ -1,36 +1,53 @@
 <template>
-  <div id="not-found">
-    
-      <div class="container">
-        <div class="row full-height align-items-center">
-          <div class="col-12">
-            <div class="text-center p-t-50">
-              <h1 class="font-size-170 text-secondary font-weight-light text-opacity ls-2">404</h1>
-              <h2 class="font-weight-light font-size-30">Whoops! Looks like you got lost</h2>
-              <p class="lead">We couldnt find what you were looking for.</p>
-              <router-link :to="{ name: 'dashboard' }" 
-                  class="btn btn-gradient-success btn-lg m-t-30">Go back
-              </router-link>
-            </div>
-          </div>
-          <div class="col-12 align-self-end ">
-            <div class="text-center p-b-20 font-size-13">
-              <span>Copyright © 2020. All rights reserved.</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="">
+        
+        <!-- Header (Topbar) -->
+        <header class="u-header u-header--error-page">
+            <!-- Header Logo -->
+            <router-link :to="{ name: 'dashboard' }" class="u-header-logo">
+                <img class="u-header-logo__icon" src="/assets/svg/logo-mini.svg" alt="404">
+                <img class="u-header-logo__text ml-1" src="/assets/svg/logo-text-dark.svg" alt="404" width="140">
+            </router-link>
+            <!-- End Header Logo -->
+        </header>
+        <!-- End Header (Topbar) -->
 
-  </div>
+        <!-- Main -->
+        <main class="u-error-content-wrap">
+            <div class="u-error-content container text-center my-auto">
+                <h1 class="u-error__title">404</h1>
+                <h2 class="u-error__sub-title">Page not found</h2>
+                <h4 class="font-weight-semi-bold mb-0">
+                    <router-link :to="{ name: 'dashboard' }">Return back</router-link>
+                </h4>
+
+                <!-- SVG Shapes -->
+                <figure class="u-shape u-shape-top-left">
+                    <img src="/assets/svg/shapes/shape-1.svg" alt="404">
+                </figure>
+                <figure class="u-shape u-shape-top-right">
+                    <img src="/assets/svg/shapes/shape-2.svg" alt="404">
+                </figure>
+                <figure class="u-shape u-shape-bottom-left">
+                    <img src="/assets/svg/shapes/shape-3.svg" alt="404">
+                </figure>
+                <figure class="u-shape u-shape-bottom-right">
+                    <img src="/assets/svg/shapes/shape-4.svg" alt="404">
+                </figure>
+                <!-- End SVG Shapes -->
+
+            </div>
+        </main>
+        <!-- End Main -->
+
+    </div>
 </template>
 
 <script>
-
-export default {
-  name: 'not-found'
-}
+    export default {
+        name: '404',
+        mounted() {
+            //
+        }
+    }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>

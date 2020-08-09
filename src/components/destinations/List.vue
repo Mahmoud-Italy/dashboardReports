@@ -9,9 +9,9 @@
             <div class="u-content">
 
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Destinations
-                       <!--  v-if="permission.hasCreate"  -->
-                        <router-link 
+                    <h1 class="h2 mb-2">Destinations 
+
+                        <router-link v-if="this.permission.add"
                             :to="{ name: 'create-destinations' }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
@@ -32,17 +32,7 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">
-                                Destinations 
-                                <!-- <span v-if="dataLoading">
-                                    <span class="spinner-grow spinner-grow-sm mr-1" 
-                                        role="status" aria-hidden="true">
-                                    </span>
-                                </span>
-                                <span v-if="!dataLoading && rows.length" class="f12">
-                                    {{rows.length}}
-                                </span> -->
-                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Destinations</li>
                         </ol>
                     
                     <!-- Build Action button -->
@@ -444,11 +434,12 @@
                 auth: { 
                     role: '',
                     access_token: '',
+                    permissions: [],
                 },
                 permission: {
-                    hasCreate: '',
-                    hasEdit: '',
-                    hasDestroy: '',
+                    add: false,
+                    edit: false,
+                    destroy: false,
                 },
                 //
                 count_all: 0,
@@ -508,6 +499,11 @@
             if(localStorage.getItem('access_token')) {
                 this.auth.access_token = localStorage.getItem('access_token');
             }
+            if(localStorage.getItem('permissions')) {
+                this.auth.permissions = localStorage.getItem('permissions');
+            }
+            //
+            this.hasPermission();
 
             // Status By
             if(this.$route.params.status) {
@@ -525,6 +521,24 @@
             this.fetchData('', true);
         },
         methods: {
+
+            hasPermission() {
+                let myArr = JSON.parse(this.auth.permissions);
+                for (var i = 0; myArr.length; i++) {
+                    if(myArr[i].name == 'add_destinations') {
+                       this.permission.add = true;
+                       break;
+                    }
+                    if(myArr.name == 'edit_destinations') {
+                       this.permission.edit = true;
+                       break;
+                    }
+                    if(myArr.name == 'delete_destinations') {
+                       this.permission.destroy = true;
+                       break;
+                    }
+               }
+            },
 
             onSearchSubmit(value) {
                 this.search = value;
@@ -881,7 +895,6 @@
                 }
             },
         /** END Bulk Actions **/
-
 
 
         },

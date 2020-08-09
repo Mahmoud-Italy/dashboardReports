@@ -9,10 +9,10 @@
             <div class="u-content">
 
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Destinations
+                    <h1 class="h2 mb-2">Users
                        <!--  v-if="permission.hasCreate"  -->
                         <router-link 
-                            :to="{ name: 'create-destinations' }" 
+                            :to="{ name: 'create-users' }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
@@ -33,7 +33,7 @@
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Destinations 
+                                Users 
                                 <!-- <span v-if="dataLoading">
                                     <span class="spinner-grow spinner-grow-sm mr-1" 
                                         role="status" aria-hidden="true">
@@ -99,8 +99,8 @@
                                         :fields = "exp.json_fields"
                                         :before-generate = "startDownload"
                                         :before-finish = "finishDownload"
-                                        worksheet = "Destinations"
-                                        name = "Destinations.xls">Excel
+                                        worksheet = "Users"
+                                        name = "Users.xls">Excel
                                     </download-excel>
                                     <download-excel
                                         class = "dropdown-item cursor-pointer"
@@ -109,8 +109,8 @@
                                         :before-generate = "startDownload"
                                         :before-finish = "finishDownload"
                                         type = "csv"
-                                        worksheet = "Destinations"
-                                        name = "Destinations.xls">CSV
+                                        worksheet = "Users"
+                                        name = "Users.xls">CSV
                                     </download-excel>
                                     <a class="dropdown-item" href="javascript:;" v-print="'#printMe'">Print</a>
                                 </div>
@@ -125,22 +125,22 @@
                     <header class="card-header">
                         <h2 class="h4 card-header-title">
                             <router-link class="pg-hd"
-                                :to="{ name: 'destinations' }"
+                                :to="{ name: 'users' }"
                                 :class="(this.status == '') ? 'active' : '' ">All</router-link> 
                             <span class="pg-hd no-decoration f14"> ({{count_all}}) </span> &nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-destinations', params:{status: 'active'} }" 
+                                :to="{ name: 'status-users', params:{status: 'active'} }" 
                                 :class="(this.status == 'active') ? 'active' : '' ">Active</router-link>
                             <span class="pg-hd no-decoration f14"> ({{count_active}}) </span> &nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-destinations', params:{status: 'inactive'} }" 
+                                :to="{ name: 'status-users', params:{status: 'inactive'} }" 
                                 :class="(this.status == 'inactive') ? 'active' : '' ">Inactive</router-link>
                             <span class="pg-hd no-decoration f14"> ({{count_inactive}}) </span> &nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-destinations', params:{status: 'trash'} }" 
+                                :to="{ name: 'status-users', params:{status: 'trash'} }" 
                                 :class="(this.status == 'trash') ? 'active' : '' ">Trash</router-link>
                             <span class="pg-hd no-decoration f14"> ({{count_trash}}) </span>
 
@@ -195,7 +195,7 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th style="width:30%">Title
+                                        <th style="width:30%">Name
                                             <span v-if="!orderLoading"
                                                 @click="onOrderBy('title')"
                                                 class="cursor-pointer " 
@@ -209,8 +209,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">Region</th>
-                                        <th class="text-center" style="width: 20%">Author</th>
+                                        <th class="text-center" style="width: 10%">Role</th>
                                         <th class="text-center" style="width: 15%">No. Packages</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
@@ -254,9 +253,9 @@
                                     <td class="font-weight-semi-bold">
                                         <!-- v-if="permission.hasEdit"  -->
                                         <router-link 
-                                                :to="{ name: 'edit-destinations', params:{id: row.id} }" 
+                                                :to="{ name: 'edit-users', params:{id: row.id} }" 
                                                 class="default-color text-decoration-hover">
-                                            {{ row.title }} 
+                                            {{ row.name }} 
                                         </router-link>
                                         <!-- <span v-if="!permission.hasEdit">{{ row.title }}</span> -->
                                     </td>
@@ -267,24 +266,11 @@
                                             params:{filter_by: 'region', 'filter':row.region} }" 
                                             class="text-decoration-hover">
                                             <span class="badge badge-md badge-pill badge-danger-soft">
-                                                {{ row.region.title }}
+                                                {{ row.role }}
                                             </span>
                                         </router-link>
                                     </td>
 
-                                    <td class="font-weight-semi-bold text-center">
-                                        <span v-if="!row.user" class="text-center"> - </span>
-                                        <router-link v-if="row.user" 
-                                            :to="{ name: 'filter-destination', 
-                                                params:{filter_by: 'author', 'filter':row.user.id}}" 
-                                            class="text-decoration-hover black">
-                                            <div v-if="row.user" class="align-items-center">
-                                                <img class="u-avatar-xs rounded-circle mr-2"
-                                                    src="/assets/img/default_avatar.png">
-                                                <span class="media-body">{{ row.user.name }}</span>
-                                            </div>
-                                        </router-link>
-                                    </td>
 
                                     <td class="font-weight-semi-bold text-center">
                                         <span> 0 </span>
@@ -313,7 +299,7 @@
                                                             <!-- v-if="permission.hasEdit" -->
                                                             <router-link 
                                                                 class="d-block link-dark"
-                                                                :to="{ name: 'edit-destinations', 
+                                                                :to="{ name: 'edit-users', 
                                                                 params:{id: row.id}}">
                                                                 Edit
                                                             </router-link>
@@ -367,9 +353,8 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th>Title</th>
-                                        <th class="text-center">Region</th>
-                                        <th class="text-center">Author</th>
+                                        <th>Name</th>
+                                        <th class="text-center">Role</th>
                                         <th class="text-center">No. Packages</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
@@ -562,7 +547,7 @@
                 };
                 let vm = this;
                 const options = {
-                    url: page_url || window.baseURL+'/destinations',
+                    url: page_url || window.baseURL+'/users',
                     method: 'GET',
                     data: {},
                     params: {
@@ -624,7 +609,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/destinations/export?id='+this.selected);
+                    this.axios.post(window.baseURL+'/users/export?id='+this.selected);
                 return res.data.rows;
             },
             startDownload(){
@@ -685,7 +670,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/destinations/active/'+id,
+                  url: window.baseURL+'/users/active/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -718,7 +703,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/destinations/inactive/'+id,
+                  url: window.baseURL+'/users/inactive/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -762,7 +747,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/destinations/trash/'+id,
+                  url: window.baseURL+'/users/trash/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -807,7 +792,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/destinations/restore/'+id,
+                  url: window.baseURL+'/users/restore/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -852,7 +837,7 @@
                         'Authorization': `Bearer `+this.auth.access_token,
                     };
                     const options = {
-                        url: window.baseURL+'/destinations/'+id,
+                        url: window.baseURL+'/users/'+id,
                         method: 'DELETE',
                         data: {},
                     }

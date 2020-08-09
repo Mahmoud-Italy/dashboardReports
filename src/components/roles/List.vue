@@ -9,10 +9,10 @@
             <div class="u-content">
 
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Destinations
+                    <h1 class="h2 mb-2">Roles
                        <!--  v-if="permission.hasCreate"  -->
                         <router-link 
-                            :to="{ name: 'create-destinations' }" 
+                            :to="{ name: 'create-roles' }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
@@ -32,17 +32,7 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">
-                                Destinations 
-                                <!-- <span v-if="dataLoading">
-                                    <span class="spinner-grow spinner-grow-sm mr-1" 
-                                        role="status" aria-hidden="true">
-                                    </span>
-                                </span>
-                                <span v-if="!dataLoading && rows.length" class="f12">
-                                    {{rows.length}}
-                                </span> -->
-                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Roles</li>
                         </ol>
                     
                     <!-- Build Action button -->
@@ -99,8 +89,8 @@
                                         :fields = "exp.json_fields"
                                         :before-generate = "startDownload"
                                         :before-finish = "finishDownload"
-                                        worksheet = "Destinations"
-                                        name = "Destinations.xls">Excel
+                                        worksheet = "Roles"
+                                        name = "Roles.xls">Excel
                                     </download-excel>
                                     <download-excel
                                         class = "dropdown-item cursor-pointer"
@@ -109,8 +99,8 @@
                                         :before-generate = "startDownload"
                                         :before-finish = "finishDownload"
                                         type = "csv"
-                                        worksheet = "Destinations"
-                                        name = "Destinations.xls">CSV
+                                        worksheet = "Roles"
+                                        name = "Roles.xls">CSV
                                     </download-excel>
                                     <a class="dropdown-item" href="javascript:;" v-print="'#printMe'">Print</a>
                                 </div>
@@ -125,22 +115,22 @@
                     <header class="card-header">
                         <h2 class="h4 card-header-title">
                             <router-link class="pg-hd"
-                                :to="{ name: 'destinations' }"
+                                :to="{ name: 'roles' }"
                                 :class="(this.status == '') ? 'active' : '' ">All</router-link> 
                             <span class="pg-hd no-decoration f14"> ({{count_all}}) </span> &nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-destinations', params:{status: 'active'} }" 
+                                :to="{ name: 'status-roles', params:{status: 'active'} }" 
                                 :class="(this.status == 'active') ? 'active' : '' ">Active</router-link>
                             <span class="pg-hd no-decoration f14"> ({{count_active}}) </span> &nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-destinations', params:{status: 'inactive'} }" 
+                                :to="{ name: 'status-roles', params:{status: 'inactive'} }" 
                                 :class="(this.status == 'inactive') ? 'active' : '' ">Inactive</router-link>
                             <span class="pg-hd no-decoration f14"> ({{count_inactive}}) </span> &nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-destinations', params:{status: 'trash'} }" 
+                                :to="{ name: 'status-roles', params:{status: 'trash'} }" 
                                 :class="(this.status == 'trash') ? 'active' : '' ">Trash</router-link>
                             <span class="pg-hd no-decoration f14"> ({{count_trash}}) </span>
 
@@ -195,9 +185,9 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th style="width:30%">Title
+                                        <th style="width:40%">Name
                                             <span v-if="!orderLoading"
-                                                @click="onOrderBy('title')"
+                                                @click="onOrderBy('name')"
                                                 class="cursor-pointer " 
                                                 :class="(this.order == 'DESC') 
                                                         ? 'ti-arrow-down' 
@@ -209,9 +199,8 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">Region</th>
                                         <th class="text-center" style="width: 20%">Author</th>
-                                        <th class="text-center" style="width: 15%">No. Packages</th>
+                                        <th class="text-center" style="width: 15%">No. Users</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -254,22 +243,11 @@
                                     <td class="font-weight-semi-bold">
                                         <!-- v-if="permission.hasEdit"  -->
                                         <router-link 
-                                                :to="{ name: 'edit-destinations', params:{id: row.id} }" 
+                                                :to="{ name: 'edit-roles', params:{id: row.id} }" 
                                                 class="default-color text-decoration-hover">
-                                            {{ row.title }} 
+                                            {{ row.name }} 
                                         </router-link>
                                         <!-- <span v-if="!permission.hasEdit">{{ row.title }}</span> -->
-                                    </td>
-
-                                
-                                    <td class="font-weight-semi-bold text-center">
-                                        <router-link :to="{ name: 'filter-destination', 
-                                            params:{filter_by: 'region', 'filter':row.region} }" 
-                                            class="text-decoration-hover">
-                                            <span class="badge badge-md badge-pill badge-danger-soft">
-                                                {{ row.region.title }}
-                                            </span>
-                                        </router-link>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
@@ -367,10 +345,9 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th>Title</th>
-                                        <th class="text-center">Region</th>
+                                        <th>Name</th>
                                         <th class="text-center">Author</th>
-                                        <th class="text-center">No. Packages</th>
+                                        <th class="text-center">No. Users</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
@@ -427,8 +404,7 @@
                 exp: {
                    json_fields: {
                         'id': 'id',
-                        'title': 'title',
-                        'body': 'body',
+                        'name': 'name',
                         'created_at': 'created_at',
                     }, 
                     json_data: [],
@@ -562,7 +538,7 @@
                 };
                 let vm = this;
                 const options = {
-                    url: page_url || window.baseURL+'/destinations',
+                    url: page_url || window.baseURL+'/roles',
                     method: 'GET',
                     data: {},
                     params: {
@@ -624,7 +600,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/destinations/export?id='+this.selected);
+                    this.axios.post(window.baseURL+'/roles/export?id='+this.selected);
                 return res.data.rows;
             },
             startDownload(){
@@ -685,7 +661,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/destinations/active/'+id,
+                  url: window.baseURL+'/roles/active/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -718,7 +694,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/destinations/inactive/'+id,
+                  url: window.baseURL+'/roles/inactive/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -762,7 +738,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/destinations/trash/'+id,
+                  url: window.baseURL+'/roles/trash/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -807,7 +783,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/destinations/restore/'+id,
+                  url: window.baseURL+'/roles/restore/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -852,7 +828,7 @@
                         'Authorization': `Bearer `+this.auth.access_token,
                     };
                     const options = {
-                        url: window.baseURL+'/destinations/'+id,
+                        url: window.baseURL+'/roles/'+id,
                         method: 'DELETE',
                         data: {},
                     }

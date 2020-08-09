@@ -121,6 +121,8 @@
                 <!-- End Breadcrumb -->
 
                 <!-- Card -->
+            <div class="row">
+              <div class="col-md-8 mb-5">
                 <div class="card">
                     <header class="card-header">
                         <h2 class="h4 card-header-title">
@@ -195,7 +197,7 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th style="width:40%">Title
+                                        <th style="width:20%">Name
                                             <span v-if="!orderLoading"
                                                 @click="onOrderBy('title')"
                                                 class="cursor-pointer " 
@@ -209,7 +211,6 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 20%">Author</th>
                                         <th class="text-center" style="width: 15%">No. Packages</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
@@ -261,20 +262,6 @@
                                     </td>
 
  
-                                    <td class="font-weight-semi-bold text-center">
-                                        <span v-if="!row.user" class="text-center"> - </span>
-                                        <router-link v-if="row.user" 
-                                            :to="{ name: 'filter-destination', 
-                                                params:{filter_by: 'author', 'filter':row.user.id}}" 
-                                            class="text-decoration-hover black">
-                                            <div v-if="row.user" class="align-items-center">
-                                                <img class="u-avatar-xs rounded-circle mr-2"
-                                                    src="/assets/img/default_avatar.png">
-                                                <span class="media-body">{{ row.user.name }}</span>
-                                            </div>
-                                        </router-link>
-                                    </td>
-
                                     <td class="font-weight-semi-bold text-center">
                                         <span> 0 </span>
                                     </td>
@@ -356,8 +343,7 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th>Title</th>
-                                        <th class="text-center">Author</th>
+                                        <th>Name</th>
                                         <th class="text-center">No. Packages</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
@@ -384,6 +370,53 @@
                         </nav>
 
                     </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-4 mb-5">
+                <div class="card">
+                    <header class="card-header">
+                        <h2 class="h4 card-header-title">Add New</h2>
+                    </header>
+
+                <form @submit.prevent="addNew">
+                    <div class="card-body pt-0">
+
+                        <!-- Tag -->
+                        <div class="form-group">
+                            <label for="inputText3">Name</label>
+                            <input class="form-control text-lowercase"
+                                    id="inputText3" 
+                                    type="text"  
+                                    @keydown.space.prevent 
+                                    v-model="row.tag" 
+                                    required="">
+                        </div>
+                        <!-- End Tag -->
+                        
+                        <!-- Button -->                        
+                        <div class="form-group">
+                            <button class="btn btn-primary" :disabled="btnLoading">
+                                <span v-if="btnLoading">
+                                    <span class="spinner-grow spinner-grow-sm mr-1" 
+                                        role="status" aria-hidden="true">
+                                    </span>Loading...
+                                </span>
+                                <span v-if="!btnLoading" class="ti-save"></span>
+                                <span v-if="!btnLoading"> {{btn_status}} Tag</span>
+                            </button>
+                        </div>
+                        <!-- End Button -->
+
+                    </div>
+                </form>
+
+                    </div>
+                </div>
+
+
+
                 </div>
             </div>
             <!-- End Content Body -->
@@ -433,6 +466,9 @@
                     role: '',
                     access_token: '',
                 },
+                row: {
+                    tag: '',
+                },
                 permission: {
                     hasCreate: '',
                     hasEdit: '',
@@ -461,10 +497,12 @@
                 sortLoading: false,
                 showLoading: false,
                 orderLoading: false,
+                btnLoading: false,
                 something_went_wrong: false,
                 rows: [],
                 show: 10,
                 pagination: {},
+                btn_status: 'Create',
             }
         },
         mounted() {},

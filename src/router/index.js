@@ -43,6 +43,13 @@ export default new Router({
   { path: '/articles/create', name: 'create-articles', component: require('../components/articles/Create.vue').default, beforeEnter: requireAuth },
   { path: '/articles/edit/:id', name: 'edit-articles', component: require('../components/articles/Edit.vue').default, beforeEnter: requireAuth },
 
+  // PackageTypes
+  { path: '/packageTypes', name: 'packageTypes', component: require('../components/packageTypes/List.vue').default, beforeEnter: requireAuth },
+  { path: '/packageTypes/status/:status', name: 'status-packageTypes', component: require('../components/packageTypes/List.vue').default, beforeEnter: requireAuth },
+  { path: '/packageTypes/create', name: 'create-packageTypes', component: require('../components/packageTypes/Create.vue').default, beforeEnter: requireAuth },
+  { path: '/packageTypes/edit/:id', name: 'edit-packageTypes', component: require('../components/packageTypes/Edit.vue').default, beforeEnter: requireAuth },
+
+
   // Packages
   { path: '/packages', name: 'packages', component: require('../components/packages/List.vue').default, beforeEnter: requireAuth },
   { path: '/packages/status/:status', name: 'status-packages', component: require('../components/packages/List.vue').default, beforeEnter: requireAuth },
@@ -86,8 +93,21 @@ export default new Router({
   { path: '/roles/edit/:id', name: 'edit-roles', component: require('../components/roles/Edit.vue').default, beforeEnter: requireAuth },
     
 
+  // wikis
+  { path: '/wikis', name: 'wikis', component: require('../components/wikis/List.vue').default, beforeEnter: requireAuth },
+  { path: '/wikis/status/:status', name: 'status-wikis', component: require('../components/wikis/List.vue').default, beforeEnter: requireAuth },
+  { path: '/wikis/create', name: 'create-wikis', component: require('../components/wikis/Create.vue').default, beforeEnter: requireAuth },
+  { path: '/wikis/edit/:id', name: 'edit-wikis', component: require('../components/wikis/Edit.vue').default, beforeEnter: requireAuth },
+
+  // Logs
+  { path: '/logs', name: 'logs', component: require('../components/logs/List.vue').default, beforeEnter: requireAuth },
 
   // Settings
+  { path: '/settings', name: 'settings', component: require('../components/settings/List.vue').default, beforeEnter: requireAuth },
+  { path: '/settings/status/:status', name: 'status-settings', component: require('../components/settings/List.vue').default, beforeEnter: requireAuth },
+  { path: '/settings/create', name: 'create-settings', component: require('../components/settings/Create.vue').default, beforeEnter: requireAuth },
+  { path: '/settings/edit/:id', name: 'edit-settings', component: require('../components/settings/Edit.vue').default, beforeEnter: requireAuth },
+  
     
   // Extra
   { path: '/forbidden', name: 'forbidden', component: require('../components/extra/403.vue').default },

@@ -177,19 +177,21 @@
 
             // Logout
             logout(){
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('avatar');
-                localStorage.removeItem('username');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
 
+                localStorage.removeItem('permissions');
+
                 // clear default Navigation
-                localStorage.removeItem('nav_roles');
-                localStorage.removeItem('nav_sliders');
-                localStorage.removeItem('nav_themes');
-                localStorage.removeItem('nav_reports');
-                localStorage.removeItem('nav_activity_logs');
-                localStorage.removeItem('nav_cache_management');
+                // localStorage.removeItem('nav_roles');
+                // localStorage.removeItem('nav_sliders');
+                // localStorage.removeItem('nav_themes');
+                // localStorage.removeItem('nav_reports');
+                // localStorage.removeItem('nav_activity_logs');
+                // localStorage.removeItem('nav_cache_management');
                 this.$router.push({ name: 'login' });
             },
         },

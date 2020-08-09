@@ -137,12 +137,14 @@
                     this.row.password = '';
 
                         localStorage.setItem('access_token', res.data.access_token);
-                        // localStorage.setItem('username', res.data.username);
-                        // localStorage.setItem('user_id', res.data.user_id);
-                        // localStorage.setItem('avatar', res.data.avatar);
-                        // localStorage.setItem('role', res.data.role);
+                        localStorage.setItem('user_image', res.data.user.image);
+                        localStorage.setItem('user_name', res.data.user.name);
+                        localStorage.setItem('user_id', res.data.user.id);
+                        localStorage.setItem('role', res.data.user.role);
+                        // Permissions
+                        localStorage.setItem('permissions', JSON.stringify(res.data.permissions));
 
-                        this.$router.push({ name: 'dashboard' })
+                    this.$router.push({ name: 'dashboard' })
 
                 })
                 .catch(err => {

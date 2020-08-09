@@ -1,37 +1,55 @@
 <template>
-  <div id="forbidden">
-    
-      <div class="container">
-          <div class="row full-height align-items-center">
-              <div class="col-md-7">
-                <div class="m-t-15 m-l-20">
-                  <h1 class="font-size-55 text-semibold">403</h1>
-                  <h2 class="font-weight-light font-size-35">Forbidden</h2>
-                  <p class="width-70 text-opacity m-t-25 font-size-16">
-                    User does not have the permission.</p>
-                  <div class="m-t-15">
-                    <router-link :to="{ name: 'dashboard' }" 
-                      class="btn btn-gradient-success btn-lg m-t-30">Go back
-                    </router-link>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-5 d-none d-md-block">
-                <img class="img-fluid" src="/assets/images/others/img-33.png" alt="">
-              </div>
-          </div>
-        </div>
+    <div class="">
+        
+        <!-- Header (Topbar) -->
+        <header class="u-header u-header--error-page">
+            <!-- Header Logo -->
+            <router-link :to="{ name: 'dashboard' }" class="u-header-logo">
+                <img class="u-header-logo__icon" src="/assets/svg/logo-mini.svg" alt="500">
+                <img class="u-header-logo__text ml-1" src="/assets/svg/logo-text-dark.svg" alt="500" width="140">
+            </router-link>
+            <!-- End Header Logo -->
+        </header>
+        <!-- End Header (Topbar) -->
 
-  </div>
+        <!-- Main -->
+        <main class="u-error-content-wrap">
+            <div class="u-error-content container text-center my-auto">
+                <h1 class="u-error__title">403</h1>
+                <h2 class="u-error__sub-title">Forbidden</h2>
+                <p class="u-error">
+                    User does not have the permission.</p>
+                <h4 class="font-weight-semi-bold mb-0">
+                    <router-link :to="{ name: 'dashboard' }">Return back</router-link>
+                </h4>
+
+                <!-- SVG Shapes -->
+                <figure class="u-shape u-shape-top-left">
+                    <img src="/assets/svg/shapes/shape-1.svg" alt="500">
+                </figure>
+                <figure class="u-shape u-shape-top-right">
+                    <img src="/assets/svg/shapes/shape-2.svg" alt="500">
+                </figure>
+                <figure class="u-shape u-shape-bottom-left">
+                    <img src="/assets/svg/shapes/shape-3.svg" alt="500">
+                </figure>
+                <figure class="u-shape u-shape-bottom-right">
+                    <img src="/assets/svg/shapes/shape-4.svg" alt="500">
+                </figure>
+                <!-- End SVG Shapes -->
+
+            </div>
+        </main>
+        <!-- End Main -->
+
+    </div>
 </template>
 
 <script>
-
-export default {
-  name: 'forbidden'
-}
+    export default {
+        name: '403',
+        mounted() {
+            //
+        }
+    }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>

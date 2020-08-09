@@ -9,10 +9,10 @@
             <div class="u-content">
 
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Destinations
+                    <h1 class="h2 mb-2">Pages
                        <!--  v-if="permission.hasCreate"  -->
                         <router-link 
-                            :to="{ name: 'create-destinations' }" 
+                            :to="{ name: 'create-pages' }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>

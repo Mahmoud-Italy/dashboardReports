@@ -64,7 +64,8 @@
                                         this.$route.path == '/writers/status/inactive' || 
                                         this.$route.path == '/writers/status/trash' ||
                                         this.$route.path == '/writers/create') ? 'active' : '' ">
-                                <span class="ti-agenda u-sidebar-nav-menu__item-icon"></span>
+                                        <!-- ti-agenda -->
+                                <span class="ti-paint-roller u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Writers</span>
                             </router-link>
                         </li>
@@ -84,6 +85,19 @@
                         </li>
                         <!-- End Posts -->
 
+                        <!-- PackageType -->
+                        <li class="u-sidebar-nav-menu__item">
+                            <router-link :to="{ name: 'packageTypes' }" class="u-sidebar-nav-menu__link"
+                                :class="(this.$route.path == '/packageTypes' || 
+                                        this.$route.path == '/packageTypes/status/active' ||
+                                        this.$route.path == '/packageTypes/status/inactive' ||
+                                        this.$route.path == '/packageTypes/status/trash' ||
+                                        this.$route.path == '/packageTypes/create') ? 'active' : '' ">
+                                <span class="ti-signal u-sidebar-nav-menu__item-icon"></span>
+                                <span class="u-sidebar-nav-menu__item-title">Package Types</span>
+                            </router-link>
+                        </li>
+                        <!-- End PackageType -->
 
                         <!-- Packages -->
                         <li class="u-sidebar-nav-menu__item">
@@ -177,28 +191,32 @@
                         </li>
                         <!-- End Roles -->
 
+                        <!-- Wikis-->
+                        <li 
+                            class="u-sidebar-nav-menu__item">
+                            <router-link :to="{ name: 'wikis' }" class="u-sidebar-nav-menu__link"
+                                :class="(this.$route.path == '/wikis' || 
+                                        this.$route.path == '/wikis/status/active' ||
+                                        this.$route.path == '/wikis/status/inactive' ||
+                                        this.$route.path == '/wikis/trash') ? 'active' : '' ">
+                                <span class="ti-agenda u-sidebar-nav-menu__item-icon"></span>
+                                <span class="u-sidebar-nav-menu__item-title">Wikis</span>
+                            </router-link>
+                        </li>
+                        <!-- End Wikis -->
+
 
                         <!-- Activity Log -->
                         <li v-if="nav_activity_logs == 'show'"
                             class="u-sidebar-nav-menu__item">
                             <router-link :to="{ name: 'logs' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/activity-logs') ? 'active' : '' ">
+                                :class="(this.$route.path == '/logs') ? 'active' : '' ">
                                 <span class="ti-brush-alt u-sidebar-nav-menu__item-icon"></span>
-                                <span class="u-sidebar-nav-menu__item-title">Activity Logs</span>
+                                <span class="u-sidebar-nav-menu__item-title">Logs</span>
                             </router-link>
                         </li>
                         <!-- End Activity Log -->
 
-                        <!-- Cache Management -->
-                        <li v-if="nav_cache_management == 'show'"
-                            class="u-sidebar-nav-menu__item">
-                            <router-link :to="{ name: 'settings' }" class="u-sidebar-nav-menu__link"
-                                :class="(this.$route.path == '/cache-management') ? 'active' : '' ">
-                                <span class="ti-pulse u-sidebar-nav-menu__item-icon"></span>
-                                <span class="u-sidebar-nav-menu__item-title">Cache Management</span>
-                            </router-link>
-                        </li>
-                        <!-- End Cache Management -->
 
                         <!-- Settings -->
                         <li class="u-sidebar-nav-menu__item">
@@ -212,15 +230,16 @@
 
 
                         <!-- Settings -->
-                        <li class="u-sidebar-nav-menu__item">
+                        <!-- <li class="u-sidebar-nav-menu__item">
                             <router-link :to="{ name: 'settings' }" class="u-sidebar-nav-menu__link"
                                 >
                                 <span class="ti-agenda u-sidebar-nav-menu__item-icon"></span>
                                 <span class="u-sidebar-nav-menu__item-title">Documention</span>
                             </router-link>
-                        </li>
+                        </li> -->
                         <!-- End Settings -->
 
+                        <li class="u-sidebar-nav-menu__item"></li>
                         <br/><br/><br/><br/><br/><br/>
 
                     </ul>
