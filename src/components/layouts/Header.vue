@@ -102,7 +102,7 @@
                             <img class="u-header-avatar img-fluid rounded-circle mr-md-3" 
                                 src="/assets/img/default_avatar.png" alt="User Profile">
                             <span class="text-dark d-none d-md-inline-flex align-items-center">
-                                {{ auth.username }}
+                                {{ auth.user_name }}
                                 <span class="ti-angle-down text-muted ml-4"></span>
                             </span>
                         </a>
@@ -144,9 +144,9 @@
             return {
                 auth: {
                     user_id: '',
-                    avatar: '',
-                    username: '',
-                    accessToken: '',
+                    user_name: '',
+                    user_image: '',
+                    access_token: '',
                 },
                 search: '',
             }
@@ -157,14 +157,14 @@
             if(localStorage.getItem('user_id')) {
                 this.auth.user_id = localStorage.getItem('user_id');
             }
-            if(localStorage.getItem('avatar')) {
-                this.auth.avatar = localStorage.getItem('avatar');
+            if(localStorage.getItem('user_image')) {
+                this.auth.user_image = localStorage.getItem('user_image');
             }
-            if(localStorage.getItem('username')) {
-                this.auth.username = localStorage.getItem('username');
+            if(localStorage.getItem('user_name')) {
+                this.auth.user_name = localStorage.getItem('use_rname');
             }
-            if(localStorage.getItem('accessToken')) {
-                this.auth.accessToken = localStorage.getItem('accessToken');
+            if(localStorage.getItem('access_token')) {
+                this.auth.access_token = localStorage.getItem('access_token');
             }
             
             
@@ -198,7 +198,6 @@
 
         //
         opnSideNav(){
-            console.log('====');
             let el = document.querySelector("body");
             if(el.classList.has('side-nav-on-action')) {
                 el.classList.remove('side-nav-on-action');

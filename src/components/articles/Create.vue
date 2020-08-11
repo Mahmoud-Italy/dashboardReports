@@ -8,7 +8,7 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Destinations
+                    <h1 class="h2 mb-2">Articles
 
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
@@ -29,7 +29,7 @@
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
                             <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'destinations' }">Destinations</router-link>
+                                <router-link :to="{ name: 'articles' }">Articles</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Add New</li>
                         </ol>
@@ -124,22 +124,22 @@
                         <div class="card mt-5">
                             <div class="card-body">
                                 <div id="accordion" class="accordion">
-                                    <div id="TabDest" class="card-header">
+                                    <div id="TabArticle" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Dest')"
+                                            @click="collapseToggle('Article')"
                                             aria-expanded="false" 
-                                            aria-controls="collapseDest" 
+                                            aria-controls="collapseArticle" 
                                             data-toggle="collapse"
-                                            data-target="#collapseDest">Destination
-                                            <span id="iconToggleDest" 
+                                            data-target="#collapseArticle">Article
+                                            <span id="iconToggleArticle" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow 
                                                     pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseDest" 
+                                    <div id="collapseArticle" 
                                         class="collapse" 
-                                        aria-labelledby="TabDest" 
+                                        aria-labelledby="TabArticle" 
                                         data-parent="#accordion">
 
                                 <div class="col-12 pt-3">
@@ -164,10 +164,33 @@
                                                 v-model="row.slug" 
                                                 @keydown.space.prevent 
                                                 @paste="onSlugPaste"
-                                                @change="onSlugChange">
+                                                @change="onSlugChange(false)">
                                     </div>
                                     <!-- End Slug -->
 
+                                    <!-- Short Body -->
+                                    <div class="form-group">
+                                        <label for="inputText3_1">Short body</label>
+                                        <editor
+                                            id="inputText3_1"
+                                            v-model="row.short_body"
+                                            api-key="xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b"
+                                            :init="{
+                                                height: 300,
+                                                menubar: 'file edit view insert format tools table tc help',
+                                                plugins: [
+                                                    'advlist autolink lists link image charmap print preview anchor',
+                                                    'searchreplace visualblocks code fullscreen',
+                                                    'insertdatetime media table paste code help wordcount'
+                                                ],
+                                                toolbar:
+                                                    'undo redo | formatselect | bold italic backcolor | \
+                                                    alignleft aligncenter alignright alignjustify | \
+                                                    bullist numlist outdent indent | removeformat | help'
+                                            }"
+                                        />
+                                    </div>
+                                    <!-- End Short Body -->
 
                                     <!-- Body -->
                                     <div class="form-group">
@@ -202,6 +225,152 @@
                     <!-- End CardDest -->
 
 
+
+                    <!-- Card Items -->
+                    <div class="card mt-5">
+                            <div class="card-body">
+                                <div id="accordion" class="accordion">
+                                    <div id="TabItems" class="card-header">
+                                        <h2 class="h4 card-header-title" 
+                                            @click="collapseToggle('Items')"
+                                            aria-expanded="false" 
+                                            aria-controls="collapseItems" 
+                                            data-toggle="collapse"
+                                            data-target="#collapseItems">Items
+                                            <span id="iconToggleItems" 
+                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow 
+                                                    pull-right black">
+                                            </span>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseItems" 
+                                        class="collapse" 
+                                        aria-labelledby="TabItems" 
+                                        data-parent="#accordion">
+
+                                <div class="col-12 pt-3">
+                                
+                                <!-- For Loop -->
+                                <div v-for="i in 10" 
+                                    :key="i" 
+                                    :ref="'frm_'+i" 
+                                    :class="(i != 1) ? 'hidden' : '' " 
+                                    :id="'frm_'+i">
+
+                                    <!-- Remove -->
+                                    <div class="pull-right ui-mt-10">
+                                        <button v-if="i != 1"
+                                            type="button" 
+                                            class="btn btn-danger btn-circle btn-with-icon btn-sm" 
+                                            @click="removeOption(i)">
+                                            <span class="btn-icon ti-close font-bold"></span>
+                                        </button>
+                                    </div>
+                                    <!-- End Remove -->
+
+                                    <!-- Title -->
+                                    <div class="form-group">
+                                        <label for="inputText1_1">Link</label>
+                                        <input class="form-control" 
+                                                id="inputText1_1" 
+                                                type="text" 
+                                                v-model="row.items_link[i]">
+                                    </div>
+                                    <!-- End Title -->
+
+                                     <!-- Title -->
+                                    <div class="form-group">
+                                        <label for="inputText1_2">Order</label>
+                                        <input class="form-control" 
+                                                id="inputText1_2" 
+                                                type="text" 
+                                                v-model="row.items_order[i]">
+                                    </div>
+                                    <!-- End Title -->
+
+                                    <!-- Body -->
+                                    <div class="form-group">
+                                        <label :for="'editorItems_'+i">Body</label>
+                                        <editor
+                                            :id="'editorItems_'+i"
+                                            v-model="row.items_body[i]"
+                                            api-key="xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b"
+                                            :init="{
+                                                height: 300,
+                                                menubar: 'file edit view insert format tools table tc help',
+                                                plugins: [
+                                                    'advlist autolink lists link image charmap print preview anchor',
+                                                    'searchreplace visualblocks code fullscreen',
+                                                    'insertdatetime media table paste code help wordcount'
+                                                ],
+                                                toolbar:
+                                                    'undo redo | formatselect | bold italic backcolor | \
+                                                    alignleft aligncenter alignright alignjustify | \
+                                                    bullist numlist outdent indent | removeformat | help'
+                                            }"
+                                        />
+                                    </div>
+                                    <!-- End Short Body -->
+
+                                    <!-- image alt -->
+                                    <div class="form-group">
+                                        <label for="inputText1_2">Image alt</label>
+                                        <input class="form-control" 
+                                                id="inputText1_2" 
+                                                type="text" 
+                                                v-model="row.items_image_alt[i]">
+                                    </div>
+                                    <!-- End image alt -->
+
+                                    <!-- image title -->
+                                    <div class="form-group">
+                                        <label for="inputText1_2">Image title</label>
+                                        <input class="form-control" 
+                                                id="inputText1_2" 
+                                                type="text" 
+                                                v-model="row.items_image_title[i]">
+                                    </div>
+                                    <!-- End image title -->
+
+                                    <!-- image -->
+                                    <div class="form-group">
+                                        <label for="inputText1_2">Image</label>
+                                        <img v-if="row.items_preview[i]" 
+                                            :src="row.items_preview[i]">
+                                        <input class="form-control" 
+                                                id="inputText1_2" 
+                                                type="file"
+                                                ref="myDropify" 
+                                                v-on:change="onItemsImageChange">
+                                    </div>
+                                    <!-- End image -->
+                                    
+                                    <!-- Button -->
+                                    <div class="row pull-right ui-mt15" :ref="'btn_'+i" :id="'btn_'+i">
+                                        <button type="button" 
+                                            class="btn btn-dark btn-circle btn-with-icon"
+                                            @click="opnFrm(i+1)">
+                                            <span class="btn-icon ti-plus font-bold"></span>
+                                        </button>
+                                    </div>
+                                    <!-- End Button -->
+
+                                    <div class="form-group">
+                                        <br/><hr><br/>
+                                    </div>
+                                </div>
+                                <!-- End Loop -->
+
+                                    
+                                </div>
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Card Items -->
+
+
                 </div>
 
 
@@ -215,41 +384,95 @@
                         <div class="card">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
-                                    <div id="NavRegion" class="card-header">
+                                    <div id="NavWriter" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Region')" 
+                                            @click="collapseToggle('Writer')" 
                                             aria-expanded="false" 
-                                            aria-controls="collapseNavRegion" 
+                                            aria-controls="collapseNavWriter" 
                                             data-toggle="collapse" 
-                                            data-target="#collapseNavRegion">Region
-                                            <span id="iconToggleRegion" 
+                                            data-target="#collapseNavWriter">Writer
+                                            <span id="iconToggleWriter" 
                                                     class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseNavRegion" 
+                                    <div id="collapseNavWriter" 
                                         class="collapse" 
-                                        aria-labelledby="NavRegion" 
+                                        aria-labelledby="NavWriter" 
                                         data-parent="#accordionNav">
                                         <div class="col-12 pt-3">
                                             <!-- Region -->
                                             <div class="form-group">
-                                                <div v-if="regionLoading" class="text-center">
+                                                <div v-if="writerLoading" class="text-center">
                                                     <span class="spinner-grow spinner-grow-sm mr-1" 
                                                         role="status" 
                                                         aria-hidden="true">
                                                     </span>
                                                 </div>
                                                 <select class="form-control custom-select"
-                                                    v-if="!regionLoading" 
-                                                    v-model="row.region_id">
-                                                    <option value="">Select Region</option>
-                                                    <option v-for="(region, index) in regions" 
+                                                    v-if="!writerLoading" 
+                                                    v-model="row.writer_id">
+                                                    <option value="">Select Writer</option>
+                                                    <option v-for="(writer, index) in writers" 
                                                             :key="index"
-                                                            :value="region.id">
-                                                            {{ region.title }}
+                                                            :value="writer.id">
+                                                            {{ writer.title }}
                                                     </option>
                                                 </select>
+                                            </div>
+                                            <!-- End Region -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End NavOne -->
+
+
+                        <!-- NavOne -->
+                        <div class="card mt-5">
+                            <div class="card-body">
+                                <div id="accordionNav" class="accordion">
+                                    <div id="NavPackages" class="card-header">
+                                        <h2 class="h4 card-header-title" 
+                                            @click="collapseToggle('Packages')" 
+                                            aria-expanded="false" 
+                                            aria-controls="collapseNavPackages" 
+                                            data-toggle="collapse" 
+                                            data-target="#collapseNavPackages">Packages Related
+                                            <span id="iconTogglePackages" 
+                                                    class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
+                                            </span>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseNavPackages" 
+                                        class="collapse" 
+                                        aria-labelledby="NavPackages" 
+                                        data-parent="#accordionNav">
+                                        <div class="col-12 pt-3">
+                                            <!-- Region -->
+                                            <div class="form-group">
+                                                <div v-if="packageLoading" class="text-center">
+                                                    <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                        role="status" 
+                                                        aria-hidden="true">
+                                                    </span>
+                                                </div>
+                                                <multiselect v-if="!packageLoading"
+                                                    id="multiselect"
+                                                    ref="multiselectRef"
+                                                    autocomplete="on"
+                                                    v-model="packagesValue" 
+                                                    :options="packagesOptions" 
+                                                    :multiple="true"
+                                                    :close-on-select="false" 
+                                                    :clear-on-select="false" 
+                                                    :hide-selected="true" 
+                                                    :preserve-search="true" 
+                                                    :taggable="false"
+                                                    placeholder="Type to search packages"
+                                                    :preselect-first="true">
+                                                </multiselect>
                                             </div>
                                             <!-- End Region -->
                                         </div>
@@ -346,6 +569,23 @@
                                                 </div>
                                             </div>
                                             <!-- End Status -->
+
+                                            <!-- Featured -->
+                                            <div class="form-group">
+                                                <div class="custom-control custom-switch mb-2">
+                                                    <input type="checkbox" 
+                                                        class="custom-control-input" 
+                                                        id="customSwitch2" 
+                                                        :checked="row.featured"
+                                                        @click="onFeatured">
+                                                    <label class="custom-control-label" 
+                                                        for="customSwitch2"
+                                                        v-html="(row.featured) ? 'Featured article' 
+                                                                            : 'Not Featured article'">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <!-- End Featured -->
                                         </div>
                                     </div>
                                 </div>
@@ -369,7 +609,7 @@
                                     </span>Loading...
                                 </span>
                                 <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> Create Destination</span>
+                                <span v-if="!btnLoading"> Create Article</span>
                             </button>
                         </div>
 
@@ -401,6 +641,7 @@
     import Navigation from '../layouts/Navigation';
     import Footer from '../layouts/Footer.vue';
     import Editor from '@tinymce/tinymce-vue';
+    import Multiselect from 'vue-multiselect';
     import iziToast from 'izitoast';
     
     export default {
@@ -409,7 +650,8 @@
             Header,
             Navigation,
             Footer,
-            Editor
+            Editor,
+            Multiselect
         },
         data(){
             return {
@@ -419,24 +661,41 @@
                     access_token: '',
                 },
                 row: {
-                    region_id: '',
-                    status: true,
+                    writer_id: '',
+                    category_id: '',
+                    destination_id: '',
+                    status: 1,
+                    featured: 0,
                     preview: "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e",
-                    image: '',
+                    image_url: '',
                     image_alt: '',
                     image_title: '',
                     
                     slug: '',
                     title: '',
+                    short_body: '',
                     body: '',
 
                     meta_title: '',
                     meta_keywords: '',
                     meta_description: '',
-                },
-                regions: [],
-                regionLoading: true,
 
+                    // items
+                    items: [],
+                    items_link: [],
+                    items_order: [],
+                    items_body: [],
+
+                    items_preview: [],
+                    items_image_url: [],
+                    items_image_alt: [],
+                    items_image_title: []
+                },
+                packagesValue: [],
+                packagesOptions: [],
+                writers: [],
+                writerLoading: true,
+                packageLoading: true,
                 btnLoading: false,
             }
         },
@@ -449,9 +708,10 @@
             }
             if(localStorage.getItem('access_token')) {
                 this.auth.access_token = localStorage.getItem('access_token');
-            }
+            }   
 
-            this.fetchRegions();
+            this.fetchWriters();
+            this.fetchPackages();
         },
         methods: {
             
@@ -467,26 +727,51 @@
                 }
             },
 
-            // Fetch Regions
-            fetchRegions(){
-                this.regionLoading = true;
+            // Fetch Writer
+            fetchWriters(){
+                this.writerLoading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/regions',
+                    url: window.baseURL+'/writers',
                     method: 'GET',
                     data: {},
                     params: {
                         status: 'active',
-                        paginate: 25,
+                        paginate: 100,
                     },
                 }
                 this.axios(options)
                     .then(res => {
-                        this.regionLoading = false;
-                        this.regions = res.data.rows;
+                        this.writerLoading = false;
+                        this.writers = res.data.rows;
+                    })
+                    .catch(() => {})
+                    .finally(() => {});
+            },
+
+            // Packages
+            fetchPackages(){
+                this.packageLoading = true;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const options = {
+                    url: window.baseURL+'/packages',
+                    method: 'GET',
+                    data: {},
+                    params: {
+                        status: 'active',
+                        paginate: 100,
+                    },
+                }
+                this.axios(options)
+                    .then(res => {
+                        this.packageLoading = false;
+                        this.packagesOptions = res.data.packages;
                     })
                     .catch(() => {})
                     .finally(() => {});
@@ -496,7 +781,13 @@
             onImageChange(e){
                 const file = e.target.files[0];
                 this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
+                this.row.image_url = file;
+            },
+
+            onItemsImageChange(e) {
+                const file = e.target.files[0];
+                this.row.items_preview = URL.createObjectURL(file);
+                this.row.items_image_url = file;
             },
 
 
@@ -507,25 +798,44 @@
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
+                // items
+                for( let i = 1; i < this.row.items_link.length; i++ ) {
+                    this.row.items[i] = {
+                        'link' : this.row.items_link[i],
+                        'body' : this.row.items_body[i],
+                        'order' : this.row.items_order[i],
+                        //
+                        'image_url' : this.row.items_image_url[i],
+                        'image_alt' : this.row.items_image_alt[i],
+                        'image_title' : this.row.items_image_title[i]
+                    }
+                }
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 const options = {
-                    url: window.baseURL+'/destinations',
+                    url: window.baseURL+'/articles',
                     method: 'POST',
                     data: {
-                        region_id: this.row.region_id,
-                        status: this.row.status,
+                        writer_id: this.row.writer_id,
+                        destination_id: this.row.destination_id,
+                        category_id: this.row.category_id,
 
-                        image_url: this.row.image,
+                        status: this.row.status,
+                        featured: this.row.featured,
+
+                        image_url: this.row.image_url,
                         image_alt: this.row.image_alt,
                         image_title: this.row.image_title,
 
                         title: this.row.title,
                         slug: this.row.slug,
+                        short_body: this.row.short_body,
                         body: this.row.body,
 
                         meta_title: this.row.meta_title,
                         meta_keywords: this.row.meta_keywords,
-                        meta_description: this.row.meta_description
+                        meta_description: this.row.meta_description,
+
+                        items: this.row.items
                     }
                 }
                 this.axios(options, config)
@@ -536,7 +846,7 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        this.$router.push({ name: 'destinations' })
+                        //this.$router.push({ name: 'Articles' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -565,19 +875,48 @@
                 let str = this.row.slug;
                 this.onSlugChange(str);
             },
-            onSlugChange(str=''){
+            onSlugChange(str){
                 if(!str) {
-                    str = this.row.slug;
+                   let str = this.row.slug;
+                   this.row.slug = str.replace(/\s+/g, '-');
+                } else {
+                    this.row.slug = str.replace(/\s+/g, '-');
                 }
-                this.row.slug = str.replace(/\s+/g, '-');
             },
 
             // active status
             onStatus(){
                 if(this.row.status)
-                    this.row.status = false;
+                    this.row.status = 0;
                 else
-                    this.row.status = true;
+                    this.row.status = 1;
+            },
+            onFeatured(){
+                if(this.row.featured)
+                    this.row.featured = 0;
+                else
+                    this.row.featured = 1;
+            },
+
+            // items add more
+            opnFrm(i) {
+                let prev = i - 1;
+                let pvt = document.querySelector('#btn_'+prev);
+                let frm = document.querySelector('#frm_'+i);
+                pvt.classList.add('hidden');
+                frm.classList.remove('hidden');
+            },
+            removeOption(i) {
+                let prev = i - 1;
+                let pvt = document.querySelector('#btn_'+prev);
+                let frm = document.querySelector('#frm_'+i);
+                frm.classList.add('hidden');
+                pvt.classList.remove('hidden');
+                this.row.items_link[i] = '';
+                this.row.items_order[i] = '';
+                this.row.items_body[i] = '';
+                this.row.items_image_alt[i] = '';
+                this.row.items_image_title[i] = '';
             },
 
             // Cancel
@@ -609,6 +948,7 @@
         // },
     }
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

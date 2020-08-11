@@ -136,7 +136,7 @@
                 };
                 let vm = this;
                 const options = {
-                    url: window.baseURL+'/appSettings',
+                    url: window.baseURL+'/apps',
                     method: 'GET',
                     data: {},
                     params: {
