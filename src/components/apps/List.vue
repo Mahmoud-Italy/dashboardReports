@@ -134,7 +134,6 @@
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
-                let vm = this;
                 const options = {
                     url: window.baseURL+'/apps',
                     method: 'GET',
@@ -148,10 +147,6 @@
                     .then(res => {
                         this.pgLoading = false;
                         this.rows = res.data.rows;
-                        if(res.data.pagiante.total) {
-                            this.total_data = res.data.pagiante.total;
-                            vm.makePagination(res.data.pagiante)
-                        }
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -163,22 +158,11 @@
                             iziToast.warning({
                                 icon: 'ti-alert',
                                 title: 'Wow-man,',
-                                message: err.response.data.message
+                                message: (err.response) ? err.response.data.message : ''+err
                             });
                         }
                     })
                     .finally(() => {})
-            },
-
-            // Pagination
-            makePagination(meta) {
-                let pagination = {
-                    current_page: meta.current_page,
-                    last_page: meta.last_page,
-                    next_page_url: meta.next_page_url,
-                    prev_page_url: meta.prev_page_url
-                }
-                this.pagination = pagination;
             },
 
             // remove sessions

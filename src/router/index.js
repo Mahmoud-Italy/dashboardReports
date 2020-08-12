@@ -37,11 +37,12 @@ export default new Router({
   { path: '/articles/edit/:id', name: 'edit-articles', component: require('../components/articles/Edit.vue').default, beforeEnter: requireAuth },
 
   // Caches
-  { path: '/articles', name: 'caches', component: require('../components/caches/List.vue').default, beforeEnter: requireAuth },
+  { path: '/caches', name: 'caches', component: require('../components/caches/List.vue').default, beforeEnter: requireAuth },
 
   // Categories
   { path: '/categories', name: 'categories', component: require('../components/categories/List.vue').default, beforeEnter: requireAuth },
   { path: '/categories/status/:status', name: 'status-categories', component: require('../components/categories/List.vue').default, beforeEnter: requireAuth },
+  { path: '/categories/filter/:filter_by/:filter', name: 'filter-categories', component: require('../components/categories/List.vue').default, beforeEnter: requireAuth },
   { path: '/categories/create', name: 'create-categories', component: require('../components/categories/Create.vue').default, beforeEnter: requireAuth },
   { path: '/categories/edit/:id', name: 'edit-categories', component: require('../components/categories/Edit.vue').default, beforeEnter: requireAuth },
 
@@ -127,9 +128,9 @@ export default new Router({
   { path: '/writers/edit/:id', name: 'edit-writers', component: require('../components/writers/Edit.vue').default, beforeEnter: requireAuth },
 
     
-  // Extra
-  { path: '/forbidden', name: 'forbidden', component: require('../components/extra/403.vue').default },
-  { path: '/*', name: 'not-found', component: require('../components/extra/404.vue').default }
+  // Errors
+  { path: '/forbidden', name: 'forbidden', component: require('../components/errors/Forbidden.vue').default, beforeEnter: requireAuth },
+  { path: '/*', name: 'not-found', component: require('../components/errors/NotFound.vue').default }
 
   ]
 })

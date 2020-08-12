@@ -10,8 +10,7 @@
 
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2">Categories
-                       <!--  v-if="permission.hasCreate"  -->
-                        <router-link 
+                        <router-link v-if="permissions.add"
                             :to="{ name: 'create-categories' }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
@@ -32,25 +31,19 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">
-                                Categories 
-                                <!-- <span v-if="dataLoading">
-                                    <span class="spinner-grow spinner-grow-sm mr-1" 
-                                        role="status" aria-hidden="true">
-                                    </span>
-                                </span>
-                                <span v-if="!dataLoading && rows.length" class="f12">
-                                    {{rows.length}}
-                                </span> -->
-                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Categories</li>
                         </ol>
                     
                     <!-- Build Action button -->
                     <div class="pull-rights ui-mt-50 pull-right ">
                         <div class="dropdown display-flex-inline">
                             <div class="dropdown ui-mr5">
-                                <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" :disabled="bulkLoading">
+                                <button type="button" 
+                                    class="btn btn-danger btn-sm dropdown-toggle" 
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true" 
+                                    aria-expanded="false" 
+                                    :disabled="bulkLoading">
                                     <span v-if="!bulkLoading">Bulk Actions</span>
                                     <span v-if="bulkLoading">
                                         <span class="spinner-grow spinner-grow-sm mr-1" 
@@ -66,17 +59,17 @@
                                         @click="multiInactive()"
                                         class="dropdown-item" href="javascript:;">Inactive
                                     </a>
-                                    <!--  && permission.hasDestroy" -->
-                                    <a v-if="status != 'trash'"
+
+                                    <a v-if="status != 'trash' && permissions.delete"
                                         @click="multiMoveToTrash()"
                                         class="dropdown-item" href="javascript:;">Move to Trash
                                     </a>
 
-                                    <a v-if="status == 'trash'"
+                                    <a v-if="status == 'trash' && permissions.delete"
                                         @click="multiRestoreFromTrash()"
                                         class="dropdown-item" href="javascript:;">Restore
                                     </a>
-                                    <a v-if="status == 'trash'"
+                                    <a v-if="status == 'trash' && permissions.delete"
                                         @click="multiDeletePermanently()"
                                         class="dropdown-item" href="javascript:;">Delete Permanently
                                     </a>
@@ -84,15 +77,21 @@
                             </div>
 
                             <div class="dropdown">
-                                <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
-                                    :disabled="exportLoading"><span v-if="!exportLoading">Export</span>
+                                <button type="button" 
+                                    class="btn btn-secondary btn-sm dropdown-toggle" 
+                                    id="dropdownMenuButton"
+                                    data-toggle="dropdown" 
+                                    aria-haspopup="true" 
+                                    aria-expanded="false" 
+                                    :disabled="exportLoading">
+                                    <span v-if="!exportLoading">Export</span>
                                     <span v-if="exportLoading">
                                         <span class="spinner-grow spinner-grow-sm mr-1" 
                                         role="status" aria-hidden="true"></span>Loading...
                                     </span>
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div class="dropdown-menu" 
+                                    aria-labelledby="dropdownMenuButton">
                                     <download-excel
                                         class = "dropdown-item cursor-pointer"
                                         :fetch = "fetchExport"
@@ -112,7 +111,10 @@
                                         worksheet = "Categories"
                                         name = "Categories.xls">CSV
                                     </download-excel>
-                                    <a class="dropdown-item" href="javascript:;" v-print="'#printMe'">Print</a>
+                                    <a class="dropdown-item" 
+                                        href="javascript:;" 
+                                        v-print="'#printMe'">Print
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -126,30 +128,32 @@
                         <h2 class="h4 card-header-title">
                             <router-link class="pg-hd"
                                 :to="{ name: 'categories' }"
-                                :class="(this.status == '') ? 'active' : '' ">All</router-link> 
-                            <span class="pg-hd no-decoration f14"> ({{count_all}}) </span> &nbsp;|&nbsp; 
+                                :class="(status == '') ? 'active' : '' ">All</router-link> 
+                            <span class="pg-hd no-decoration f14"> ({{statusBar.all}}) </span>&nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
                                 :to="{ name: 'status-categories', params:{status: 'active'} }" 
-                                :class="(this.status == 'active') ? 'active' : '' ">Active</router-link>
-                            <span class="pg-hd no-decoration f14"> ({{count_active}}) </span> &nbsp;|&nbsp; 
-
+                                :class="(status == 'active') ? 'active' : '' ">Active</router-link>
+                           <span class="pg-hd no-decoration f14"> ({{statusBar.active}}) </span>&nbsp;|&nbsp; 
                             <router-link class="pg-hd"
                                 :to="{ name: 'status-categories', params:{status: 'inactive'} }" 
-                                :class="(this.status == 'inactive') ? 'active' : '' ">Inactive</router-link>
-                            <span class="pg-hd no-decoration f14"> ({{count_inactive}}) </span> &nbsp;|&nbsp; 
+                                :class="(status == 'inactive') ? 'active' : '' ">Inactive</router-link>
+                            <span class="pg-hd no-decoration f14"> ({{statusBar.inactive}}) </span>&nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
                                 :to="{ name: 'status-categories', params:{status: 'trash'} }" 
-                                :class="(this.status == 'trash') ? 'active' : '' ">Trash</router-link>
-                            <span class="pg-hd no-decoration f14"> ({{count_trash}}) </span>
+                                :class="(status == 'trash') ? 'active' : '' ">Trash</router-link>
+                            <span class="pg-hd no-decoration f14"> ({{statusBar.trash}}) </span>
 
 
                             <!-- Show Entries -->
                             <div class="dropdown pull-right ui-mt-10">
-                                <button type="button" class="btn btn-light btn-sm dropdown-toggle" 
+                                <button type="button" 
+                                    class="btn btn-light btn-sm dropdown-toggle" 
                                     id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    data-toggle="dropdown" 
+                                    aria-haspopup="true" 
+                                    aria-expanded="false">
                                     <span>Show</span>
                                     <span v-if="!showLoading"> {{ show }}</span>
                                     <span v-if="showLoading">
@@ -157,21 +161,22 @@
                                         role="status" aria-hidden="true"></span>
                                     </span>
                                 </button>
-                                <div class="dropdown-menu ui-min-w100" aria-labelledby="dropdownMenuButton">
+                                <div class="dropdown-menu ui-min-w100" 
+                                    aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item cursor-pointer"
-                                        :class="(this.show == 10) ? 'active' : ''"
+                                        :class="(show == 10) ? 'active' : ''"
                                         @click="onShow(10)">10
                                     </a>
                                     <a class="dropdown-item cursor-pointer"
-                                        :class="(this.show == 25) ? 'active' : ''"
+                                        :class="(show == 25) ? 'active' : ''"
                                         @click="onShow(25)">25
                                     </a>
                                     <a class="dropdown-item cursor-pointer"
-                                        :class="(this.show == 50) ? 'active' : ''"
+                                        :class="(show == 50) ? 'active' : ''"
                                         @click="onShow(50)">50
                                     </a>
                                     <a class="dropdown-item cursor-pointer"
-                                        :class="(this.show == 100) ? 'active' : ''"
+                                        :class="(show == 100) ? 'active' : ''"
                                         @click="onShow(100)">100
                                     </a>
                                 </div>
@@ -190,7 +195,9 @@
                                     <tr>
                                         <th style="width: 5%">
                                             <div class="custom-control custom-checkbox">
-                                                <input id="expBox0" class="custom-control-input" type="checkbox"
+                                                <input id="expBox0" 
+                                                    class="custom-control-input" 
+                                                    type="checkbox"
                                                     v-model="selectAll" @click="select">
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
@@ -199,9 +206,9 @@
                                             <span v-if="!orderLoading"
                                                 @click="onOrderBy('title')"
                                                 class="cursor-pointer " 
-                                                :class="(this.order == 'DESC') 
+                                                :class="(order == 'DESC') 
                                                         ? 'ti-arrow-down' 
-                                                        :(this.order == 'ASC') ? 'ti-arrow-up'
+                                                        :(order == 'ASC') ? 'ti-arrow-up'
                                                         : 'ti-exchange-vertical'">
                                             </span>
                                             <span v-if="orderLoading">
@@ -211,7 +218,7 @@
                                         </th>
                                         <th class="text-center" style="width: 10%">Destination</th>
                                         <th class="text-center" style="width: 20%">Author</th>
-                                        <th class="text-center" style="width: 15%">No. Packages</th>
+                                        <th class="text-center" style="width: 10%">No. Packages</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -252,32 +259,32 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold">
-                                        <!-- v-if="permission.hasEdit"  -->
-                                        <router-link 
-                                                :to="{ name: 'edit-categories', params:{id: row.id} }" 
-                                                class="default-color text-decoration-hover">
+                                        <router-link v-if="permissions.edit"
+                                            :to="{ name: 'edit-categories', params:{id:row.encrypt_id} }" 
+                                            class="default-color text-decoration-hover">
                                             {{ row.title }} 
                                         </router-link>
-                                        <!-- <span v-if="!permission.hasEdit">{{ row.title }}</span> -->
+                                        <span v-if="!permissions.edit">{{ row.title }}</span>
                                     </td>
 
                                 
                                     <td class="font-weight-semi-bold text-center">
-                                        <span v-if="!row.destination"> - </span>
-                                        <router-link v-if="row.destination" 
-                                            :to="{ name: 'filter-destination', 
-                                            params:{filter_by: 'destination', 'filter':row.destination} }" 
+                                        <router-link v-if="row.destination"
+                                            :to="{ name: 'filter-categories', 
+                                            params:{filter_by: 'destination', 
+                                                   filter : row.destination.title} }" 
                                             class="text-decoration-hover">
                                             <span class="badge badge-md badge-pill badge-danger-soft">
                                                 {{ row.destination.title }}
                                             </span>
                                         </router-link>
+                                        <span v-if="!row.destination"> - </span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
                                         <span v-if="!row.user" class="text-center"> - </span>
                                         <router-link v-if="row.user" 
-                                            :to="{ name: 'filter-destination', 
+                                            :to="{ name: 'filter-categories', 
                                                 params:{filter_by: 'author', 'filter':row.user.id}}" 
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
@@ -289,7 +296,7 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                        <span> {{ row.packages }} </span>
+                                        <span> 0 </span>
                                     </td>
 
                                     <td v-html="(row.deleted_at) ? row.deleted_at : 
@@ -299,24 +306,29 @@
 
                                     <td class="text-center">
                                         <div class="dropdown">
-                                            <a id="tableWithImage1MenuInvoker" class="u-icon-sm link-muted" 
-                                                href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false"
+                                            <a id="tableWithImage1MenuInvoker" 
+                                                class="u-icon-sm link-muted" 
+                                                href="javascript:;" 
+                                                role="button" 
+                                                aria-haspopup="true" 
+                                                aria-expanded="false"
                                                 data-toggle="dropdown"
                                                 data-offset="8">
                                                 <span v-if="!row.loading" class="ti-more"></span>
-                                                <span v-if="row.loading" class="spinner-grow spinner-grow-sm mr-1" 
+                                                <span v-if="row.loading" 
+                                                    class="spinner-grow spinner-grow-sm mr-1" 
                                                     role="status" aria-hidden="true">
                                                 </span>
                                             </a>
-                                            <div class="dropdown-menu dropdown-menu-right" style="width: 150px">
+                                            <div class="dropdown-menu dropdown-menu-right" 
+                                                style="width: 150px">
                                                 <div class="card border-0 p-3">
                                                     <ul class="list-unstyled mb-0">
                                                         <li v-if="!row.trash">
-                                                            <!-- v-if="permission.hasEdit" -->
-                                                            <router-link 
+                                                            <router-link v-if="permissions.edit"
                                                                 class="d-block link-dark"
                                                                 :to="{ name: 'edit-categories', 
-                                                                params:{id: row.id}}">
+                                                                params:{id: row.encrypt_id}}">
                                                                 Edit
                                                             </router-link>
                                                         </li>
@@ -324,32 +336,35 @@
                                                             <a @click="row.loading = true; 
                                                                 inactivate(row.id)"
                                                                 v-html="(row.status) ? 'Inactive' : ''"
-                                                                class="d-block link-dark" href="javascript:;">
+                                                                class="d-block link-dark" 
+                                                                href="javascript:;">
                                                             </a>
                                                         </li>
-                                                        <li v-if="!row.trash">
+                                                        <li v-if="!row.trash && permissions.delete">
                                                             <a @click="row.loading = true; 
                                                                 activate(row.id)"
                                                                 v-html="(!row.status) ? 'Active' : ''"
-                                                                class="d-block link-dark" href="javascript:;">
+                                                                class="d-block link-dark" 
+                                                                href="javascript:;">
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <!-- permission.hasDestroy -->
-                                                            <a v-if="row.trash == 0" 
+                                                            <a v-if="row.trash == 0 && permissions.delete" 
                                                                 @click="row.loading = true; 
                                                                 moveToTrash(row.id)"
                                                                 class="d-block link-dark" href="javascript:;">Move to Trash
                                                             </a>
-                                                            <a v-if="row.trash == 1" 
+                                                            <a v-if="row.trash == 1 && permissions.delete" 
                                                                 @click="row.loading = true; 
                                                                 restoreFromTrash(row.id)"
-                                                                class="d-block link-dark" href="javascript:;">Restore
+                                                                class="d-block link-dark" 
+                                                                href="javascript:;">Restore
                                                             </a>
-                                                            <a v-if="row.trash == 1" 
+                                                            <a v-if="row.trash == 1 && permissions.delete" 
                                                                 @click="row.loading = true; 
                                                                 deletePermanently(row.id)"
-                                                                class="d-block link-dark" href="javascript:;">Delete Permanently
+                                                                class="d-block link-dark" 
+                                                                href="javascript:;">Delete Permanently
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -430,7 +445,7 @@
                    json_fields: {
                         'id': 'id',
                         'title': 'title',
-                        'body': 'body',
+                        'body' : 'body',
                         'created_at': 'created_at',
                     }, 
                     json_data: [],
@@ -447,17 +462,18 @@
                     role: '',
                     access_token: '',
                 },
-                permission: {
-                    hasCreate: '',
-                    hasEdit: '',
-                    hasDestroy: '',
+                permissions: {
+                    add: false,
+                    edit: false,
+                    delete: false
+                },
+                statusBar: {
+                    all: 0,
+                    active: 0,
+                    inactive: 0,
+                    trash: 0,
                 },
                 //
-                count_all: 0,
-                count_active: 0,
-                count_inactive: 0,
-                count_trash: 0,
-
                 search: '',
                 status: '',
                 filter_by: '',
@@ -584,15 +600,19 @@
                         this.showLoading = false;
                         this.orderLoading = false;
 
-                        this.count_all = res.data.all;
-                        this.count_active = res.data.active;
-                        this.count_inactive = res.data.inactive;
-                        this.count_trash = res.data.trash;
+                        this.statusBar.all = res.data.statusBar.all;
+                        this.statusBar.active = res.data.statusBar.active;
+                        this.statusBar.inactive = res.data.statusBar.inactive;
+                        this.statusBar.trash = res.data.statusBar.trash;
+
+                        this.permissions.add = res.data.permissions.add;
+                        this.permissions.edit = res.data.permissions.edit;
+                        this.permissions.delete = res.data.permissions.delete;
 
                         this.rows = res.data.rows;
-                        if(res.data.pagiante.total) {
-                            this.total_data = res.data.pagiante.total;
-                            vm.makePagination(res.data.pagiante)
+                        if(res.data.paginate.total) {
+                            //this.total_data = res.data.paginate.total;
+                            vm.makePagination(res.data.paginate)
                         }
                     })
                     .catch(err => {
@@ -605,7 +625,7 @@
                             iziToast.warning({
                                 icon: 'ti-alert',
                                 title: 'Wow-man,',
-                                message: err.response.data.message
+                                message: (err.response) ? err.response.data.message : ''+err
                             });
                         }
                     })
@@ -643,7 +663,12 @@
 
             // remove sessions
             removeLocalStorage() {
+                localStorage.removeItem('permissions');
                 localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
             },
         
 
@@ -883,8 +908,6 @@
                 }
             },
         /** END Bulk Actions **/
-
-
 
         },
     }

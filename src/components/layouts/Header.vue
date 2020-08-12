@@ -161,7 +161,7 @@
                 this.auth.user_image = localStorage.getItem('user_image');
             }
             if(localStorage.getItem('user_name')) {
-                this.auth.user_name = localStorage.getItem('use_rname');
+                this.auth.user_name = localStorage.getItem('user_name');
             }
             if(localStorage.getItem('access_token')) {
                 this.auth.access_token = localStorage.getItem('access_token');

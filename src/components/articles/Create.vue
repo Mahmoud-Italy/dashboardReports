@@ -433,6 +433,104 @@
                         <div class="card mt-5">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
+                                    <div id="NavDestination" class="card-header">
+                                        <h2 class="h4 card-header-title" 
+                                            @click="collapseToggle('Destination')" 
+                                            aria-expanded="false" 
+                                            aria-controls="collapseNavDestination" 
+                                            data-toggle="collapse" 
+                                            data-target="#collapseNavDestination">Destination
+                                            <span id="iconToggleDestination" 
+                                                    class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
+                                            </span>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseNavDestination" 
+                                        class="collapse" 
+                                        aria-labelledby="NavDestination" 
+                                        data-parent="#accordionNav">
+                                        <div class="col-12 pt-3">
+                                            <!-- Destinations -->
+                                            <div class="form-group">
+                                                <div v-if="destinationLoading" class="text-center">
+                                                    <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                        role="status" 
+                                                        aria-hidden="true">
+                                                    </span>
+                                                </div>
+                                                <select class="form-control custom-select"
+                                                    v-if="!destinationLoading" 
+                                                    v-model="row.destination_id">
+                                                    <option value="">Select Destination</option>
+                                                    <option v-for="(destination, index) in destinations" 
+                                                            :key="index"
+                                                            :value="destination.id">
+                                                            {{ destination.title }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <!-- End Destination -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End NavOne -->
+
+
+                        <!-- NavOne -->
+                        <div class="card mt-5">
+                            <div class="card-body">
+                                <div id="accordionNav" class="accordion">
+                                    <div id="NavCategory" class="card-header">
+                                        <h2 class="h4 card-header-title" 
+                                            @click="collapseToggle('Category')" 
+                                            aria-expanded="false" 
+                                            aria-controls="collapseNavCategory" 
+                                            data-toggle="collapse" 
+                                            data-target="#collapseNavCategory">Category
+                                            <span id="iconToggleCategory" 
+                                                    class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
+                                            </span>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseNavCategory" 
+                                        class="collapse" 
+                                        aria-labelledby="NavCategory" 
+                                        data-parent="#accordionNav">
+                                        <div class="col-12 pt-3">
+                                            <!-- Category -->
+                                            <div class="form-group">
+                                                <div v-if="categoryLoading" class="text-center">
+                                                    <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                        role="status" 
+                                                        aria-hidden="true">
+                                                    </span>
+                                                </div>
+                                                <select class="form-control custom-select"
+                                                    v-if="!categoryLoading" 
+                                                    v-model="row.category_id">
+                                                    <option value="">Select Category</option>
+                                                    <option v-for="(category, index) in categories" 
+                                                            :key="index"
+                                                            :value="destination.id">
+                                                            {{ category.title }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <!-- End Category -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End NavOne -->
+
+
+                        <!-- NavOne -->
+                        <div class="card mt-5">
+                            <div class="card-body">
+                                <div id="accordionNav" class="accordion">
                                     <div id="NavPackages" class="card-header">
                                         <h2 class="h4 card-header-title" 
                                             @click="collapseToggle('Packages')" 
@@ -581,7 +679,7 @@
                                                     <label class="custom-control-label" 
                                                         for="customSwitch2"
                                                         v-html="(row.featured) ? 'Featured article' 
-                                                                            : 'Not Featured article'">
+                                                                               : 'Normal article'">
                                                     </label>
                                                 </div>
                                             </div>
@@ -694,7 +792,11 @@
                 packagesValue: [],
                 packagesOptions: [],
                 writers: [],
+                destinations: [],
+                categories: [],
                 writerLoading: true,
+                destinationLoading: true,
+                categoryLoading: true,
                 packageLoading: true,
                 btnLoading: false,
             }
@@ -711,7 +813,6 @@
             }   
 
             this.fetchWriters();
-            this.fetchPackages();
         },
         methods: {
             
@@ -747,6 +848,59 @@
                     .then(res => {
                         this.writerLoading = false;
                         this.writers = res.data.rows;
+                        this.fetchDestinations();
+                    })
+                    .catch(() => {})
+                    .finally(() => {});
+            },
+
+            // Fetch Destination
+            fetchDestinations(){
+                this.destinationLoading = true;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const options = {
+                    url: window.baseURL+'/destinations',
+                    method: 'GET',
+                    data: {},
+                    params: {
+                        status: 'active',
+                        paginate: 100,
+                    },
+                }
+                this.axios(options)
+                    .then(res => {
+                        this.destinationLoading = false;
+                        this.destinations = res.data.rows;
+                        this.fetchCategories();
+                    })
+                    .catch(() => {})
+                    .finally(() => {});
+            },
+
+            // Fetch Categories
+            fetchCategories(){
+                this.categoryLoading = true;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const options = {
+                    url: window.baseURL+'/categories',
+                    method: 'GET',
+                    data: {},
+                    params: {
+                        status: 'active',
+                        paginate: 100,
+                    },
+                }
+                this.axios(options)
+                    .then(res => {
+                        this.categoryLoading = false;
+                        this.categories = res.data.rows;
+                        this.fetchPackages();
                     })
                     .catch(() => {})
                     .finally(() => {});
@@ -846,7 +1000,7 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        //this.$router.push({ name: 'Articles' })
+                        this.$router.push({ name: 'Articles' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -922,7 +1076,7 @@
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'destinations' });
+                    this.$router.push({ name: 'articles' });
                 }
             },
 

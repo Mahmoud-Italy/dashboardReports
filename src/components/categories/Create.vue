@@ -282,7 +282,8 @@
                                         <div class="col-12 pt-3">
                                             <!-- Image -->
                                             <div class="form-group">
-                                                <img :src="row.preview" 
+                                                <img v-if="row.preview" 
+                                                    :src="row.preview" 
                                                     class="mb-2 h200 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
@@ -471,12 +472,12 @@
                 row: {
                     destination_id: '',
                     status: true,
-                    preview: "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e",
+                    preview: "",
                     image: '',
                     image_alt: '',
                     image_title: '',
 
-                    icon_preview: "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e",
+                    icon_preview: "",
                     icon: '',
                     icon_alt: '',
                     icon_title: '',
