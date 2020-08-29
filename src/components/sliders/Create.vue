@@ -8,7 +8,7 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Destinations
+                    <h1 class="h2 mb-2">Sliders
 
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
@@ -29,7 +29,7 @@
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
                             <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'destinations' }">Destinations</router-link>
+                                <router-link :to="{ name: 'sliders' }">Sliders</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Add New</li>
                         </ol>
@@ -45,222 +45,113 @@
                     <div class="col-md-8 mb-5">
 
 
-                    <!-- CardMeta -->
+                    <!-- Card Content -->
                     <div class="card">
                         <div class="card-body">
                             <div id="accordion" class="accordion">
-                                <div id="TabMeta" class="card-header">
+                                <div id="TabContent" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Meta')"
+                                            @click="collapseToggle('Content')"
                                             aria-expanded="false" 
-                                            aria-controls="collapseMeta" 
+                                            aria-controls="collapseContent" 
                                             data-toggle="collapse"
-                                            data-target="#collapseMeta">Meta
-                                            <span id="iconToggleMeta" 
+                                            data-target="#collapseContent">Content
+                                            <span id="iconToggleContent" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseMeta" 
+                                    <div id="collapseContent" 
                                         class="collapse show" 
-                                        aria-labelledby="TabMeta" 
+                                        aria-labelledby="TabContent" 
                                         data-parent="#accordion">
 
                                     <div class="col-12 pt-3">
 
-                                        <!-- Meta title -->
+                                        <!-- Title -->
                                         <div class="form-group">
-                                            <div class="pull-right f12" 
-                                                v-if="row.meta_title"
-                                                v-text="(row.meta_title.length)">
-                                            </div>
-                                            <label for="inputText4">Meta title</label>
+                                            <label for="input1">Title</label>
                                             <input class="form-control"
-                                                    id="inputText4"  
+                                                    id="input1"  
                                                     type="text" 
-                                                    v-model="row.meta_title">
+                                                    v-model="row.title">
                                         </div>
-                                        <!-- End Meta title -->
+                                        <!-- End Title -->
+
+                                        <!-- Order -->
+                                        <div class="form-group">
+                                            <label for="input2">Order</label>
+                                            <input class="form-control"
+                                                    id="input2"  
+                                                    type="number"
+                                                    min="0" 
+                                                    v-model.number="row.order">
+                                        </div>
+                                        <!-- End Order -->
+
+                                        <!-- Button -->
+                                        <div class="form-group">
+                                            <label for="input3">Button</label>
+                                            <input class="form-control"
+                                                    id="input3"  
+                                                    type="text"
+                                                    v-model="row.button">
+                                        </div>
+                                        <!-- End Button -->
+
+                                        <!-- Link -->
+                                        <div class="form-group">
+                                            <label for="input4">Link</label>
+                                            <input class="form-control"
+                                                    id="input4"  
+                                                    type="text"
+                                                    v-model="row.link">
+                                        </div>
+                                        <!-- End Link -->
+
+                                        <!-- Iframe -->
+                                        <div class="form-group">
+                                            <label for="input5">Iframe</label>
+                                            <input class="form-control"
+                                                    id="input5"  
+                                                    type="text"
+                                                    v-model="row.iframe">
+                                        </div>
+                                        <!-- End Iframe -->
                                             
-                                        <!-- Meta keywords -->
+                                        <!-- Body -->
                                         <div class="form-group">
-                                            <div class="pull-right f12"
-                                                v-if="row.meta_keywords" 
-                                                v-text="(row.meta_keywords.length)">
-                                            </div>
-                                            <label for="inputText5">Meta keywords</label>
-                                            <textarea class="form-control"
-                                                    id="inputText5" 
-                                                    rows="5"  
-                                                    v-model="row.meta_keywords">
-                                            </textarea>
+                                            <label for="input6">Body</label>
+                                            <editor
+                                                id="input6"
+                                                v-model="row.body"
+                                                :api-key="editor.api_key"
+                                                :init="{
+                                                    height: 300,
+                                                    menubar: editor.menubar,
+                                                    plugins: editor.plugins,
+                                                    toolbar: editor.toolbar
+                                                }"
+                                            />
                                         </div>
-                                        <!-- End Meta keywords -->
-
-                                        <!-- Meta description -->
-                                        <div class="form-group">
-                                            <div class="pull-right f12" 
-                                                v-if="row.meta_description" 
-                                                v-text="(row.meta_description.length)">
-                                            </div>
-                                            <label for="inputText6">Meta description</label>
-                                            <textarea class="form-control" 
-                                                    id="inputText6" 
-                                                    rows="5" 
-                                                    v-model="row.meta_description">
-                                            </textarea>
-                                        </div>
-                                        <!-- End Meta description -->
+                                        <!-- End Body -->
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End CarDMeta -->
-
-
-                        <!-- CardDest -->
-                        <div class="card mt-5">
-                            <div class="card-body">
-                                <div id="accordion" class="accordion">
-                                    <div id="TabDest" class="card-header">
-                                        <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Dest')"
-                                            aria-expanded="false" 
-                                            aria-controls="collapseDest" 
-                                            data-toggle="collapse"
-                                            data-target="#collapseDest">Destination
-                                            <span id="iconToggleDest" 
-                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow 
-                                                    pull-right black">
-                                            </span>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseDest" 
-                                        class="collapse" 
-                                        aria-labelledby="TabDest" 
-                                        data-parent="#accordion">
-
-                                <div class="col-12 pt-3">
-                                    
-                                    <!-- Title -->
-                                    <div class="form-group">
-                                        <label for="inputText1">Title</label>
-                                        <input class="form-control" 
-                                                id="inputText1" 
-                                                type="text" 
-                                                v-model="row.title" 
-                                                @keyup="onTitleChange">
-                                    </div>
-                                    <!-- End Title -->
-
-                                    <!-- Slug -->
-                                    <div class="form-group">
-                                        <label for="inputText2">Slug</label>
-                                        <input class="form-control text-lowercase"
-                                                id="inputText2"  
-                                                type="text" 
-                                                v-model="row.slug" 
-                                                @keydown.space.prevent 
-                                                @paste="onSlugPaste"
-                                                @change="onSlugChange">
-                                    </div>
-                                    <!-- End Slug -->
-
-
-                                    <!-- Body -->
-                                    <div class="form-group">
-                                        <label for="inputText3">Body</label>
-                                        <editor
-                                            id="inputText3"
-                                            v-model="row.body"
-                                            api-key="xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b"
-                                            :init="{
-                                                height: 600,
-                                                menubar: 'file edit view insert format tools table tc help',
-                                                plugins: [
-                                                    'advlist autolink lists link image charmap print preview anchor',
-                                                    'searchreplace visualblocks code fullscreen',
-                                                    'insertdatetime media table paste code help wordcount'
-                                                ],
-                                                toolbar:
-                                                    'undo redo | formatselect | bold italic backcolor | \
-                                                    alignleft aligncenter alignright alignjustify | \
-                                                    bullist numlist outdent indent | removeformat | help'
-                                            }"
-                                        />
-                                    </div>
-                                    <!-- End Body -->
-
-                                </div>
-                                
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End CardDest -->
-
+                        <!-- End Card User -->
 
                 </div>
-
-
 
 
 
                     <!-- ******* SideNavbar ******** -->
                     <div class="col-md-4 mb-5">
 
-                        <!-- NavOne -->
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="accordionNav" class="accordion">
-                                    <div id="NavRegion" class="card-header">
-                                        <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Region')" 
-                                            aria-expanded="false" 
-                                            aria-controls="collapseNavRegion" 
-                                            data-toggle="collapse" 
-                                            data-target="#collapseNavRegion">Region
-                                            <span id="iconToggleRegion" 
-                                                    class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
-                                            </span>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseNavRegion" 
-                                        class="collapse" 
-                                        aria-labelledby="NavRegion" 
-                                        data-parent="#accordionNav">
-                                        <div class="col-12 pt-3">
-                                            <!-- Region -->
-                                            <div class="form-group">
-                                                <div v-if="regionLoading" class="text-center">
-                                                    <span class="spinner-grow spinner-grow-sm mr-1" 
-                                                        role="status" 
-                                                        aria-hidden="true">
-                                                    </span>
-                                                </div>
-                                                <select class="form-control custom-select"
-                                                    v-if="!regionLoading" 
-                                                    v-model="row.region_id">
-                                                    <option value="">Select Region</option>
-                                                    <option v-for="(region, index) in regions" 
-                                                            :key="index"
-                                                            :value="region.id">
-                                                            {{ region.title }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <!-- End Region -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End NavOne -->
-
                         <!-- NavTwo -->
-                        <div class="card mt-5">
+                        <div class="card">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
                                     <div id="NavImage" class="card-header">
@@ -283,25 +174,32 @@
                                             <!-- Image -->
                                             <div class="form-group">
                                                 <img :src="row.preview" 
-                                                    class="mb-2 h200 custom-image">
+                                                    class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
                                                     ref="myDropify" 
                                                     v-on:change="onImageChange">
                                             </div>
+                                            <!-- Image -->
+
+                                            <!-- Image Alt -->
                                             <div class="form-group">
                                                 <label>Image alt</label>
                                                 <input type="text" 
                                                     class="form-control"
                                                     v-model="row.image_alt">
                                             </div>
+                                            <!-- End Image Alt -->
+
+                                            <!-- Image Title -->
                                             <div class="form-group">
                                                 <label>Image title</label>
                                                 <input type="text" 
                                                     class="form-control"
                                                     v-model="row.image_title">
                                             </div>
-                                            <!-- Image -->
+                                            <!-- End Image Title -->
+
                                         </div>
                                     </div>
                                 </div>
@@ -369,7 +267,7 @@
                                     </span>Loading...
                                 </span>
                                 <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> Create Destination</span>
+                                <span v-if="!btnLoading"> Create Slider</span>
                             </button>
                         </div>
 
@@ -419,24 +317,31 @@
                     access_token: '',
                 },
                 row: {
-                    region_id: '',
                     status: true,
-                    preview: "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e",
-                    image: '',
+                    preview: "",
+                    image_url: '',
                     image_alt: '',
                     image_title: '',
                     
-                    slug: '',
+                    order: 0,
+                    button: '',
+                    link: '',
+                    iframe: '',
                     title: '',
                     body: '',
-
-                    meta_title: '',
-                    meta_keywords: '',
-                    meta_description: '',
                 },
-                regions: [],
-                regionLoading: true,
-
+                editor: {
+                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
+                    menubar: 'file edit view insert format tools table tc help',
+                    plugins: [
+                                'advlist autolink lists link image charmap print preview anchor',
+                                'searchreplace visualblocks code fullscreen',
+                                'insertdatetime media table paste code help wordcount'
+                            ],
+                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
+                              alignleft aligncenter alignright alignjustify | \
+                              bullist numlist outdent indent | removeformat | help',
+                },
                 btnLoading: false,
             }
         },
@@ -451,7 +356,6 @@
                 this.auth.access_token = localStorage.getItem('access_token');
             }
 
-            this.fetchRegions();
         },
         methods: {
             
@@ -467,30 +371,6 @@
                 }
             },
 
-            // Fetch Regions
-            fetchRegions(){
-                this.regionLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
-                const options = {
-                    url: window.baseURL+'/regions',
-                    method: 'GET',
-                    data: {},
-                    params: {
-                        status: 'active',
-                        paginate: 25,
-                    },
-                }
-                this.axios(options)
-                    .then(res => {
-                        this.regionLoading = false;
-                        this.regions = res.data.rows;
-                    })
-                    .catch(() => {})
-                    .finally(() => {});
-            },
 
             // Upload Featured image
             onImageChange(e){
@@ -509,23 +389,18 @@
                 };
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 const options = {
-                    url: window.baseURL+'/destinations',
+                    url: window.baseURL+'/sliders',
                     method: 'POST',
                     data: {
-                        region_id: this.row.region_id,
-                        status: this.row.status,
-
-                        image_url: this.row.image,
+                        order: this.row.order,
+                        button: this.row.button,
+                        link: this.row.link,
+                        iframe: this.row.iframe,
+                        image: this.row.image,
                         image_alt: this.row.image_alt,
                         image_title: this.row.image_title,
-
                         title: this.row.title,
-                        slug: this.row.slug,
                         body: this.row.body,
-
-                        meta_title: this.row.meta_title,
-                        meta_keywords: this.row.meta_keywords,
-                        meta_description: this.row.meta_description
                     }
                 }
                 this.axios(options, config)
@@ -536,7 +411,7 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        this.$router.push({ name: 'destinations' })
+                        this.$router.push({ name: 'sliders' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -555,23 +430,6 @@
                     .finally(() => {})
             },
 
-            // Title
-            onTitleChange() {
-                this.onSlugChange(this.row.title);
-            },
-
-            // on Paste
-            onSlugPaste(){
-                let str = this.row.slug;
-                this.onSlugChange(str);
-            },
-            onSlugChange(str=''){
-                if(!str) {
-                    str = this.row.slug;
-                }
-                this.row.slug = str.replace(/\s+/g, '-');
-            },
-
             // active status
             onStatus(){
                 if(this.row.status)
@@ -583,30 +441,11 @@
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'destinations' });
+                    this.$router.push({ name: 'sliders' });
                 }
             },
 
         },
-
-        // Before Enter..
-        //beforeRouteEnter (to, from, next) { 
-          // next(vm => { 
-          //   //next();
-          // }) 
-        //},
-
-        // Before Leaving.. 
-        // beforeRouteLeave(to, from, next) { 
-        //     if(this.row.title && !this.isSubmit) {
-        //         const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-        //         if (answer) {
-        //             next()
-        //         } else {
-        //             next(false)
-        //         }
-        //     } else { next() }
-        // },
     }
 </script>
 

@@ -136,37 +136,25 @@
                     this.btnLoading = false;
                     this.row.password = '';
 
-                        localStorage.setItem('access_token', res.data.access_token);
-                        localStorage.setItem('user_image', res.data.user.image);
-                        localStorage.setItem('user_name', res.data.user.name);
-                        localStorage.setItem('user_id', res.data.user.id);
-                        localStorage.setItem('role', res.data.user.role);
-                        // Permissions
-                        localStorage.setItem('permissions', JSON.stringify(res.data.permissions));
+                    // LocalStorage
+                    localStorage.setItem('access_token', res.data.access_token);
+                    localStorage.setItem('user_image', res.data.user.image);
+                    localStorage.setItem('user_name', res.data.user.name);
+                    localStorage.setItem('user_id', res.data.user.id);
+                    localStorage.setItem('role', res.data.user.role);
 
                     this.$router.push({ name: 'dashboard' })
-
                 })
                 .catch(err => {
                     this.btnLoading = false;
                     this.row.password = '';
 
                     // 401 Unauthorized
-                    if(err.response && err.response.status == 401) {
-                        iziToast.error({
-                            icon: 'ti-na',
-                            title: 'Wow-wow,',
-                            message: err.response.data.error
-                        });
-
-                    } else {
-                        iziToast.error({
-                            icon: 'ti-na',
-                            title: 'Wow-wow,',
-                            message: 'Something went wrong '+err
-                        });
-                    }
-
+                    iziToast.error({
+                        icon: 'ti-na',
+                        title: 'Wow-wow,',
+                        message: (err.response) ? err.response.data.error : ''+err
+                    });
                 });
             },
 

@@ -39,11 +39,9 @@
 
         <div v-if="pgLoading" class="row h-100">
             <div class="container text-center">
-                <p><br/></p>
-                <div class="spinner-grow" role="status">
+                <div class="spinner-grow mt-5" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
-                <p><br/></p>
             </div>
         </div>
 
@@ -172,7 +170,7 @@
                                                 v-model="row.slug" 
                                                 @keydown.space.prevent 
                                                 @paste="onSlugPaste"
-                                                @change="onSlugChange">
+                                                @change="onSlugChange(false)">
                                     </div>
                                     <!-- End Slug -->
 
@@ -183,19 +181,12 @@
                                         <editor
                                             id="inputText3"
                                             v-model="row.body"
-                                            api-key="xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b"
+                                            :api-key="editor.api_key"
                                             :init="{
                                                 height: 600,
-                                                menubar: 'file edit view insert format tools table tc help',
-                                                plugins: [
-                                                    'advlist autolink lists link image charmap print preview anchor',
-                                                    'searchreplace visualblocks code fullscreen',
-                                                    'insertdatetime media table paste code help wordcount'
-                                                ],
-                                                toolbar:
-                                                    'undo redo | formatselect | bold italic backcolor | \
-                                                    alignleft aligncenter alignright alignjustify | \
-                                                    bullist numlist outdent indent | removeformat | help'
+                                                menubar: editor.menubar,
+                                                plugins: editor.plugins,
+                                                toolbar: editor.toolbar
                                             }"
                                         />
                                     </div>
@@ -290,8 +281,9 @@
                                         <div class="col-12 pt-3">
                                             <!-- Image -->
                                             <div class="form-group">
+                                                <label>Image</label>
                                                 <img :src="row.preview" 
-                                                    class="mb-2 h200 custom-image">
+                                                    class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
                                                     ref="myDropify" 
@@ -412,7 +404,7 @@
     import iziToast from 'izitoast';
     
     export default {
-        name: 'Create',
+        name: 'Edit',
         components: {
             Header,
             Navigation,
@@ -427,20 +419,33 @@
                     access_token: '',
                 },
                 row: {
-                    region_id: '',
-                    status: true,
-                    preview: "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e",
-                    image: '',
-                    image_alt: '',
-                    image_title: '',
-                    
+                    // meta
+                    meta_title: '',
+                    meta_keywords: '',
+                    meta_description: '',
+
+                    // row
                     slug: '',
                     title: '',
                     body: '',
 
-                    meta_title: '',
-                    meta_keywords: '',
-                    meta_description: '',
+                    // region
+                    region_id: '',
+
+                    // image
+                    preview: '',
+                    image: '',
+                    image_alt: '',
+                    image_title: '',
+
+                    // status & visbility
+                    status: true,
+                },
+                editor: {
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
                 },
                 regions: [],
                 regionLoading: true,
@@ -464,17 +469,7 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },  
+            
 
             // fetch Row
             fetchRow() {
@@ -491,24 +486,30 @@
                 }
                 this.axios(options)
                     .then(res => {
-                    this.pgLoading = false;
-
-                    this.row.region_id = (res.data.row.region) ? res.data.row.region.id : null;
-                    this.row.status= res.data.row.status;
-
-                    this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.age_title : null;
-                        
-                    this.row.slug = res.data.row.slug;
-                    this.row.title = res.data.row.title;
-                    this.row.body = res.data.row.body;
-
+                this.pgLoading = false;
+                // meta
                 this.row.meta_title = (res.data.row.meta) ? res.data.row.meta.meta_title : null;
                 this.row.meta_keywords = (res.data.row.meta) ? res.data.row.meta.meta_keywords : null;
                 this.row.meta_description = (res.data.row.meta) ? res.data.row.meta.meta_description : null;
 
-                    this.fetchRegions();
+                // row
+                this.row.slug = res.data.row.slug;
+                this.row.title = res.data.row.title;
+                this.row.body = res.data.row.body;
+
+                // region
+                this.row.region_id = (res.data.row.region) ? res.data.row.region.id : null;
+
+                // image
+                this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
+                this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
+                this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
+                this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
+
+                // status & visibility
+                this.row.status = res.data.row.status;
+                    
+                this.fetchRegions();
                     })
                     .catch(() => {})
                     .finally(() => {});
@@ -527,7 +528,7 @@
                     data: {},
                     params: {
                         status: 'active',
-                        paginate: 25,
+                        paginate: 100,
                     },
                 }
                 this.axios(options)
@@ -537,13 +538,6 @@
                     })
                     .catch(() => {})
                     .finally(() => {});
-            },
-
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
             },
 
 
@@ -559,20 +553,26 @@
                     url: window.baseURL+'/destinations/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
-                        region_id: this.row.region_id,
-                        status: this.row.status,
+                        // meta
+                        meta_title: this.row.meta_title,
+                        meta_keywords: this.row.meta_keywords,
+                        meta_description: this.row.meta_description,
 
-                        image_url: this.row.image,
-                        image_alt: this.row.image_alt,
-                        image_title: this.row.image_title,
-
+                        // row
                         title: this.row.title,
                         slug: this.row.slug,
                         body: this.row.body,
 
-                        meta_title: this.row.meta_title,
-                        meta_keywords: this.row.meta_keywords,
-                        meta_description: this.row.meta_description
+                        // region_id
+                        region_id: this.row.region_id,
+
+                        // image
+                        image_url: this.row.image,
+                        image_alt: this.row.image_alt,
+                        image_title: this.row.image_title,
+
+                        // status & visibility
+                        status: this.row.status,
                     }
                 }
                 this.axios(options, config)
@@ -595,11 +595,26 @@
                             iziToast.warning({
                                 icon: 'ti-alert',
                                 title: 'Wow-man,',
-                                message: err.response.data.message
+                                message: (err.response) ? err.response.data.message : ''+err
                             });
                         }
                     })
                     .finally(() => {})
+            },
+
+            // Upload Featured image
+            onImageChange(e){
+                const file = e.target.files[0];
+                this.row.preview = URL.createObjectURL(file);
+                //this.row.image = file;
+                this.createBase64Image(file);
+            },
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.image_base64 = e.target.result;
+                };
             },
 
             // Title
@@ -612,7 +627,10 @@
                 let str = this.row.slug;
                 this.onSlugChange(str);
             },
-            onSlugChange(str){
+            onSlugChange(str=''){
+                if(!str) {
+                    str = this.row.slug;
+                }
                 this.row.slug = str.replace(/\s+/g, '-');
             },
 
@@ -624,6 +642,18 @@
                     this.row.status = true;
             },
 
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
+            },  
+
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
@@ -633,24 +663,6 @@
 
         },
 
-        // Before Enter..
-        //beforeRouteEnter (to, from, next) { 
-          // next(vm => { 
-          //   //next();
-          // }) 
-        //},
-
-        // Before Leaving.. 
-        // beforeRouteLeave(to, from, next) { 
-        //     if(this.row.title && !this.isSubmit) {
-        //         const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-        //         if (answer) {
-        //             next()
-        //         } else {
-        //             next(false)
-        //         }
-        //     } else { next() }
-        // },
     }
 </script>
 

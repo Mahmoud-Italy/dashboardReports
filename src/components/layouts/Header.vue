@@ -177,21 +177,27 @@
 
             // Logout
             logout(){
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const options = {
+                    url: window.baseURL+'/logout',
+                    method: 'POST',
+                    data: {},
+                    params: {},
+                }
+                this.axios(options)
+                    .then(() => {})
+                    .catch(() => {})
+                    .finally(() => {})
+
+                // remove localStorage
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('user_image');
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
-
-                localStorage.removeItem('permissions');
-
-                // clear default Navigation
-                // localStorage.removeItem('nav_roles');
-                // localStorage.removeItem('nav_sliders');
-                // localStorage.removeItem('nav_themes');
-                // localStorage.removeItem('nav_reports');
-                // localStorage.removeItem('nav_activity_logs');
-                // localStorage.removeItem('nav_cache_management');
                 this.$router.push({ name: 'login' });
             },
         },

@@ -41,29 +41,32 @@
 
             <!-- Content -->
             <div class="tab-content">
-                <div class="row">        
-                    <div class="col-md-8 mb-5">
+                <div class="row">    
+
+
+                <!-- ******* Cards ******* -->  
+                <div class="col-md-8 mb-5">
 
 
                     <!-- Card Accommodation -->
                     <div class="card">
                         <div class="card-body">
                             <div id="accordion" class="accordion">
-                                <div id="TabAccommo" class="card-header">
+                                <div id="TabAccommodation" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Accommo')"
+                                            @click="collapseToggle('Accommodation')"
                                             aria-expanded="false" 
-                                            aria-controls="collapseAccommo" 
+                                            aria-controls="collapseAccommodation" 
                                             data-toggle="collapse"
-                                            data-target="#collapseAccommo">Accommodation
-                                            <span id="iconToggleAccommo" 
+                                            data-target="#collapseAccommodation">Accommodation
+                                            <span id="iconToggleAccommodation" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseAccommo" 
+                                    <div id="collapseAccommodation" 
                                         class="collapse show" 
-                                        aria-labelledby="TabAccommo" 
+                                        aria-labelledby="TabAccommodation" 
                                         data-parent="#accordion">
 
                                     <div class="col-12 pt-3">
@@ -82,46 +85,57 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- End Card Accommodation -->
+                    </div>
+                    <!-- End Card Accommodation -->
 
 
-                        <!-- Card Price -->
-                        <div class="card mt-5">
-                            <div class="card-body">
-                                <div id="accordion" class="accordion">
-                                    <div id="TabPrice" class="card-header">
-                                        <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Price')"
-                                            aria-expanded="false" 
-                                            aria-controls="collapsePrice" 
-                                            data-toggle="collapse"
-                                            data-target="#collapsePrice">Price
-                                            <span id="iconTogglePrice" 
-                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow 
-                                                    pull-right black">
-                                            </span>
-                                        </h2>
-                                    </div>
-                                    <div id="collapsePrice" 
-                                        class="collapse" 
-                                        aria-labelledby="TabPrice" 
-                                        data-parent="#accordion">
+                    <!-- Card Prices -->
+                    <div class="card mt-5">
+                        <div class="card-body">
+                            <div id="accordion" class="accordion">
+                                <div id="TabPrices" class="card-header">
+                                    <h2 class="h4 card-header-title" 
+                                        @click="collapseToggle('Prices')"
+                                        aria-expanded="false" 
+                                        aria-controls="collapsePrices" 
+                                        data-toggle="collapse"
+                                        data-target="#collapsePrices">Prices
+                                        <span id="iconTogglePrices" 
+                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow 
+                                                pull-right black">
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="collapsePrices" 
+                                    class="collapse" 
+                                    aria-labelledby="TabPrices" 
+                                    data-parent="#accordion">
 
-                                <div class="col-12 pt-3">
+                            <div class="col-12 pt-3">
 
                                 <!-- For Loop -->
-                                <div v-for="i in 3" 
+                                <div v-for="i in 10" 
                                     :key="i" 
-                                    :ref="'frm_'+i" 
                                     :class="(i != 1) ? 'hidden' : ''"
-                                    :id="'frm_'+i">
+                                    :id="'frm_'+i"
+                                    class="ui-for-div">
+
+                                     <!--  Remove -->
+                                    <div class="pull-right ui-mt-10">
+                                        <button v-if="i != 0"
+                                            type="button" 
+                                            class="btn btn-danger btn-circle btn-with-icon btn-sm"
+                                            @click="removeOption(i)">
+                                            <span class="btn-icon ti-close font-bold"></span>
+                                         </button>
+                                    </div>
+                                    <!-- End Remove -->
 
                                     <!-- Price Name -->
                                     <div class="form-group">
-                                        <label for="inputText2">Price Name {{ i }}</label>
+                                        <label :for="'iInput'+i">Price Name</label>
                                         <input class="form-control" 
-                                                id="inputText2" 
+                                                :id="'iInput'+i" 
                                                 type="text" 
                                                 v-model="row.price_names[i]">
                                     </div>
@@ -131,36 +145,35 @@
                                     <!-- Price Items -->
                                     <div v-for="x in 10" 
                                         :key="x" 
-                                        :ref="'sub_'+i+x" 
                                         :class="(x != 1) ? 'hidden' : ''"
-                                        :id="'sub_'+i+x">
+                                        :id="'sub_'+i+'_'+x">
 
                                     <div class="row col-12 ui-ml-unset">
                                         <div class="form-group col-1">
                                             <button type="button" 
-                                                :ref="'subBtn_'+i+x" 
-                                                :id="'subBtn_'+i+x"
+                                                :id="'subBtn_'+i+'_'+x"
                                                 @click="opnSub(i,x+1)"
                                                 class="btn btn-secondary btn-circle btn-with-icon ui-mt30 ui-ml-20">
                                                 <span class="btn-icon ti-plus font-bold"></span>
                                             </button>
                                         </div>
                                         <div class="form-group col-5">
-                                            <label for="inputText2">Price Value {{ i }} {{ x }}</label>
+                                            <label :for="'pvInput'+i+'_'+x">Price Value</label>
                                             <input class="form-control" 
-                                                    :id="'inputText2'+[i,x]" 
+                                                    :id="'pvInput'+i+'_'+x" 
                                                     type="text" 
-                                                    v-model="row.price_item_values[i+ '-' +x]">
+                                                    v-model="row.price_item_values[i+'_'+x]">
                                         </div>
                                         <div class="form-group col-5">
-                                            <label for="inputText2">Content</label>
+                                            <label :for="'pcInput'+i+'_'+x">Content</label>
                                             <input class="form-control" 
-                                                    id="inputText2" 
+                                                    :id="'pcInput'+i+'_'+x" 
                                                     type="text" 
-                                                    v-model="row.price_item_body[x]">
+                                                    v-model="row.price_item_body[i+'_'+x]">
                                         </div>
                                         <div class="form-group col-1">
                                             <button type="button" 
+                                                v-if="x != 1"
                                                 @click="removeSubOption(i,x)"
                                                 class="btn btn-circle btn-with-icon ui-mt30">
                                                 <span class="btn-icon ti-close font-bold"></span>
@@ -170,24 +183,17 @@
 
                                     </div>
                                     <!-- End Price Items -->
+                                </div>
 
-
-                                    <!-- Button -->
-                                    <div class="row pull-right ui-mt15" 
-                                        :ref="'btn_'+i" 
-                                        :id="'btn_'+i">
+                                    <!-- Add more -->
+                                    <div class="row pull-right">
                                         <button type="button" 
                                             class="btn btn-dark btn-circle btn-with-icon"
-                                            @click="opnFrm(i+1)">
+                                            @click="opnFrm()">
                                             <span class="btn-icon ti-plus font-bold"></span>
                                         </button>
                                     </div>
-                                    <!-- End Button -->
-
-                                    <div class="form-group">
-                                        <br/><hr><br/>
-                                    </div>
-                                </div>
+                                    <!-- End more -->
 
 
                                 </div>
@@ -249,7 +255,7 @@
                                                     :preserve-search="true" 
                                                     :taggable="false"
                                                     placeholder="Type to search hotels"
-                                                    :preselect-first="true">
+                                                    :preselect-first="false">
                                                 </multiselect>
                                             </div>
                                             <!-- End Region -->
@@ -369,18 +375,16 @@
                     access_token: '',
                 },
                 row: {
-                    status: true,
+                    status: 1,
                     name: '',
+
                     prices: [],
-                    //items: [],
-                    items: {},
+                    price_key: 1,
+                    items: [],
+
                     price_names: [],
                     price_item_values: [],
-                    price_item_body: [],
-
-                    price_count: [],
-                    price_objects: Object
-
+                    price_item_body: []
                 },
                 hotelsValue: [],
                 hotelsOptions: [],
@@ -418,7 +422,7 @@
 
             // Fetch Hotels
             fetchHotels(){
-                this.regionLoading = true;
+                this.hotelLoading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
@@ -429,7 +433,7 @@
                     data: {},
                     params: {
                         status: 'active',
-                        paginate: 25,
+                        paginate: 100,
                     },
                 }
                 this.axios(options)
@@ -449,31 +453,26 @@
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
-                // prices & items
+
+                // Multi dimension array
                 for( let i = 1; i < this.row.price_names.length; i++ ) {
-                    // for( let x = 1; x < this.row.price_item_values.length; x++) {
-                    //     this.row.items[x] = {
-                    //         'item_value' : this.row.price_item_values[x],
-                    //         'item_body' : this.row.price_item_body[x]
-                    //     }
-                    // }
-                    console.log('i='+this.row.price_names[i]);
-                    console.log('lg='+this.row.price_names[i].length);
-                    console.log('px='+this.row.price_count.length);
-                    //console.log('pv='+this.row.price_names[i].price_item_values.length);
-                    for( let x = 1; x < this.row.price_item_values.length; x++) {
-                        console.log('x='+this.row.price_item_values[i+ '-' +x])
-                        // this.row.items[x] = {
-                        //     'item_value' : this.row.price_item_values[i+ '-' +x],
-                        //     'item_body' : this.row.price_item_body[i+ '-' +x]
-                        // }
+                        for( let x = 1; x <= 10; x++) {
+                        let item_value = this.row.price_item_values[i+'_'+x];
+                        let item_body  = this.row.price_item_body[i+'_'+x];
+                        if(item_value) {
+                            this.row.items[x] = {
+                                'item_value' : item_value,
+                                'item_body'  : item_body
+                            }
+                        }
                     }
-                    //console.log(this.row.items)
-                    // this.row.prices[i] = {
-                    //     'price_name' : this.row.price_names[i],
-                    //     'items' : this.row.items
-                    // }
+                    this.row.prices[i] = {
+                        'price_name' : this.row.price_names[i],
+                        'items'      : this.row.items
+                    }
+                    this.row.items = []; // clear array
                 }
+                
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 const options = {
                     url: window.baseURL+'/accommodations',
@@ -481,7 +480,7 @@
                     data: {
                         status: this.row.status,
                         name: this.row.name,
-
+                        hotels: this.hotelsValue,
                         prices: this.row.prices
                     }
                 }
@@ -493,7 +492,7 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        //this.$router.push({ name: 'accommodations' })
+                        this.$router.push({ name: 'accommodations' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -505,7 +504,7 @@
                             iziToast.warning({
                                 icon: 'ti-alert',
                                 title: 'Wow-man,',
-                                message: err.response.data.message
+                                message: (err.response) ? err.response.data.message : ''+err
                             });
                         }
                     })
@@ -513,72 +512,51 @@
             },
 
             // items add more
-            opnFrm(i) {
-                let prev = i - 1;
-                let pvt = document.querySelector('#btn_'+prev);
+            opnFrm() {
+                let i = this.row.price_key;
                 let frm = document.querySelector('#frm_'+i);
-                pvt.classList.add('hidden');
                 frm.classList.remove('hidden');
+                this.row.price_key++;
             },
             removeOption(i) {
-                let prev = i - 1;
-                let pvt = document.querySelector('#btn_'+prev);
                 let frm = document.querySelector('#frm_'+i);
                 frm.classList.add('hidden');
-                pvt.classList.remove('hidden');
-                //this.row.items_title[i] = '';
+                this.row.price_names[i] = '';
+                this.row.price_key++;
             },
             opnSub(i,x) {
                 let prev = x - 1;
-                let pvt = document.querySelector('#subBtn_'+i+prev);
-                let frm = document.querySelector('#sub_'+i+x);
+                let pvt = document.querySelector('#subBtn_'+i+'_'+prev);
+                let frm = document.querySelector('#sub_'+i+'_'+x);
                 pvt.classList.add('hidden');
                 frm.classList.remove('hidden');
             },
             removeSubOption(i,x) {
-                let prev = x - 1;
-                let pvt = document.querySelector('#btn_'+i+prev);
-                let frm = document.querySelector('#frm_'+i+x);
+                for(var z = x; z > 0; z--) {
+                    document.querySelector('#subBtn_'+i+'_'+z).classList.add('hidden');
+                }
+                let frm = document.querySelector('#sub_'+i+'_'+x);
                 frm.classList.add('hidden');
-                pvt.classList.remove('hidden');
-                //this.row.items_title[i] = '';
+                this.row.price_item_values[i+'_'+x] = '';
+                this.row.price_item_body[i+'_'+x] = '';
             },
 
             // active status
             onStatus(){
                 if(this.row.status)
-                    this.row.status = false;
+                    this.row.status = 0;
                 else
-                    this.row.status = true;
+                    this.row.status = 1;
             },
 
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'destinations' });
+                    this.$router.push({ name: 'accommodations' });
                 }
             },
 
         },
-
-        // Before Enter..
-        //beforeRouteEnter (to, from, next) { 
-          // next(vm => { 
-          //   //next();
-          // }) 
-        //},
-
-        // Before Leaving.. 
-        // beforeRouteLeave(to, from, next) { 
-        //     if(this.row.title && !this.isSubmit) {
-        //         const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-        //         if (answer) {
-        //             next()
-        //         } else {
-        //             next(false)
-        //         }
-        //     } else { next() }
-        // },
     }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

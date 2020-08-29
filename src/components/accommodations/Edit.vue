@@ -8,7 +8,7 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Destinations
+                    <h1 class="h2 mb-2">Accommodations
 
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
@@ -29,7 +29,7 @@
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
                             <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'destinations' }">Destinations</router-link>
+                                <router-link :to="{ name: 'accommodations' }">Accommodations</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
@@ -51,166 +51,176 @@
 
             <!-- Content -->
             <div class="tab-content">
-                <div class="row">        
-                    <div class="col-md-8 mb-5">
+                <div class="row">    
 
-                        <!-- CardMeta -->
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="accordion" class="accordion">
-                                    <div id="TabMeta" class="card-header">
+
+                <!-- ******* Cards ******* -->  
+                <div class="col-md-8 mb-5">
+
+
+                    <!-- Card Accommodation -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="accordion" class="accordion">
+                                <div id="TabAccommodation" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Meta')"
+                                            @click="collapseToggle('Accommodation')"
                                             aria-expanded="false" 
-                                            aria-controls="collapseMeta" 
+                                            aria-controls="collapseAccommodation" 
                                             data-toggle="collapse"
-                                            data-target="#collapseMeta">Meta
-                                            <span id="iconToggleMeta" 
+                                            data-target="#collapseAccommodation">Accommodation
+                                            <span id="iconToggleAccommodation" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseMeta" 
+                                    <div id="collapseAccommodation" 
                                         class="collapse show" 
-                                        aria-labelledby="TabMeta" 
+                                        aria-labelledby="TabAccommodation" 
                                         data-parent="#accordion">
 
                                     <div class="col-12 pt-3">
 
-                                        <!-- Meta title -->
+                                        <!-- Name -->
                                         <div class="form-group">
-                                            <div class="pull-right f12" 
-                                                v-if="row.meta_title"
-                                                v-text="(row.meta_title.length)">
-                                            </div>
-                                            <label for="inputText4">Meta title</label>
+                                            <label for="inputText1">Name</label>
                                             <input class="form-control"
-                                                    id="inputText4"  
+                                                    id="inputText1"  
                                                     type="text" 
-                                                    v-model="row.meta_title">
+                                                    v-model="row.name">
                                         </div>
-                                        <!-- End Meta title -->
-                                            
-                                        <!-- Meta keywords -->
-                                        <div class="form-group">
-                                            <div class="pull-right f12"
-                                                v-if="row.meta_keywords" 
-                                                v-text="(row.meta_keywords.length)">
-                                            </div>
-                                            <label for="inputText5">Meta keywords</label>
-                                            <textarea class="form-control"
-                                                    id="inputText5" 
-                                                    rows="5"  
-                                                    v-model="row.meta_keywords">
-                                            </textarea>
-                                        </div>
-                                        <!-- End Meta keywords -->
-
-                                        <!-- Meta description -->
-                                        <div class="form-group">
-                                            <div class="pull-right f12" 
-                                                v-if="row.meta_description" 
-                                                v-text="(row.meta_description.length)">
-                                            </div>
-                                            <label for="inputText6">Meta description</label>
-                                            <textarea class="form-control" 
-                                                    id="inputText6" 
-                                                    rows="5" 
-                                                    v-model="row.meta_description">
-                                            </textarea>
-                                        </div>
-                                        <!-- End Meta description -->
-
+                                        <!-- Name -->
+                                        
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- End CardMeta -->
+                    </div>
+                    <!-- End Card Accommodation -->
 
-                        <!-- CardDest -->
-                        <div class="card mt-5">
-                            <div class="card-body">
-                                <div id="accordion" class="accordion">
-                                    <div id="TabDest" class="card-header">
-                                        <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Dest')"
-                                            aria-expanded="false" 
-                                            aria-controls="collapseDest" 
-                                            data-toggle="collapse"
-                                            data-target="#collapseDest">Destination
-                                            <span id="iconToggleDest" 
-                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow 
-                                                    pull-right black">
-                                            </span>
-                                        </h2>
+
+                    <!-- Card Prices -->
+                    <div class="card mt-5">
+                        <div class="card-body">
+                            <div id="accordion" class="accordion">
+                                <div id="TabPrices" class="card-header">
+                                    <h2 class="h4 card-header-title" 
+                                        @click="collapseToggle('Prices')"
+                                        aria-expanded="false" 
+                                        aria-controls="collapsePrices" 
+                                        data-toggle="collapse"
+                                        data-target="#collapsePrices">Prices
+                                        <span id="iconTogglePrices" 
+                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow 
+                                                pull-right black">
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="collapsePrices" 
+                                    class="collapse" 
+                                    aria-labelledby="TabPrices" 
+                                    data-parent="#accordion">
+
+                            <div class="col-12 pt-3">
+
+                                <!-- For Loop -->
+                                <div v-for="i in 10" 
+                                    :key="i" 
+                                    :class="(i > prices_length.length) ? 'hidden' : '' " 
+                                    :id="'frm_'+i">
+
+                                     <!--  Remove -->
+                                    <div class="pull-right ui-mt-10">
+                                        <button v-if="i != 1"
+                                            type="button" 
+                                            class="btn btn-danger btn-circle btn-with-icon btn-sm"
+                                            @click="removeOption(i)">
+                                            <span class="btn-icon ti-close font-bold"></span>
+                                         </button>
                                     </div>
-                                    <div id="collapseDest" 
-                                        class="collapse" 
-                                        aria-labelledby="TabDest" 
-                                        data-parent="#accordion">
+                                    <!-- End Remove -->
 
-                                <div class="col-12 pt-3">
-                                    
-                                    <!-- Title -->
+                                    <!-- Price Name -->
                                     <div class="form-group">
-                                        <label for="inputText1">Title</label>
+                                        <label :for="'iInput'+i">Price Name</label>
                                         <input class="form-control" 
-                                                id="inputText1" 
+                                                :id="'iInput'+i" 
                                                 type="text" 
-                                                v-model="row.title" 
-                                                @keyup="onTitleChange">
+                                                v-model="row.price_names[i]">
                                     </div>
-                                    <!-- End Title -->
+                                    <!-- End Price Name -->
 
-                                    <!-- Slug -->
+                                    
+                                    <!-- Price Items -->
+                                    <div v-for="x in 10" 
+                                        :key="x" 
+                                        :class="(x > prices_items_length[i-1]) ? 'hidden' : ''" 
+                                        :id="'sub_'+i+'_'+x">
+
+                                    <div class="row col-12 ui-ml-unset">
+                                        <div class="form-group col-1">
+                                            <button type="button"
+                                                :class="(x < prices_items_length[i-1]) ? 'hidden' : ''"
+                                                :id="'subBtn_'+i+'_'+x"
+                                                @click="opnSub(i,x+1)"
+                                                class="btn btn-secondary btn-circle btn-with-icon ui-mt30 ui-ml-20">
+                                                <span class="btn-icon ti-plus font-bold"></span>
+                                            </button>
+                                        </div>
+                                        <div class="form-group col-5">
+                                            <label :for="'pvInput'+i+'_'+x">Price Value</label>
+                                            <input class="form-control" 
+                                                    :id="'pvInput'+i+'_'+x" 
+                                                    type="text" 
+                                                    v-model="row.price_item_values[i+'_'+x]">
+                                        </div>
+                                        <div class="form-group col-5">
+                                            <label :for="'pcInput'+i+'_'+x">Content</label>
+                                            <input class="form-control" 
+                                                    :id="'pcInput'+i+'_'+x" 
+                                                    type="text" 
+                                                    v-model="row.price_item_body[i+'_'+x]">
+                                        </div>
+                                        <div class="form-group col-1">
+                                            <button type="button" 
+                                                v-if="x != 1"
+                                                @click="removeSubOption(i,x)"
+                                                class="btn btn-circle btn-with-icon ui-mt30">
+                                                <span class="btn-icon ti-close font-bold"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                    <!-- End Price Items -->
+
+
+                                    <!-- Button -->
+                                    <div class="row pull-right ui-mt15" 
+                                        :id="'btn_'+i">
+                                        <button type="button" 
+                                            class="btn btn-dark btn-circle btn-with-icon"
+                                            @click="opnFrm(i+1)">
+                                            <span class="btn-icon ti-plus font-bold"></span>
+                                        </button>
+                                    </div>
+                                    <!-- End Button -->
+
                                     <div class="form-group">
-                                        <label for="inputText2">Slug</label>
-                                        <input class="form-control text-lowercase"
-                                                id="inputText2"  
-                                                type="text" 
-                                                v-model="row.slug" 
-                                                @keydown.space.prevent 
-                                                @paste="onSlugPaste"
-                                                @change="onSlugChange">
+                                        <br/><hr><br/>
                                     </div>
-                                    <!-- End Slug -->
+                                </div>
 
-
-                                    <!-- Body -->
-                                    <div class="form-group">
-                                        <label for="inputText3">Body</label>
-                                        <editor
-                                            id="inputText3"
-                                            v-model="row.body"
-                                            api-key="xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b"
-                                            :init="{
-                                                height: 600,
-                                                menubar: 'file edit view insert format tools table tc help',
-                                                plugins: [
-                                                    'advlist autolink lists link image charmap print preview anchor',
-                                                    'searchreplace visualblocks code fullscreen',
-                                                    'insertdatetime media table paste code help wordcount'
-                                                ],
-                                                toolbar:
-                                                    'undo redo | formatselect | bold italic backcolor | \
-                                                    alignleft aligncenter alignright alignjustify | \
-                                                    bullist numlist outdent indent | removeformat | help'
-                                            }"
-                                        />
-                                    </div>
-                                    <!-- End Body -->
 
                                 </div>
-                                
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- End CardDest -->
 
-                </div>
 
+                </div>
 
 
 
@@ -223,100 +233,54 @@
                         <div class="card">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
-                                    <div id="NavRegion" class="card-header">
+                                    <div id="NavHotels" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Region')" 
+                                            @click="collapseToggle('Hotels')" 
                                             aria-expanded="false" 
-                                            aria-controls="collapseNavRegion" 
+                                            aria-controls="collapseNavHotels" 
                                             data-toggle="collapse" 
-                                            data-target="#collapseNavRegion">Region
-                                            <span id="iconToggleRegion" 
+                                            data-target="#collapseNavHotels">Hotels
+                                            <span id="iconToggleHotels" 
                                                     class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseNavRegion" 
+                                    <div id="collapseNavHotels" 
                                         class="collapse" 
-                                        aria-labelledby="NavRegion" 
+                                        aria-labelledby="NavHotels" 
                                         data-parent="#accordionNav">
                                         <div class="col-12 pt-3">
                                             <!-- Region -->
                                             <div class="form-group">
-                                                <div v-if="regionLoading" class="text-center">
+                                                <div v-if="hotelLoading" class="text-center">
                                                     <span class="spinner-grow spinner-grow-sm mr-1" 
                                                         role="status" 
                                                         aria-hidden="true">
                                                     </span>
                                                 </div>
-                                                <select class="form-control custom-select"
-                                                    v-if="!regionLoading" 
-                                                    v-model="row.region_id">
-                                                    <option value="">Select Region</option>
-                                                    <option v-for="(region, index) in regions" 
-                                                            :key="index"
-                                                            :value="region.id">
-                                                            {{ region.title }}
-                                                    </option>
-                                                </select>
-                                                <!-- Region -->
+                                                <multiselect v-if="!hotelLoading"
+                                                    id="multiselect"
+                                                    ref="multiselectRef"
+                                                    autocomplete="on"
+                                                    v-model="hotelsValue" 
+                                                    :options="hotelsOptions" 
+                                                    :multiple="true"
+                                                    :close-on-select="false" 
+                                                    :clear-on-select="false" 
+                                                    :hide-selected="true" 
+                                                    :preserve-search="true" 
+                                                    :taggable="false"
+                                                    placeholder="Type to search hotels"
+                                                    :preselect-first="false">
+                                                </multiselect>
                                             </div>
+                                            <!-- End Region -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- End NavOne -->
-
-                        <!-- NavTwo -->
-                        <div class="card mt-5">
-                            <div class="card-body">
-                                <div id="accordionNav" class="accordion">
-                                    <div id="NavImage" class="card-header">
-                                        <h2 class="h4 card-header-title"
-                                            @click="collapseToggle('Image')"  
-                                            aria-expanded="false" 
-                                            aria-controls="collapseNavImage" 
-                                            data-toggle="collapse" 
-                                            data-target="#collapseNavImage">Featued Image
-                                            <span id="iconToggleImage" 
-                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
-                                            </span>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseNavImage" 
-                                        class="collapse" 
-                                        aria-labelledby="NavImage" 
-                                        data-parent="#accordionNav">
-                                        <div class="col-12 pt-3">
-                                            <!-- Image -->
-                                            <div class="form-group">
-                                                <img :src="row.preview" 
-                                                    class="mb-2 h200 custom-image">
-                                                <input type="file" 
-                                                    class="form-control" 
-                                                    ref="myDropify" 
-                                                    v-on:change="onImageChange">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Image alt</label>
-                                                <input type="text" 
-                                                    class="form-control"
-                                                    v-model="row.image_alt">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Image title</label>
-                                                <input type="text" 
-                                                    class="form-control"
-                                                    v-model="row.image_title">
-                                            </div>
-                                            <!-- Image -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End NavTwo -->
-
 
                         <!-- NavThree -->
                         <div class="card mt-5">
@@ -353,7 +317,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <!-- Status -->
+                                            <!-- End Status -->
                                         </div>
                                     </div>
                                 </div>
@@ -377,7 +341,7 @@
                                     </span>Loading...
                                 </span>
                                 <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> Update Destination</span>
+                                <span v-if="!btnLoading"> Update Accommodation</span>
                             </button>
                         </div>
 
@@ -408,16 +372,16 @@
     import Header from '../layouts/Header.vue';
     import Navigation from '../layouts/Navigation';
     import Footer from '../layouts/Footer.vue';
-    import Editor from '@tinymce/tinymce-vue';
+    import Multiselect from 'vue-multiselect';
     import iziToast from 'izitoast';
     
     export default {
-        name: 'Create',
+        name: 'Edit',
         components: {
             Header,
             Navigation,
             Footer,
-            Editor
+            Multiselect
         },
         data(){
             return {
@@ -427,23 +391,22 @@
                     access_token: '',
                 },
                 row: {
-                    region_id: '',
-                    status: true,
-                    preview: "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e",
-                    image: '',
-                    image_alt: '',
-                    image_title: '',
-                    
-                    slug: '',
-                    title: '',
-                    body: '',
+                    status: 1,
+                    name: '',
 
-                    meta_title: '',
-                    meta_keywords: '',
-                    meta_description: '',
+                    prices: [],
+                    items: [],
+
+                    price_names: [],
+                    price_item_values: [],
+                    price_item_body: []
                 },
-                regions: [],
-                regionLoading: true,
+                hotelsValue: [],
+                hotelsOptions: [],
+                hotelLoading: true,
+
+                prices_length: [],
+                prices_items_length: [],
 
                 pgLoading: true,
                 btnLoading: false,
@@ -463,7 +426,7 @@
             this.fetchRow();
         },
         methods: {
-            
+
             // toggleCollapse
             collapseToggle(div) {
                 let el = document.querySelector("span#iconToggle"+div);
@@ -474,7 +437,7 @@
                     el.classList.remove('ti-angle-up');
                     el.classList.add('ti-angle-down');
                 }
-            },  
+            },
 
             // fetch Row
             fetchRow() {
@@ -484,7 +447,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/destinations/'+this.$route.params.id,
+                    url: window.baseURL+'/accommodations/'+this.$route.params.id,
                     method: 'GET',
                     data: {},
                     params: {},
@@ -492,87 +455,103 @@
                 this.axios(options)
                     .then(res => {
                     this.pgLoading = false;
-
-                    this.row.region_id = (res.data.row.region) ? res.data.row.region.id : null;
-                    this.row.status= res.data.row.status;
+                    this.row.status = res.data.row.status;
+                    this.hotelsValue = (res.data.row.hotels_value) ? res.data.row.hotels_value : null;
 
                     this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
                     this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.age_title : null;
-                        
-                    this.row.slug = res.data.row.slug;
-                    this.row.title = res.data.row.title;
-                    this.row.body = res.data.row.body;
+                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
+                    
+                    this.row.name = res.data.row.name;
 
-                this.row.meta_title = (res.data.row.meta) ? res.data.row.meta.meta_title : null;
-                this.row.meta_keywords = (res.data.row.meta) ? res.data.row.meta.meta_keywords : null;
-                this.row.meta_description = (res.data.row.meta) ? res.data.row.meta.meta_description : null;
+                    this.prices_length = res.data.row.prices;
+                    if(this.prices_length) {
+                        for(let i = 1; i <= this.prices_length.length; i++) {
+                            let x = i-1;
+                            // get price names
+                            this.row.price_names[i] = res.data.row.prices[x].name;
 
-                    this.fetchRegions();
+                            // get price items
+                            this.prices_items_length[x] = res.data.row.prices[x].items.length;
+                            for( let y = 1; y <= res.data.row.prices[x].items.length; y++) {
+                                let z = y-1;
+                                this.row.price_item_values[i+'_'+y] 
+                                        = res.data.row.prices[x].items[z].price_value;
+                                this.row.price_item_body[i+'_'+y] 
+                                        = res.data.row.prices[x].items[z].body;
+                            }
+                            //
+                        }
+                    }
+                    
+                    this.fetchHotels();
                     })
                     .catch(() => {})
                     .finally(() => {});
             },
 
-            // Fetch Regions
-            fetchRegions() {
+            // Fetch Hotels
+            fetchHotels(){
                 this.regionLoading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/regions',
+                    url: window.baseURL+'/hotels',
                     method: 'GET',
                     data: {},
                     params: {
                         status: 'active',
-                        paginate: 25,
+                        paginate: 100,
                     },
                 }
                 this.axios(options)
                     .then(res => {
-                        this.regionLoading = false;
-                        this.regions = res.data.rows;
+                        this.hotelLoading = false;
+                        this.hotelsOptions = res.data.hotels;
                     })
                     .catch(() => {})
                     .finally(() => {});
             },
 
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
 
-
-            // Add New
+            // editRow
             editRow(){
                 this.btnLoading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
+
+                // Multi dimension array
+                for( let i = 1; i < this.row.price_names.length; i++ ) {
+                    for( let x = 1; x <= 10; x++) {
+                        let item_value = this.row.price_item_values[i+'_'+x];
+                        let item_body  = this.row.price_item_body[i+'_'+x];
+                        if(item_value) {
+                            this.row.items[x] = {
+                                'item_value' : item_value,
+                                'item_body'  : item_body
+                            }
+                        }
+                    }
+                    this.row.prices[i] = {
+                        'price_name' : this.row.price_names[i],
+                        'items'      : this.row.items
+                    }
+                    this.row.items = []; // clear array
+                }
+                
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 const options = {
-                    url: window.baseURL+'/destinations/'+this.$route.params.id,
+                    url: window.baseURL+'/accommodations/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
-                        region_id: this.row.region_id,
                         status: this.row.status,
-
-                        image_url: this.row.image,
-                        image_alt: this.row.image_alt,
-                        image_title: this.row.image_title,
-
-                        title: this.row.title,
-                        slug: this.row.slug,
-                        body: this.row.body,
-
-                        meta_title: this.row.meta_title,
-                        meta_keywords: this.row.meta_keywords,
-                        meta_description: this.row.meta_description
+                        name: this.row.name,
+                        hotels_ids: this.hotelsValue,
+                        prices: this.row.prices
                     }
                 }
                 this.axios(options, config)
@@ -583,7 +562,7 @@
                             title: 'Great job,',
                             message: 'Item Updated Successfully.',
                         });
-                        this.$router.push({ name: 'destinations' })
+                        this.$router.push({ name: 'accommodations' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -595,64 +574,65 @@
                             iziToast.warning({
                                 icon: 'ti-alert',
                                 title: 'Wow-man,',
-                                message: err.response.data.message
+                                message: (err.response) ? err.response.data.message : ''+err
                             });
                         }
                     })
                     .finally(() => {})
             },
 
-            // Title
-            onTitleChange() {
-                this.onSlugChange(this.row.title);
+            // items add more
+            opnFrm(i) {
+                let prev = i - 1;
+                let pvt = document.querySelector('#btn_'+prev);
+                let frm = document.querySelector('#frm_'+i);
+                pvt.classList.add('hidden');
+                frm.classList.remove('hidden');
             },
-
-            // on Paste
-            onSlugPaste(){
-                let str = this.row.slug;
-                this.onSlugChange(str);
+            removeOption(i) {
+                let prev = i - 1;
+                let pvt = document.querySelector('#btn_'+prev);
+                let frm = document.querySelector('#frm_'+i);
+                frm.classList.add('hidden');
+                pvt.classList.remove('hidden');
+                this.row.price_names[i] = '';
             },
-            onSlugChange(str){
-                this.row.slug = str.replace(/\s+/g, '-');
+            opnSub(i,x) {
+                let prev = x - 1;
+                let pvt = document.querySelector('#subBtn_'+i+'_'+prev);
+                let frm = document.querySelector('#sub_'+i+'_'+x);
+                pvt.classList.add('hidden');
+                frm.classList.remove('hidden');
+            },
+            removeSubOption(i,x) {
+                let prev = x - 1;
+                let pvt = document.querySelector('#subBtn_'+i+'_'+prev);
+                let frm = document.querySelector('#sub_'+i+'_'+x);
+                frm.classList.add('hidden');
+                pvt.classList.remove('hidden');
+                this.row.price_item_values[i+'_'+x] = '';
+                this.row.price_item_body[i+'_'+x] = '';
             },
 
             // active status
             onStatus(){
                 if(this.row.status)
-                    this.row.status = false;
+                    this.row.status = 0;
                 else
-                    this.row.status = true;
+                    this.row.status = 1;
             },
 
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'destinations' });
+                    this.$router.push({ name: 'accommodations' });
                 }
             },
 
         },
-
-        // Before Enter..
-        //beforeRouteEnter (to, from, next) { 
-          // next(vm => { 
-          //   //next();
-          // }) 
-        //},
-
-        // Before Leaving.. 
-        // beforeRouteLeave(to, from, next) { 
-        //     if(this.row.title && !this.isSubmit) {
-        //         const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-        //         if (answer) {
-        //             next()
-        //         } else {
-        //             next(false)
-        //         }
-        //     } else { next() }
-        // },
     }
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

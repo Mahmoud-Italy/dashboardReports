@@ -244,11 +244,15 @@
                                                     v-if="!destinationLoading" 
                                                     v-model="row.destination_id">
                                                     <option value="">Select Destination</option>
-                                                    <option v-for="(destination, index) in destinations" 
+                                                    <optgroup v-for="(region, index) in destinations" 
                                                             :key="index"
+                                                            :label="region.title">
+                                                        <option v-for="(destination,idx) in region.destinations"
+                                                            :key="idx"
                                                             :value="destination.id">
                                                             {{ destination.title }}
-                                                    </option>
+                                                        </option>
+                                                    </optgroup>
                                                 </select>
                                             </div>
                                             <!-- End Destination -->
@@ -531,7 +535,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/destinations',
+                    url: window.baseURL+'/regions',
                     method: 'GET',
                     data: {},
                     params: {

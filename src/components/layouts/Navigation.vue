@@ -207,8 +207,7 @@
 
 
                         <!-- Activity Log -->
-                        <li v-if="nav_activity_logs == 'show'"
-                            class="u-sidebar-nav-menu__item">
+                        <li class="u-sidebar-nav-menu__item">
                             <router-link :to="{ name: 'logs' }" class="u-sidebar-nav-menu__link"
                                 :class="(this.$route.path == '/logs') ? 'active' : '' ">
                                 <span class="ti-brush-alt u-sidebar-nav-menu__item-icon"></span>
@@ -258,24 +257,7 @@
     export default {
         name: 'Navigation',
         props: {
-            nav_roles: {
-                default: (localStorage.getItem('nav_roles')) ? localStorage.getItem('nav_roles') : 'show',
-            },
-            nav_sliders: {
-                default: (localStorage.getItem('nav_sliders')) ? localStorage.getItem('nav_sliders') : 'show',
-            },
-            nav_themes: {
-                default: (localStorage.getItem('nav_themes')) ? localStorage.getItem('nav_themes') : 'show',
-            },
-            nav_reports: {
-                default: (localStorage.getItem('nav_reports')) ? localStorage.getItem('nav_reports') : 'hide',
-            },
-            nav_activity_logs: {
-                default: (localStorage.getItem('nav_activity_logs')) ? localStorage.getItem('nav_activity_logs') : 'show',
-            },
-            nav_cache_management: {
-                default: (localStorage.getItem('nav_cache_management')) ? localStorage.getItem('nav_cache_management') : 'show',
-            },
+            //
         },
         data(){
             return {
@@ -286,55 +268,13 @@
         watch: {
           $route() {
             //
-            if(localStorage.getItem('nav_roles')) {
-                this.$props.nav_roles = localStorage.getItem('nav_roles');
-            }
-            if(localStorage.getItem('nav_sliders')) {
-                this.$props.nav_sliders = localStorage.getItem('nav_sliders');
-            }
-            if(localStorage.getItem('nav_themes')) {
-                this.$props.nav_themes = localStorage.getItem('nav_themes');
-            }
-            if(localStorage.getItem('nav_reports')) {
-                this.$props.nav_reports = localStorage.getItem('nav_reports');
-            }
-            if(localStorage.getItem('nav_activity_logs')) {
-                this.$props.nav_activity_logs = localStorage.getItem('nav_activity_logs');
-            }
-            if(localStorage.getItem('nav_cache_management')) {
-                this.$props.nav_cache_management = localStorage.getItem('nav_cache_management');
-            }
-
           }
         },
         created() {
             //
-            if(localStorage.getItem('nav_roles')) {
-                this.$props.nav_roles = localStorage.getItem('nav_roles');
-            }
-            if(localStorage.getItem('nav_sliders')) {
-                this.$props.nav_sliders = localStorage.getItem('nav_sliders');
-            }
-            if(localStorage.getItem('nav_themes')) {
-                this.$props.nav_themes = localStorage.getItem('nav_themes');
-            }
-            if(localStorage.getItem('nav_reports')) {
-                this.$props.nav_reports = localStorage.getItem('nav_reports');
-            }
-            if(localStorage.getItem('nav_activity_logs')) {
-                this.$props.nav_activity_logs = localStorage.getItem('nav_activity_logs');
-            }
-            if(localStorage.getItem('nav_cache_management')) {
-                this.$props.nav_cache_management = localStorage.getItem('nav_cache_management');
-            }
         },
         methods: {
             //
-       //   requestPropChange: function (path, value) {
-             //    if (this.is(path, 'String') && this.isDefined(value) && (new RegExp('^[a-zA-Z_\\$]\\w*(\\.([a-zA-Z_\\$]\\w*|[0-9]+))*$')).test(path)) {
-             //      this.$emit('propChange', {path: path.split('.'), value: value})
-             //    }
-             // },
 
             onChangeNav(e){
                 if(this.$refs['itemComponent'+e].classList.contains('u-sidebar-nav--opened')) {

@@ -260,8 +260,8 @@
 
                                     <td class="font-weight-semi-bold">
                                         <router-link v-if="permissions.edit"
-                                                :to="{ name: 'edit-articles', params:{id: row.id} }" 
-                                                class="default-color text-decoration-hover">
+                                            :to="{ name: 'edit-articles', params:{id:row.encrypt_id} }" 
+                                            class="default-color text-decoration-hover">
                                             {{ row.title }} 
                                         </router-link>
                                         <span v-if="!permissions.edit">{{ row.title }}</span>
@@ -325,7 +325,7 @@
                                                             <router-link v-if="permissions.edit"
                                                                 class="d-block link-dark"
                                                                 :to="{ name: 'edit-articles', 
-                                                                params:{id: row.id}}">
+                                                                params:{id: row.encrypt_id}}">
                                                                 Edit
                                                             </router-link>
                                                         </li>

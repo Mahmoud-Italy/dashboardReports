@@ -716,7 +716,7 @@
                                     </span>Loading...
                                 </span>
                                 <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> Create Article</span>
+                                <span v-if="!btnLoading"> Updated Article</span>
                             </button>
                         </div>
 
@@ -773,7 +773,7 @@
                     destination_id: '',
                     status: 1,
                     featured: 0,
-                    preview: "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e",
+                    preview: '',
                     image_url: '',
                     image_alt: '',
                     image_title: '',
@@ -1017,7 +1017,7 @@
                 }
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 const options = {
-                    url: window.baseURL+'/articles',
+                    url: window.baseURL+'/articles/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
                         writer_id: this.row.writer_id,
@@ -1051,7 +1051,7 @@
                             title: 'Great job,',
                             message: 'Item Updated Successfully.',
                         });
-                        this.$router.push({ name: 'Articles' })
+                        this.$router.push({ name: 'articles' })
                     })
                     .catch(err => {
                         // 403 Forbidden

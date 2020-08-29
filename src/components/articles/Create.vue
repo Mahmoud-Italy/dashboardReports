@@ -1000,7 +1000,7 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        this.$router.push({ name: 'Articles' })
+                        this.$router.push({ name: 'articles' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -1082,24 +1082,6 @@
 
         },
 
-        // Before Enter..
-        //beforeRouteEnter (to, from, next) { 
-          // next(vm => { 
-          //   //next();
-          // }) 
-        //},
-
-        // Before Leaving.. 
-        // beforeRouteLeave(to, from, next) { 
-        //     if(this.row.title && !this.isSubmit) {
-        //         const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-        //         if (answer) {
-        //             next()
-        //         } else {
-        //             next(false)
-        //         }
-        //     } else { next() }
-        // },
     }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

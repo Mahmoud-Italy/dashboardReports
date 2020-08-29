@@ -13,6 +13,8 @@
 
  /* Min Tailwind css  */
  
+ .ui-reload { cursor: pointer; margin-bottom: 5px; margin-top: -15px; font-size: 11px }
+ .ucfirst { text-transform: capitalize; }
  .ui-ml-unset { margin-left: unset !important }
  span.dropdown-item { cursor: pointer !important }
  .ui-mt10 { margin-top: 10px }
@@ -29,10 +31,14 @@
  .ui-mt-30 { margin-top: -30px !important }
  .ui-mt-50 { margin-top: -50px }
  .ui-mt-60 { margin-top: -60px }
+ .ui-mt-80 { margin-top: -80px }
+ .ui-mt-94 { margin-top: -94px }
  .ui-mt-100 { margin-top: -100px }
  .ui-mt-120 { margin-top: -120px }
  .ui-mt-150 { margin-top: -150px }
  .ui-mt-180 { margin-top: -180px }
+
+ .ui-for-div { border-bottom: 1px solid #ddd; margin-bottom: 50px; padding-bottom: 50px }
 
  .ui-ml-20 { margin-left: -20px }
 
@@ -47,7 +53,9 @@
  .ui-mb-10 { margin-bottom: -10px !important }
  .ui-mb-50 { margin-bottom: -50px !important }
  .ui-mb-100 { margin-bottom: -100px !important }
-  
+ 
+ .ui.ml1 { margin-left: 1px }
+ .ui-m5 { margin: 5px; }
  .ui-w100 { width: 100px } 
  .ui-min-w100 { min-width: 100px !important }
 
@@ -72,6 +80,8 @@
  .text-decoration-hover:hover { text-decoration: underline !important }
  .pull-right { float: right !important }
  .display-flex-inline { display: inline-flex; }
+ .display-flex { display: flex }
+ .inline- { display: flex; }
  .cursor-pointer { cursor: pointer }
  .dropdown-item.active, .dropdown-item:active {
   color: #fff !important;
@@ -79,6 +89,8 @@
 
  .no-decoration { text-decoration: none !important }
  .no-padding { padding: 0 !important }
+ .no-lpadding { padding-left: 0 !important }
+ .no-rpadding { padding-right: 0 !important }
  .no-style { border-style: none !important }
  .flex-wrap-unset { flex-wrap: unset !important }
  .hidden { display: none !important }

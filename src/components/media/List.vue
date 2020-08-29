@@ -9,6 +9,7 @@
             <div class="u-content">
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize">Media
+
                         <div class="pull-rights ui-mt-15 pull-right ">
                             <div class="dropdown">
                                 <span class="badge badge-md badge-pill badge-secondary-soft">
@@ -21,7 +22,9 @@
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><router-link :to="{ name: 'dashboard' }">Home</router-link></li>
+                            <li class="breadcrumb-item">
+                                <router-link :to="{ name: 'dashboard' }">Home</router-link>
+                            </li>
                             <li class="breadcrumb-item active" aria-current="page">Media</li>
                         </ol>
                     <!-- End Breadcrumb -->
@@ -88,22 +91,27 @@
                                     <td class="font-weight-semi-bold">{{index+1}}</td>
 
                                     <td class="font-weight-semi-bold">
-                                        <a :href="row.aws_bucket+row.file" target="_blank">
-                                            <img :src="row.aws_bucket+row.file" style="width:72px;height: 72px">
+                                        <a :href="row.image" target="_blank">
+                                            <img :src="row.image" 
+                                                style="width:92px">
                                         </a>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
                                         <a href="javascript:;" 
                                             title="Copy to clipboard"
-                                            v-clipboard:copy="row.aws_bucket+row.file"
+                                            v-clipboard:copy="row.image"
                                             v-clipboard:success="onCopy"
                                             v-clipboard:error="onError">
                                             Copy to clipboard
                                         </a>
                                     </td>
 
-                                    <td class="font-weight-semi-bold text-center">{{ row.mimeType }}</td>
+                                    <td class="font-weight-semi-bold text-center">
+                                        <span class="badge badge-md badge-pill badge-danger-soft">
+                                            {{ row.mime_type }}
+                                        </span>
+                                    </td>
                                     <td class="font-weight-semi-bold text-center">{{ row.size }}</td>
                                 </tr>
                                 
@@ -120,7 +128,8 @@
 
                             </table>
                         </div>
-                        <nav  v-if="rows.length !== 0" aria-label="Page navigation example ui-mt20">
+                        <nav  v-if="rows.length !== 0" aria-label="Page navigation example ui-mt20" 
+                            style="margin-top: 20px">
                             <ul class="pagination">
                                 <li v-bind:class="[{disabled: !pagination.prev_page_url}]" class="page-item">
                                     <a class="page-link" href="javascript:" 
@@ -200,7 +209,7 @@
     import Header from '../layouts/Header.vue';
     import Navigation from '../layouts/Navigation';
     import Footer from '../layouts/Footer.vue';
-    import izitoast from 'izitoast';
+    import iziToast from 'izitoast';
 
     export default {
         name: 'Media',
@@ -213,15 +222,15 @@
             return {
                 auth: { 
                     role: '',
-                    accessToken: '',
+                    access_token: '',
                 },
                 row: {
                     preview: '',
                     image: '',
+                    base64Image: '',
                 },
                 //
                 fileSize: '',
-
                 dataLoading: true,
                 btnLoading: false,
                 something_went_wrong: false,
@@ -232,11 +241,11 @@
         mounted() {},
         created() {
             // AccessToken & Role
-            if(localStorage.getItem('accessToken')) {
-                this.auth.accessToken = localStorage.getItem('accessToken');
-            }
             if(localStorage.getItem('role')) {
                 this.auth.role = localStorage.getItem('role');
+            }
+            if(localStorage.getItem('access_token')) {
+                this.auth.accessToken = localStorage.getItem('access_token');
             }
 
             this.fetchData('', true);
@@ -246,45 +255,36 @@
             // Fetch Data
             fetchData(page_url, loading=false) {
                 if(loading) { this.dataLoading = true; }
-                this.something_went_wrong = false;
-                axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': window.csrf_token,
-                    'accesstoken': this.auth.accessToken,
-                    'permission': 'admin.media.index'
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
                 };
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 let vm = this;
-                let params = {};
-                params['api_key'] = window.api_key;
-                page_url = page_url || '/api/v1/dashboard/media';
-                axios.get(page_url, {params:params}, config)
+                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                const options = {
+                    url: window.baseURL+'/media',
+                    method: 'GET',
+                    data: {},
+                    params: {},
+                }
+                this.axios(options, config)
                     .then(res => {
                         this.dataLoading = false;
-
-                        if (res.data.statusCode == 401) {
-                            this.$router.push({name: 'access-denied'});
-
-                        } else if(res.data.statusCode == 200) {
-
-                            this.rows = res.data.data.rows;
-                            this.fileSize = res.data.data.fileSize;
-                            if(res.data.data.pagination.total) {
-                                this.total_data = res.data.data.pagination.total;
-                                vm.makePagination(res.data.data.pagination)
-                            }
-                        } else {
-                            izitoast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow, man',
-                                message: 'Slow down, '+res.data.errors,
-                            });
+                        this.rows = res.data.rows;
+                        this.fileSize = res.data.fileSize;
+                        if(res.data.paginate.total) {
+                            vm.makePagination(res.data.paginate)
                         }
                     })
                     .catch(err => {
-                        this.dataLoading = false;
-                        this.something_went_wrong = true;
-                    });
+                        this.btnLoading = false;
+                        iziToast.warning({
+                            icon: 'ti-alert',
+                            title: 'Wow-man,',
+                            message: (err.response) ? err.response.data.message : ''+err
+                        });
+                    })
+                    .finally(() => {})
             },
 
             // Pagination
@@ -300,51 +300,55 @@
 
             // Upload Featured image
             onImageChange(e){
-              const file = e.target.files[0];
-              this.row.preview = URL.createObjectURL(file);
-              this.row.image = file;
+                const file = e.target.files[0];
+                this.row.preview = URL.createObjectURL(file);
+                //this.row.image = file;
+
+                this.createBase64Image(file);
+            },
+
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.base64Image = e.target.result;
+                };
             },
 
             // Add Or Update Category
             addNew(){
                 this.btnLoading = true;
-                axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': window.csrf_token,
-                    'accesstoken': this.auth.accessToken,
-                    'permission': 'admin.media.create'
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const config = { headers: { 'Content-Type': 'application/json' }};  
-                let formData = new FormData();
-                formData.append('api_key', window.api_key);
-                formData.append('file', this.row.image);
-                axios.post('/api/v1/dashboard/media', formData, config)
-                .then(res => {
-                    this.btnLoading = false;
-                    this.row.preview = '';
-                    this.row.image = '';
-                    this.fetchData('', true);
+                const options = {
+                    url: window.baseURL+'/media',
+                    method: 'POST',
+                    data: {
+                        file: this.row.base64Image
+                    }
+                }
+                this.axios(options, config)
+                    .then(res => {
+                        this.btnLoading = false;
+                        this.row.preview = '';
+                        this.row.base64Image = '';
+                        this.fetchData('', true);
 
-                    if(res.data.statusCode == 201) {
-                        izitoast.success({
+                        iziToast.success({
                             icon: 'ti-check',
                             title: 'Great job,',
                             message: 'File Uploaded Successfully',
                         });
-                    } else {
-                        izitoast.warning({
-                            icon: 'ti-alert',
-                            title: 'Wow, man',
-                            message: 'Slow down, '+res.data.errors,
-                        });
-                    }
                 })
                 .catch(err => {
                     this.btnLoading = false;
-                    izitoast.error({
+                    iziToast.error({
                         icon: 'ti-na',
                         title: 'Wow-wow,',
-                        message: 'Something went wrong',
+                        message: (err.response) ? err.response.data.message : ''+err
                     });
                 });
             },
@@ -353,20 +357,20 @@
             // Edit
             editRow(row) {
                 //this.edit = true;
-                this.row.id = row.id;
-                this.row.preview = row.preview;
+                //this.row.id = row.id;
+                //this.row.preview = row.preview;
             },
 
             // Copy to Clipboard
             onCopy: function (e) {
-                izitoast.success({
+                iziToast.success({
                     icon: 'ti-check',
                     title: 'Great job,',
                     message: 'Copy to Clipboard Successfully',
                 });
             },
             onError: function (e) {
-                izitoast.error({
+                iziToast.error({
                     icon: 'ti-na',
                     title: 'Wow-wow,',
                     message: 'Something went wrong, try again',

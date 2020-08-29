@@ -37,6 +37,23 @@ import AxiosPlugin from 'vue-axios-cors';
 Vue.use(AxiosPlugin)
 /* End Axios PLugin */
 
+/* VueApexCharts */
+import VueApexCharts from 'vue-apexcharts';
+Vue.use(VueApexCharts);
+Vue.component('apexchart', VueApexCharts);
+/* End VueApexCharts */
+
+/* Vue Editor */
+window.editor_apiKey  = 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b';
+window.editor_menubar = 'file edit view insert format tools table tc help';
+window.editor_plugins = 'advlist autolink lists link image charmap print preview anchor',
+                         'searchreplace visualblocks code fullscreen',
+                         'insertdatetime media table paste code help wordcount';
+window.editor_toolbar = 'undo redo | formatselect | bold italic backcolor | \
+                         alignleft aligncenter alignright alignjustify | \
+                         bullist numlist outdent indent | removeformat | help';
+/* Vue End Editor */
+
 // baseURL
 window.baseURL = 'http://localhost:8000/api/v1/dashboard';
 Vue.config.productionTip = false

@@ -8,7 +8,7 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Destinations
+                    <h1 class="h2 mb-2">Pages
 
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
@@ -29,7 +29,7 @@
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
                             <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'destinations' }">Destinations</router-link>
+                                <router-link :to="{ name: 'pages' }">Pages</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
@@ -183,19 +183,12 @@
                                         <editor
                                             id="inputText3"
                                             v-model="row.body"
-                                            api-key="xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b"
+                                            :api-key="editor.api_key"
                                             :init="{
-                                                height: 600,
-                                                menubar: 'file edit view insert format tools table tc help',
-                                                plugins: [
-                                                    'advlist autolink lists link image charmap print preview anchor',
-                                                    'searchreplace visualblocks code fullscreen',
-                                                    'insertdatetime media table paste code help wordcount'
-                                                ],
-                                                toolbar:
-                                                    'undo redo | formatselect | bold italic backcolor | \
-                                                    alignleft aligncenter alignright alignjustify | \
-                                                    bullist numlist outdent indent | removeformat | help'
+                                                height: 900,
+                                                menubar: editor.menubar,
+                                                plugins: editor.plugins,
+                                                toolbar: editor.toolbar
                                             }"
                                         />
                                     </div>
@@ -219,56 +212,8 @@
                     <!-- ******* SideNavbar ******** -->
                     <div class="col-md-4 mb-5">
 
-                        <!-- NavOne -->
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="accordionNav" class="accordion">
-                                    <div id="NavRegion" class="card-header">
-                                        <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Region')" 
-                                            aria-expanded="false" 
-                                            aria-controls="collapseNavRegion" 
-                                            data-toggle="collapse" 
-                                            data-target="#collapseNavRegion">Region
-                                            <span id="iconToggleRegion" 
-                                                    class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
-                                            </span>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseNavRegion" 
-                                        class="collapse" 
-                                        aria-labelledby="NavRegion" 
-                                        data-parent="#accordionNav">
-                                        <div class="col-12 pt-3">
-                                            <!-- Region -->
-                                            <div class="form-group">
-                                                <div v-if="regionLoading" class="text-center">
-                                                    <span class="spinner-grow spinner-grow-sm mr-1" 
-                                                        role="status" 
-                                                        aria-hidden="true">
-                                                    </span>
-                                                </div>
-                                                <select class="form-control custom-select"
-                                                    v-if="!regionLoading" 
-                                                    v-model="row.region_id">
-                                                    <option value="">Select Region</option>
-                                                    <option v-for="(region, index) in regions" 
-                                                            :key="index"
-                                                            :value="region.id">
-                                                            {{ region.title }}
-                                                    </option>
-                                                </select>
-                                                <!-- Region -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End NavOne -->
-
                         <!-- NavTwo -->
-                        <div class="card mt-5">
+                        <div class="card5">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
                                     <div id="NavImage" class="card-header">
@@ -291,7 +236,7 @@
                                             <!-- Image -->
                                             <div class="form-group">
                                                 <img :src="row.preview" 
-                                                    class="mb-2 h200 custom-image">
+                                                    class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
                                                     ref="myDropify" 
@@ -377,7 +322,7 @@
                                     </span>Loading...
                                 </span>
                                 <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> Update Destination</span>
+                                <span v-if="!btnLoading"> Update Page</span>
                             </button>
                         </div>
 
@@ -412,7 +357,7 @@
     import iziToast from 'izitoast';
     
     export default {
-        name: 'Create',
+        name: 'Edit',
         components: {
             Header,
             Navigation,
@@ -427,9 +372,8 @@
                     access_token: '',
                 },
                 row: {
-                    region_id: '',
                     status: true,
-                    preview: "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e",
+                    preview: '',
                     image: '',
                     image_alt: '',
                     image_title: '',
@@ -442,8 +386,18 @@
                     meta_keywords: '',
                     meta_description: '',
                 },
-                regions: [],
-                regionLoading: true,
+                editor: {
+                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
+                    menubar: 'file edit view insert format tools table tc help',
+                    plugins: [
+                                'advlist autolink lists link image charmap print preview anchor',
+                                'searchreplace visualblocks code fullscreen',
+                                'insertdatetime media table paste code help wordcount'
+                            ],
+                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
+                              alignleft aligncenter alignright alignjustify | \
+                              bullist numlist outdent indent | removeformat | help',
+                },
 
                 pgLoading: true,
                 btnLoading: false,
@@ -484,7 +438,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/destinations/'+this.$route.params.id,
+                    url: window.baseURL+'/pages/'+this.$route.params.id,
                     method: 'GET',
                     data: {},
                     params: {},
@@ -493,7 +447,6 @@
                     .then(res => {
                     this.pgLoading = false;
 
-                    this.row.region_id = (res.data.row.region) ? res.data.row.region.id : null;
                     this.row.status= res.data.row.status;
 
                     this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
@@ -508,37 +461,12 @@
                 this.row.meta_keywords = (res.data.row.meta) ? res.data.row.meta.meta_keywords : null;
                 this.row.meta_description = (res.data.row.meta) ? res.data.row.meta.meta_description : null;
 
-                    this.fetchRegions();
                     })
                     .catch(() => {})
                     .finally(() => {});
             },
 
-            // Fetch Regions
-            fetchRegions() {
-                this.regionLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
-                const options = {
-                    url: window.baseURL+'/regions',
-                    method: 'GET',
-                    data: {},
-                    params: {
-                        status: 'active',
-                        paginate: 25,
-                    },
-                }
-                this.axios(options)
-                    .then(res => {
-                        this.regionLoading = false;
-                        this.regions = res.data.rows;
-                    })
-                    .catch(() => {})
-                    .finally(() => {});
-            },
-
+            
             // Upload Featured image
             onImageChange(e){
                 const file = e.target.files[0];
@@ -556,10 +484,9 @@
                 };
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 const options = {
-                    url: window.baseURL+'/destinations/'+this.$route.params.id,
+                    url: window.baseURL+'/pages/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
-                        region_id: this.row.region_id,
                         status: this.row.status,
 
                         image_url: this.row.image,
@@ -583,7 +510,7 @@
                             title: 'Great job,',
                             message: 'Item Updated Successfully.',
                         });
-                        this.$router.push({ name: 'destinations' })
+                        this.$router.push({ name: 'pages' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -627,30 +554,12 @@
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'destinations' });
+                    this.$router.push({ name: 'pages' });
                 }
             },
 
         },
 
-        // Before Enter..
-        //beforeRouteEnter (to, from, next) { 
-          // next(vm => { 
-          //   //next();
-          // }) 
-        //},
-
-        // Before Leaving.. 
-        // beforeRouteLeave(to, from, next) { 
-        //     if(this.row.title && !this.isSubmit) {
-        //         const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-        //         if (answer) {
-        //             next()
-        //         } else {
-        //             next(false)
-        //         }
-        //     } else { next() }
-        // },
     }
 </script>
 

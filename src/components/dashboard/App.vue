@@ -11,20 +11,27 @@
 
                         <!-- Check Update -->
                         <div class="col-12 mb-3">
-                            <button type="button" 
+                            <button type="button"
+                                @click="checkUpdate" 
                                 class="pull-right btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2 btn-with-icon">
-                                <span class="btn-icon ti-download mr-2"></span>
-                                <span> No new updates available! </span>
+                                <span v-if="!updateLoading" class="btn-icon ti-download mr-2"></span>
+                                <span v-if="updateLoading">
+                                    <div class="spinner-grow spinner-grow-sm mr-1" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </span>
+                                <span v-html="(updateLoading) 
+                                    ? ' Checking for updates...' 
+                                    : ' No new updates available!' "></span>
                             </button>
                         </div>
                         <!-- End Check Update -->
 
 
-                        <!-- Total Posts -->
+                        <!-- Total Visitors -->
                         <div class="col-sm-6 col-xl-3 mb-5">
                             <div class="card">
                                 <div class="card-body">
-
                                     <div class="dropdown show">
                                         <span class="ti-more pull-right cursor-pointer" 
                                             id="dropMenuPosts" 
@@ -33,47 +40,46 @@
                                             aria-expanded="false"></span>
                                         <div class="dropdown-menu" aria-labelledby="dropMenuPosts">
                                             <span class="dropdown-item " 
-                                                :class="(post_days == '0') ? 'active' : ''"
-                                                @click="fetchTotalPosts(0)">Today</span>
+                                                :class="(visitorDays == '0') ? 'active' : ''"
+                                                @click="fetchTotalVisitors(0)">Today</span>
                                             <span class="dropdown-item "
-                                                :class="(post_days == '1') ? 'active' : ''"
-                                                @click="fetchTotalPosts(1)">Yesterday</span>
+                                                :class="(visitorDays == '1') ? 'active' : ''"
+                                                @click="fetchTotalVisitors(1)">Yesterday</span>
                                             <span class="dropdown-item "
-                                                :class="(post_days == '7') ? 'active' : ''"
-                                                @click="fetchTotalPosts(7)">Last 7 days</span>
+                                                :class="(visitorDays == '7') ? 'active' : ''"
+                                                @click="fetchTotalVisitors(7)">Last 7 days</span>
                                             <span class="dropdown-item "
-                                                :class="(post_days == '28') ? 'active' : ''"
-                                                @click="fetchTotalPosts(28)">Last 28 days</span>
+                                                :class="(visitorDays == '28') ? 'active' : ''"
+                                                @click="fetchTotalVisitors(28)">Last 28 days</span>
                                             <span class="dropdown-item "
-                                                :class="(post_days == '90') ? 'active' : ''"
-                                                @click="fetchTotalPosts(90)">Last 90 days</span>
+                                                :class="(visitorDays == '90') ? 'active' : ''"
+                                                @click="fetchTotalVisitors(90)">Last 90 days</span>
                                             <span class="dropdown-item "
-                                                :class="(post_days == '180') ? 'active' : ''"
-                                                @click="fetchTotalPosts(180)">Last 180 days</span>
+                                                :class="(visitorDays == '180') ? 'active' : ''"
+                                                @click="fetchTotalVisitors(180)">Last 180 days</span>
                                             <span class="dropdown-item "
-                                                :class="(post_days == 'infinity') ? 'active' : ''"
-                                                @click="fetchTotalPosts('infinity')">Last calendar year</span>
+                                                :class="(visitorDays == 'infinity') ? 'active' : ''"
+                                                @click="fetchTotalVisitors('infinity')">Last calendar year</span>
                                         </div>
                                     </div>
-
                                     <div class="media align-items-center py-2">
                                         <div class="media-body">
-                                            <h5 class="h5 text-muted mb-2">Total Posts</h5>
-                                            <span v-if="postLoading">
+                                            <h5 class="h5 text-muted mb-2">Total Visitors</h5>
+                                            <span v-if="visitorLoading">
                                                 <div class="spinner-grow spinner-grow-sm mr-1" role="status">
                                                       <span class="sr-only">Loading...</span>
                                                 </div>
                                             </span>
-                                            <span v-if="!postLoading" 
-                                                class="h2 font-weight-normal mb-0">{{ total_posts }}
+                                            <span v-if="!visitorLoading" 
+                                                class="h2 font-weight-normal mb-0">{{ visitorTotal }}
                                             </span>
                                         </div>
-                                        <div v-if="!postLoading" 
+                                        <div v-if="!visitorLoading" 
                                                 class="text-right ml-2" 
                                                 style="max-width: 70px">
                                             <div class="mb-2"></div>
-                                            <span class="text-success">{{ percentage_posts }}
-                                                <span :class="arrow_posts"></span>
+                                            <span class="text-success">{{ visitorPercentage }}
+                                                <span :class="visitorArrow"></span>
                                             </span>
                                         </div>
                                     </div>
@@ -81,14 +87,15 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- End Total Posts -->
+                        <!-- End Total Visitors -->
 
 
-                        <!-- Total Posts Views -->
+
+
+                        <!-- Total Packages -->
                         <div class="col-sm-6 col-xl-3 mb-5">
                             <div class="card">
                                 <div class="card-body">
-
                                     <div class="dropdown show">
                                         <span class="ti-more pull-right cursor-pointer" 
                                             id="dropMenuPosts" 
@@ -97,60 +104,60 @@
                                             aria-expanded="false"></span>
                                         <div class="dropdown-menu" aria-labelledby="dropMenuPosts">
                                             <span class="dropdown-item " 
-                                                :class="(view_days == '0') ? 'active' : ''"
-                                                @click="fetchTotalViews(0)">Today</span>
+                                                :class="(packageDays == '0') ? 'active' : ''"
+                                                @click="fetchTotalPackages(0)">Today</span>
                                             <span class="dropdown-item "
-                                                :class="(view_days == '1') ? 'active' : ''"
-                                                @click="fetchTotalViews(1)">Yesterday</span>
+                                                :class="(packageDays == '1') ? 'active' : ''"
+                                                @click="fetchTotalPackages(1)">Yesterday</span>
                                             <span class="dropdown-item "
-                                                :class="(view_days == '7') ? 'active' : ''"
-                                                @click="fetchTotalViews(7)">Last 7 days</span>
+                                                :class="(packageDays == '7') ? 'active' : ''"
+                                                @click="fetchTotalPackages(7)">Last 7 days</span>
                                             <span class="dropdown-item "
-                                                :class="(view_days == '28') ? 'active' : ''"
-                                                @click="fetchTotalViews(28)">Last 28 days</span>
+                                                :class="(packageDays == '28') ? 'active' : ''"
+                                                @click="fetchTotalPackages(28)">Last 28 days</span>
                                             <span class="dropdown-item "
-                                                :class="(view_days == '90') ? 'active' : ''"
-                                                @click="fetchTotalViews(90)">Last 90 days</span>
+                                                :class="(packageDays == '90') ? 'active' : ''"
+                                                @click="fetchTotalPackages(90)">Last 90 days</span>
                                             <span class="dropdown-item "
-                                                :class="(view_days == '180') ? 'active' : ''"
-                                                @click="fetchTotalViews(180)">Last 180 days</span>
+                                                :class="(packageDays == '180') ? 'active' : ''"
+                                                @click="fetchTotalPackages(180)">Last 180 days</span>
                                             <span class="dropdown-item "
-                                                :class="(view_days == 'infinity') ? 'active' : ''"
-                                                @click="fetchTotalViews('infinity')">Last calendar year</span>
+                                                :class="(packageDays == 'infinity') ? 'active' : ''"
+                                                @click="fetchTotalPackages('infinity')">Last calendar year</span>
                                         </div>
                                     </div>
-
                                     <div class="media align-items-center py-2">
                                         <div class="media-body">
-                                            <h5 class="h5 text-muted mb-2">Total Views</h5>
-                                            <span v-if="viewLoading">
+                                            <h5 class="h5 text-muted mb-2">Total Packages </h5>
+                                            <span v-if="packageLoading">
                                                 <div class="spinner-grow spinner-grow-sm mr-1" role="status">
                                                       <span class="sr-only">Loading...</span>
                                                 </div>
                                             </span>
-                                            <span v-if="!viewLoading" 
-                                                class="h2 font-weight-normal mb-0">{{ total_views }}
+                                            <span v-if="!packageLoading" 
+                                                class="h2 font-weight-normal mb-0">{{ packageTotal }}
                                             </span>
                                         </div>
-                                        <div v-if="!viewLoading" class="text-right ml-2" style="max-width: 70px">
+                                        <div v-if="!packageLoading" 
+                                            class="text-right ml-2" 
+                                            style="max-width: 70px">
                                             <div class="mb-2"></div>
-                                            <span class="text-success">{{ percentage_views }}
-                                                <span :class="arrow_views"></span>
+                                            <span class="text-success">{{ packagePercentage }}
+                                                <span :class="packageArrow"></span>
                                             </span>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-                        <!-- End Total Posts Views -->
+                        <!-- End Total Packages -->
 
 
-                        <!-- Total Posts Views -->
+
+                        <!-- Total Inquires -->
                         <div class="col-sm-6 col-xl-3 mb-5">
                             <div class="card">
                                 <div class="card-body">
-
                                     <div class="dropdown show">
                                         <span class="ti-more pull-right cursor-pointer" 
                                             id="dropMenuPosts" 
@@ -159,25 +166,87 @@
                                             aria-expanded="false"></span>
                                         <div class="dropdown-menu" aria-labelledby="dropMenuPosts">
                                             <span class="dropdown-item " 
-                                                :class="(user_days == '0') ? 'active' : ''"
+                                                :class="(inquireDays == '0') ? 'active' : ''"
+                                                @click="fetchTotalInquires(0)">Today</span>
+                                            <span class="dropdown-item "
+                                                :class="(inquireDays == '1') ? 'active' : ''"
+                                                @click="fetchTotalInquires(1)">Yesterday</span>
+                                            <span class="dropdown-item "
+                                                :class="(inquireDays == '7') ? 'active' : ''"
+                                                @click="fetchTotalInquires(7)">Last 7 days</span>
+                                            <span class="dropdown-item "
+                                                :class="(inquireDays == '28') ? 'active' : ''"
+                                                @click="fetchTotalInquires(28)">Last 28 days</span>
+                                            <span class="dropdown-item "
+                                                :class="(inquireDays == '90') ? 'active' : ''"
+                                                @click="fetchTotalInquires(90)">Last 90 days</span>
+                                            <span class="dropdown-item "
+                                                :class="(inquireDays == '180') ? 'active' : ''"
+                                                @click="fetchTotalInquires(180)">Last 180 days</span>
+                                            <span class="dropdown-item "
+                                                :class="(inquireDays == 'infinity') ? 'active' : ''"
+                                                @click="fetchTotalInquires('infinity')">Last calendar year</span>
+                                        </div>
+                                    </div>
+                                    <div class="media align-items-center py-2">
+                                        <div class="media-body">
+                                            <h5 class="h5 text-muted mb-2">Total Inquires</h5>
+                                            <span v-if="inquireLoading">
+                                                <div class="spinner-grow spinner-grow-sm mr-1" role="status">
+                                                      <span class="sr-only">Loading...</span>
+                                                </div>
+                                            </span>
+                                            <span v-if="!inquireLoading" 
+                                                class="h2 font-weight-normal mb-0">{{ inquireTotal }}
+                                            </span>
+                                        </div>
+                                        <div v-if="!inquireLoading" 
+                                            class="text-right ml-2" 
+                                            style="max-width: 70px">
+                                            <div class="mb-2"></div>
+                                            <span class="text-success">{{ inquirePercentage }}
+                                                <span :class="inquireArrow"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Total Inquires -->
+
+
+
+                        <!-- Total Users -->
+                        <div class="col-sm-6 col-xl-3 mb-5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="dropdown show">
+                                        <span class="ti-more pull-right cursor-pointer" 
+                                            id="dropMenuPosts" 
+                                            data-toggle="dropdown" 
+                                            aria-haspopup="true" 
+                                            aria-expanded="false"></span>
+                                        <div class="dropdown-menu" aria-labelledby="dropMenuPosts">
+                                            <span class="dropdown-item " 
+                                                :class="(userDays == '0') ? 'active' : ''"
                                                 @click="fetchTotalUsers(0)">Today</span>
                                             <span class="dropdown-item "
-                                                :class="(user_days == '1') ? 'active' : ''"
+                                                :class="(userDays == '1') ? 'active' : ''"
                                                 @click="fetchTotalUsers(1)">Yesterday</span>
                                             <span class="dropdown-item "
-                                                :class="(user_days == '7') ? 'active' : ''"
+                                                :class="(userDays == '7') ? 'active' : ''"
                                                 @click="fetchTotalUsers(7)">Last 7 days</span>
                                             <span class="dropdown-item "
-                                                :class="(user_days == '28') ? 'active' : ''"
+                                                :class="(userDays == '28') ? 'active' : ''"
                                                 @click="fetchTotalUsers(28)">Last 28 days</span>
                                             <span class="dropdown-item "
-                                                :class="(user_days == '90') ? 'active' : ''"
+                                                :class="(userDays == '90') ? 'active' : ''"
                                                 @click="fetchTotalUsers(90)">Last 90 days</span>
                                             <span class="dropdown-item "
-                                                :class="(user_days == '180') ? 'active' : ''"
+                                                :class="(userDays == '180') ? 'active' : ''"
                                                 @click="fetchTotalUsers(180)">Last 180 days</span>
                                             <span class="dropdown-item "
-                                                :class="(user_days == 'infinity') ? 'active' : ''"
+                                                :class="(userDays == 'infinity') ? 'active' : ''"
                                                 @click="fetchTotalUsers('infinity')">Last calendar year</span>
                                         </div>
                                     </div>
@@ -191,82 +260,22 @@
                                                 </div>
                                             </span>
                                             <span v-if="!userLoading" 
-                                                class="h2 font-weight-normal mb-0">{{ total_users }}
+                                                class="h2 font-weight-normal mb-0">{{ userTotal }}
                                             </span>
                                         </div>
-                                        <div v-if="!userLoading" class="text-right ml-2" style="max-width: 70px">
+                                        <div v-if="!userLoading" 
+                                            class="text-right ml-2" 
+                                            style="max-width: 70px">
                                             <div class="mb-2"></div>
-                                            <span class="text-success">{{ percentage_users }}
-                                                <span :class="arrow_users"></span>
+                                            <span class="text-success">{{ userPercentage }}
+                                                <span :class="userArrow"></span>
                                             </span>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-                        <!-- End Total Subscribers -->
-
-                        <!-- Total Visitors -->
-                        <div class="col-sm-6 col-xl-3 mb-5">
-                            <div class="card">
-                                <div class="card-body">
-
-                                    <div class="dropdown show">
-                                        <span class="ti-more pull-right cursor-pointer" 
-                                            id="dropMenuPosts" 
-                                            data-toggle="dropdown" 
-                                            aria-haspopup="true" 
-                                            aria-expanded="false"></span>
-                                        <div class="dropdown-menu" aria-labelledby="dropMenuPosts">
-                                            <span class="dropdown-item " 
-                                                :class="(visitor_days == '0') ? 'active' : ''"
-                                                @click="fetchTotalVisitors(0)">Today</span>
-                                            <span class="dropdown-item "
-                                                :class="(visitor_days == '1') ? 'active' : ''"
-                                                @click="fetchTotalVisitors(1)">Yesterday</span>
-                                            <span class="dropdown-item "
-                                                :class="(visitor_days == '7') ? 'active' : ''"
-                                                @click="fetchTotalVisitors(7)">Last 7 days</span>
-                                            <span class="dropdown-item "
-                                                :class="(visitor_days == '28') ? 'active' : ''"
-                                                @click="fetchTotalVisitors(28)">Last 28 days</span>
-                                            <span class="dropdown-item "
-                                                :class="(visitor_days == '90') ? 'active' : ''"
-                                                @click="fetchTotalVisitors(90)">Last 90 days</span>
-                                            <span class="dropdown-item "
-                                                :class="(visitor_days == '180') ? 'active' : ''"
-                                                @click="fetchTotalVisitors(180)">Last 180 days</span>
-                                            <span class="dropdown-item "
-                                                :class="(visitor_days == 'infinity') ? 'active' : ''"
-                                                @click="fetchTotalVisitors('infinity')">Last calendar year</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="media align-items-center py-2">
-                                        <div class="media-body">
-                                            <h5 class="h5 text-muted mb-2">Total Visitors</h5>
-                                            <span v-if="visitorLoading">
-                                                <div class="spinner-grow spinner-grow-sm mr-1" role="status">
-                                                      <span class="sr-only">Loading...</span>
-                                                </div>
-                                            </span>
-                                            <span v-if="!visitorLoading" 
-                                                class="h2 font-weight-normal mb-0">{{ total_visitors }}
-                                            </span>
-                                        </div>
-                                        <div v-if="!visitorLoading" class="text-right ml-2" style="max-width: 70px">
-                                            <div class="mb-2"></div>
-                                            <span class="text-success">{{ percentage_visitors }}
-                                                <span :class="arrow_visitors"></span>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Total Visitors -->
+                        <!-- End Total Users -->
                         
                     </div>
 
@@ -276,12 +285,12 @@
 
 
                     <div class="row">
-
+                        <!-- Line Chart -->
                         <div class="col-md-8 mb-5">
                             <div class="card ui-h-480">
                                 <header class="card-header 
                                         d-flex align-items-center justify-content-between">
-                                    <h2 class="h4 card-header-title">Posts Views During the year</h2>
+                                    <h2 class="h4 card-header-title">Visitors During the year</h2>
                                     
                                     <!-- Dropdown -->
                                     <span class="ti-more pull-right cursor-pointer"
@@ -289,54 +298,55 @@
                                             data-toggle="dropdown" 
                                             aria-haspopup="true" 
                                             aria-expanded="false"></span>
-                                    
                                      <div class="dropdown-menu" aria-labelledby="dropMenuCharts">
                                         <span class="dropdown-item " 
-                                                :class="(line_type == 'weekly') ? 'active' : ''"
+                                                :class="(lineType == 'weekly') ? 'active' : ''"
                                                 @click="fetchLineChart('weekly')">Weekly
                                         </span>
                                         <span class="dropdown-item "
-                                                :class="(line_type == 'monthly') ? 'active' : ''"
+                                                :class="(lineType == 'monthly') ? 'active' : ''"
                                                 @click="fetchLineChart('monthly')">Monthly
                                         </span>
                                         <span class="dropdown-item "
-                                                :class="(line_type == 'quarter') ? 'active' : ''"
+                                                :class="(lineType == 'quarter') ? 'active' : ''"
                                                 @click="fetchLineChart('quarter')">Quarter
                                         </span>
                                         <span class="dropdown-item "
-                                                :class="(line_type == 'yearly') ? 'active' : ''"
+                                                :class="(lineType == 'yearly') ? 'active' : ''"
                                                 @click="fetchLineChart('yearly')">Yearly
                                         </span>
                                     </div>
                                     <!-- End Dropdown -->
-
                                 </header>
 
                                 <div class="card-body pt-0 text-center">
                                     <span v-if="chartLoading">
-                                        <div class="spinner-grow spinner-grow-md mr-1 ui-mt150" role="status">
+                                        <div class="spinner-grow spinner-grow-md mr-1 ui-mt150" 
+                                            role="status">
                                             <span class="sr-only">Loading...</span>
                                         </div>
                                     </span>
                                     <apexchart v-if="!chartLoading" 
-                                                class="mt-md-3 mt-xl-0"
-                                                type=area 
-                                                :options="chartOptions1" 
-                                                :series="series1"  
-                                                height="380" />
+                                            class="mt-md-3 mt-xl-0"
+                                            type=area 
+                                            :options="chartOption" 
+                                            :series="charts"  
+                                            height="380" />
                                 </div>
                             </div>
                         </div>
+                        <!-- End Line Chart -->
 
 
 
 
+
+                        <!-- Pie Chart -->
                         <div class="col-md-4 mb-5">
                             <div class="card ui-h-300">
-                                <header class="card-header u-header-dropdown dropdown 
+                                <header class="card-header  
                                     d-flex align-items-center justify-content-between">
-
-                                    <h2 class="h4 card-header-title">Where your users located</h2>
+                                    <h2 class="h4 card-header-title">Where your visitors located</h2>
 
                                     <!-- Dropdown -->
                                     <a class="link-muted d-flex pull-right" 
@@ -347,35 +357,34 @@
                                             data-toggle="dropdown">
                                             <span class="ti-more pull-right cursor-pointer"></span>
                                    </a>
-                                    
                                     <div class="u-header-dropdown__menu dropdown-menu dropdown-menu-right" 
                                             aria-labelledby="dropMenuCountries">
                                         <span class="dropdown-item " 
-                                                :class="(pie_days == '0') ? 'active' : ''"
+                                                :class="(pieDays == '0') ? 'active' : ''"
                                                 @click="fetchCountries(0)">Today
                                         </span>
                                         <span class="dropdown-item "
-                                                :class="(pie_days == '1') ? 'active' : ''"
+                                                :class="(pieDays == '1') ? 'active' : ''"
                                                 @click="fetchCountries(1)">Yesterday
                                         </span>
                                         <span class="dropdown-item "
-                                                :class="(pie_days == '7') ? 'active' : ''"
+                                                :class="(pieDays == '7') ? 'active' : ''"
                                                 @click="fetchCountries(7)">Last 7 days
                                         </span>
                                         <span class="dropdown-item "
-                                                :class="(pie_days == '28') ? 'active' : ''"
+                                                :class="(pieDays == '28') ? 'active' : ''"
                                                 @click="fetchCountries(28)">Last 28 days
                                         </span>
                                         <span class="dropdown-item "
-                                                :class="(pie_days == '90') ? 'active' : ''"
+                                                :class="(pieDays == '90') ? 'active' : ''"
                                                 @click="fetchCountries(90)">Last 90 days
                                         </span>
                                         <span class="dropdown-item "
-                                                :class="(pie_days == '180') ? 'active' : ''"
+                                                :class="(pieDays == '180') ? 'active' : ''"
                                                 @click="fetchCountries(180)">Last 180 days
                                         </span>
                                         <span class="dropdown-item "
-                                                :class="(pie_days == 'infinity') ? 'active' : ''"
+                                                :class="(pieDays == 'infinity') ? 'active' : ''"
                                                 @click="fetchCountries('infinity')">Last calendar year
                                         </span>
                                     </div>
@@ -390,23 +399,26 @@
                                         </div>    
                                     </span>
                                     <apexchart v-if="!pieLoading" 
-                                                class="mt-md-3 mt-xl-0"
-                                                type=pie 
-                                                :options="chartOptions2" 
-                                                :series="series2"  
-                                                height="190" />
+                                            class="mt-md-3 mt-xl-0"
+                                            type=pie 
+                                            :options="pieOptions" 
+                                            :series="pies"  
+                                            height="190" />
                                 </div>
                             </div>
                         </div>
+                        <!-- End Pie Chart -->
+
 
 
 
                         <div class="col-md-8 mb-5">
                             <div class="card">
-                                <header class="card-header d-flex align-items-center justify-content-between">
-                                    <h2 class="h4 card-header-title">Trending Posts</h2>
+                                <header class="card-header d-flex align-items-center 
+                                    justify-content-between">
+                                    <h2 class="h4 card-header-title">Recent Packages</h2>
                                     <span v-if="!dataLoading" class="ti-reload cursor-pointer" 
-                                        @click="fetchTrendingPosts()">
+                                        @click="fetchTrendingPackages()">
                                     </span>
                                     <span v-if="dataLoading">
                                         <div class="spinner-grow spinner-grow-sm" role="status">
@@ -416,71 +428,53 @@
                                 </header>
 
                                 <div class="card-body">
-
                                     <div v-if="dataLoading" class="text-center">
                                         <div class="spinner-grow" role="status">
                                             <span class="sr-only">Loading...</span>
                                         </div>
                                     </div>
-
                                     <div v-if="!dataLoading" class="table-responsive">
                                         <table class="table table-hover mb-0">
                                             <thead>
                                                 <tr>
-                                                    <th style="width:35%">Title</th>
-                                                    <th class="text-center">Author</th>
-                                                    <th class="text-center">Category</th>
+                                                    <th style="width:30%">Title</th>
+                                                    <th class="text-center">Destination</th>
                                                     <th class="text-center">Date</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            
+                                            <tbody v-if="!dataLoading && !rows.length">
+                                                <tr>
+                                                    <td colspan="4" class="text-center">
+                                                        <span>No data found.</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
 
-                                            <tr v-if="!dataLoading && !rows.length">
-                                                <td colspan="5" class="text-center">
-                                                    <span>No data found.</span>
-                                                </td>
-                                            </tr>
-
-                                            <!-- v-if="!dataLoading  && rows.length"  -->
-                                            <tr 
-                                                v-for="(row, index) in rows" 
+                                            <tbody v-if="!dataLoading  && rows.length">
+                                            <tr v-for="(row, index) in rows" 
                                                 :key="index"
                                                 class="f14">
 
                                                 <!-- Title -->
                                                 <td class="font-weight-semi-bold">
-                                                    <router-link :to="{ name: 'edit-post', 
-                                                            params:{id: row.encrypt_id} }" 
-                                                            class="default-color text-decoration-hover">
-                                                            {{ row.title }}
-                                                    </router-link>
-                                                    <span v-if="row.views > 0" class="f12">
-                                                        &nbsp;|&nbsp; <span class="ti-eye"></span> {{row.views}}
-                                                    </span>
+                                                <router-link 
+                                                    :to="{ name:'edit-package',
+                                                    params:{id:row.encrypt_id}}" 
+                                                    class="default-color text-decoration-hover">
+                                                    {{ row.title }} 
+                                                </router-link>
                                                 </td>
                                                 <!-- End Title -->
 
-                                                <!-- Author -->
+                                                <!-- Destination -->
                                                 <td class="font-weight-semi-bold text-center">
-                                                    <span v-if="row.author" 
-                                                        class="badge badge-md badge-pill badge-success-soft">
-                                                        {{ row.author }}
+                                                    <span class="badge badge-md badge-pill 
+                                                        badge-danger-soft">
+                                                        {{ row.sector }}
                                                     </span>
-                                                    <span v-if="!row.author"> - </span>
                                                 </td>
-                                                <!-- End Author -->
-
-                                                <!-- Category -->
-                                                <td class="font-weight-semi-bold text-center">
-                                                    <router-link :to="{ name: 'filter-post', 
-                                                        params:{filter_by: 'category', 'filter':row.category} }" 
-                                                        class="text-decoration-hover">
-                                                        <span class="badge badge-md badge-pill badge-danger-soft">
-                                                            {{ row.category }}
-                                                        </span>
-                                                    </router-link>
-                                                </td>
-                                                <!-- End Category -->
+                                                <!-- End Destination -->
 
                                                 <!-- Date -->
                                                 <td v-html="(row.deleted_at) ? row.deleted_at : 
@@ -488,33 +482,34 @@
                                                     class="font-weight-semi-bold text-center f12">
                                                 </td>
                                                 <!-- End Date -->
-
                                             </tr>
-                                            
+
                                             </tbody>
                                             <tfoot>
                                                 <tr>
                                                     <th>Title</th>
-                                                    <th class="text-center">Author</th>
-                                                    <th class="text-center">Category</th>
+                                                    <th class="text-center">Destination</th>
                                                     <th class="text-center">Date</th>
                                                 </tr>
                                             </tfoot>
-
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- End Packages -->
 
+
+                        <!-- Top Destination -->
                         <div class="col-md-4 mb-5 ui-mt-180">
                             <div class="card">
-                                <header class="card-header d-flex align-items-center justify-content-between">
-                                    <h2 class="h4 card-header-title">Top Categories</h2>
-                                    <span v-if="!catLoading" class="ti-reload cursor-pointer" 
-                                        @click="fetchTopCategories()">
+                                <header class="card-header d-flex align-items-center 
+                                    justify-content-between">
+                                    <h2 class="h4 card-header-title">Top Destinations</h2>
+                                    <span v-if="!topLoading" class="ti-reload cursor-pointer" 
+                                        @click="fetchTopDestination()">
                                     </span>
-                                    <span v-if="catLoading">
+                                    <span v-if="topLoading">
                                         <div class="spinner-grow spinner-grow-sm" role="status">
                                             <span class="sr-only">Loading...</span>
                                         </div>
@@ -522,16 +517,16 @@
                                 </header>
 
                                 <div class="card-body text-center">
-                                    <span v-if="catLoading">
+                                    <span v-if="topLoading">
                                         <div class="spinner-grow" role="status">
                                             <span class="sr-only">Loading...</span>
                                         </div>
                                     </span>
                                     <apexchart class="mt-md-3 mt-xl-0"
-                                                v-if="!catLoading"
+                                                v-if="!topLoading"
                                                 type=bar 
-                                                :options="chartOptions3" 
-                                                :series="series3"  
+                                                :options="topOptions" 
+                                                :series="destinations"  
                                                 height="300" />
                                 </div>
                             </div>
@@ -555,18 +550,62 @@
     import Header from '../layouts/Header.vue';
     import Navigation from '../layouts/Navigation';
     import Footer from '../layouts/Footer.vue';
+    import iziToast from 'izitoast';
+
     export default {
         name: 'App',
         components: {
             Header,
             Navigation,
-            Footer
+            Footer,
         },
         data(){
             return {
-                // Chart
-                line_type: 'monthly',
-                chartOptions1: {
+                
+
+                
+
+              
+
+
+                auth: {
+                    role: '',
+                    access_token: '',
+                },
+
+                // Total Visitors
+                visitorDays: 7,
+                visitorTotal: 0,
+                visitorPercentage: '',
+                visitorArrow: '',
+                visitorLoading: true,
+
+                // Total Packages
+                packageDays: 7,
+                packageTotal: 0,
+                packagePercentage: '',
+                packageArrow: '',
+                packageLoading: true,
+
+                // Total Inquires
+                inquireDays: 7,
+                inquireTotal: 0,
+                inquirePercentage: '',
+                inquireArrow: '',
+                inquireLoading: true,
+
+                // Total User
+                userDays: 7,
+                userTotal: 0,
+                userPercentage: '',
+                userArrow: '',
+                userLoading: true,
+
+                // line Chart
+                charts: [],
+                lineType: 'monthly',
+                chartLoading: true,
+                chartOption: {
                     chart: { height: 450, zoom: { enabled: false }},
                     animations: { enabled: true },
                     dataLabels: {  enabled: false },
@@ -577,10 +616,10 @@
                 },
 
                 // Pie
+                pieDays: 7,
+                pies: [],
                 pieLoading: true,
-                pie_days: 7,
-                series2: [],
-                chartOptions2: {
+                pieOptions: {
                     chart: {
                       width: 380,
                       type: 'pie',
@@ -598,8 +637,14 @@
                     }]
                 },
 
-              // Categories
-              chartOptions3: {
+                // Recent Packages
+                rows: [],
+                dataLoading: true,
+
+                // Top Destinations
+                tops: [],
+                topLoading: true,
+                topOptions: {
                     chart: { height: 280, zoom: { enabled: false }},
                     animations: { enabled: true },
                     dataLabels: {  enabled: false },
@@ -608,310 +653,258 @@
                     grid: {  row: { colors: ['#f3f3f3', 'transparent'],  opacity: 0.5 }},
                     markers: { size: 5, align:top,  hover: {  sizeOffset: 5  }},
                 },
-                series3: [],
+                
 
-                auth: {
-                    role: '',
-                    accesstoken: '',
-                },
-                mostVisited: [],
-
-
-                // Total Posts
-                post_days: 7,
-                total_posts: 0,
-                percentage_posts: '',
-                arrow_posts: '',
-                postLoading: true,
-
-                // Total Views
-                view_days: 7,
-                total_views: 0,
-                percentage_views: '',
-                arrow_views: '',
-                viewLoading: true,
-
-                // Total Users
-                user_days: 7,
-                total_users: 0,
-                percentage_users: '',
-                arrow_users: '',
-                userLoading: true,
-
-                // Total visitors
-                visitor_days: 7,
-                total_visitors: 0,
-                percentage_visitors: '',
-                arrow_visitors: '',
-                visitorLoading: true,
-
-                 // line Chart
-                series1: [],
-                chartLoading: true,
-
-                // Posts Trend
-                rows: [],
-                dataLoading: true,
-
-                // Categories
-                catLoading: true,
-
+                updateLoading: false,
             }
         },
         mounted() {},
         created() {
             // AccessToken & Roles
-            if(localStorage.getItem('accessToken')) {
-                this.auth.accessToken = localStorage.getItem('accessToken');
-            }
-            if(localStorage.getItem('role')) {
-                this.auth.role = localStorage.getItem('role');
+            if(localStorage.getItem('access_token')) {
+                this.auth.accessToken = localStorage.getItem('access_token');
             }
 
-            //this.fetchTotalPosts(this.post_days, true);
+            this.fetchTotalVisitors(this.visitorDays, true);
         },
         methods: {
 
-            // fetch Total Posts
-            // fetchTotalPosts(days, next=false){
-            //     this.postLoading = true;
-            //     axios.defaults.headers.common = {
-            //         'X-Requested-With': 'XMLHttpRequest',
-            //         'X-CSRF-TOKEN': window.csrf_token,
-            //         'accesstoken': this.auth.accessToken
-            //     };
-            //     const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-            //     let params = {};
-            //     params['api_key'] = window.api_key;
-            //     params['days'] = days;
-            //         this.post_days = days;
-            //     axios.get('/api/v1/dashboard/explore/totalPosts', {params:params}, config)
-            //         .then(res => {
-            //             this.postLoading = false;
-            //             if(res.data.statusCode == 200) {
-            //                 this.total_posts = res.data.data.total;
-            //                 this.percentage_posts = res.data.data.percentage;
-            //                 this.arrow_posts = res.data.data.arrow_posts;
+            // fetch TotalVisitors
+            fetchTotalVisitors(days, next=false){
+                this.visitorLoading = true;
+                this.visitorDays = days;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                const options = {
+                    url: window.baseURL+'/explore/totalVisitors/'+this.visitorDays,
+                    method: 'GET',
+                    data: {},
+                    params: {}
+                }
+                this.axios(options, config)
+                    .then(res => {
+                        this.visitorLoading    = false;
+                        this.visitorTotal      = res.data.total;
+                        this.visitorPercentage = res.data.percentage;
+                        this.visitorArrow      = res.data.arrow;
 
-            //                 // Call Next Func
-            //                 if(next) { this.fetchTotalViews(this.view_days, true); }
-            //             }
-            //         })
-            //         .catch(err => {
-            //             //
-            //         });
-            // },
+                        // Call Next Func
+                        if(next) { this.fetchTotalPackages(this.packageDays, true); }
+                    })
+                    .catch(() => { });
+            },
 
 
-            // // fetch Total Views
-            // fetchTotalViews(days, next=false){
-            //     this.viewLoading = true;
-            //     axios.defaults.headers.common = {
-            //         'X-Requested-With': 'XMLHttpRequest',
-            //         'X-CSRF-TOKEN': window.csrf_token,
-            //         'accesstoken': this.auth.accessToken
-            //     };
-            //     const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-            //     let params = {};
-            //     params['api_key'] = window.api_key;
-            //     params['days'] = days;
-            //         this.view_days = days;
-            //     axios.get('/api/v1/dashboard/explore/totalViews', {params:params}, config)
-            //         .then(res => {
-            //             this.viewLoading = false;
-            //             if(res.data.statusCode == 200) {
-            //                 this.total_views = res.data.data.total;
-            //                 this.percentage_views = res.data.data.percentage;
-            //                 this.arrow_views = res.data.data.arrow_posts;
+            // fetch TotalPackages
+            fetchTotalPackages(days, next=false){
+                this.packageLoading = true;
+                this.packageDays = days;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                const options = {
+                    url: window.baseURL+'/explore/totalPackages/'+this.packageDays,
+                    method: 'GET',
+                    data: {},
+                    params: {}
+                }
+                this.axios(options, config)
+                    .then(res => {
+                        this.packageLoading    = false;
+                        this.packageTotal      = res.data.total;
+                        this.packagePercentage = res.data.percentage;
+                        this.packageArrow      = res.data.arrow;
 
-            //                 // Call Next Func
-            //                 if(next) { this.fetchTotalUsers(this.user_days, true); }
-            //             }
-            //         })
-            //         .catch(err => {
-            //             // 
-            //         });
-            // },
+                        // Call Next Func
+                        if(next) { this.fetchTotalInquires(this.inquireDays, true); }
+                    })
+                    .catch(() => { });
+            },
 
 
-            // // fetch Total Users
-            // fetchTotalUsers(days, next=false){
-            //     this.userLoading = true;
-            //     axios.defaults.headers.common = {
-            //         'X-Requested-With': 'XMLHttpRequest',
-            //         'X-CSRF-TOKEN': window.csrf_token,
-            //         'accesstoken': this.auth.accessToken
-            //     };
-            //     const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-            //     let params = {};
-            //     params['api_key'] = window.api_key;
-            //     params['days'] = days;
-            //         this.user_days = days;
-            //     axios.get('/api/v1/dashboard/explore/totalUsers', {params:params}, config)
-            //         .then(res => {
-            //             this.userLoading = false;
-            //             if(res.data.statusCode == 200) {
-            //                 this.total_users = res.data.data.total;
-            //                 this.percentage_users = res.data.data.percentage;
-            //                 this.arrow_users = res.data.data.arrow_posts;
+            // fetch TotalInquire
+            fetchTotalInquires(days, next=false){
+                this.inquireLoading = true;
+                this.inquireDays = days;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                const options = {
+                    url: window.baseURL+'/explore/totalInquires/'+this.inquireDays,
+                    method: 'GET',
+                    data: {},
+                    params: {}
+                }
+                this.axios(options, config)
+                    .then(res => {
+                        this.inquireLoading    = false;
+                        this.inquireTotal      = res.data.total;
+                        this.inquirePercentage = res.data.percentage;
+                        this.inquireArrow      = res.data.arrow;
 
-            //                 // Call Next Func
-            //                 if(next) { this.fetchTotalVisitors(this.visitor_days, true); }
-            //             }
-            //         })
-            //         .catch(err => {
-            //             // 
-            //         });
-            // },
+                        // Call Next Func
+                        if(next) { this.fetchTotalUsers(this.userDays, true); }
+                     })
+                    .catch(() => { });
+            },
 
 
-            // // fetch Total Visitors
-            // fetchTotalVisitors(days, next=false){
-            //     this.visitorLoading = true;
-            //     axios.defaults.headers.common = {
-            //         'X-Requested-With': 'XMLHttpRequest',
-            //         'X-CSRF-TOKEN': window.csrf_token,
-            //         'accesstoken': this.auth.accessToken
-            //     };
-            //     const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-            //     let params = {};
-            //     params['api_key'] = window.api_key;
-            //     params['days'] = days;
-            //     this.visitor_days = days;
-            //     axios.get('/api/v1/dashboard/explore/totalVisitors', {params:params}, config)
-            //         .then(res => {
-            //             this.visitorLoading = false;
-            //             if(res.data.statusCode == 200) {
-            //                 this.total_visitors = res.data.data.total;
-            //                 this.percentage_visitors = res.data.data.percentage;
-            //                 this.arrow_visitors = res.data.data.arrow_posts;
+            // fetch TotalUsers
+            fetchTotalUsers(days, next=false){
+                this.userLoading = true;
+                this.userDays = days;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                const options = {
+                    url: window.baseURL+'/explore/totalUsers/'+this.userDays,
+                    method: 'GET',
+                    data: {},
+                    params: {}
+                }
+                this.axios(options, config)
+                    .then(res => {
+                        this.userLoading    = false;
+                        this.userTotal      = res.data.total;
+                        this.userPercentage = res.data.percentage;
+                        this.userArrow      = res.data.arrow;
 
-            //                 // Call Next Func
-            //                 if(next) { this.fetchLineChart(this.line_type, true); }
-            //             }
-            //         })
-            //         .catch(err => {
-            //             // 
-            //         });
-            // },
+                        // Call Next Func
+                        if(next) { this.fetchLineChart(this.lineType, true); }
+                    })
+                    .catch(() => { });
+            },
 
 
-            // // fetch Chart
-            // fetchLineChart(type, next=false){
-            //     this.chartLoading = true;
-            //     axios.defaults.headers.common = {
-            //         'X-Requested-With': 'XMLHttpRequest',
-            //         'X-CSRF-TOKEN': window.csrf_token,
-            //         'accesstoken': this.auth.accessToken
-            //     };
-            //     const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-            //     let vm = this;
-            //     let params = {};
-            //     params['api_key'] = window.api_key;
-            //     params['type'] = type;
-            //     this.line_type = type;
-            //     axios.get('/api/v1/dashboard/explore/lineChart', {params:params}, config)
-            //         .then(res => {
-            //             this.chartLoading = false;
-            //             if(res.data.statusCode == 200) {
-            //                 this.series1 = [{name:'Views', data: res.data.data.rows.series}];
-            //                 this.chartOptions1.xaxis = {categories: res.data.data.rows.xaxis};
-            //             }
+            // fetch LineChart
+            fetchLineChart(type, next=false){
+                this.chartLoading = true;
+                this.lineType = type;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                const options = {
+                    url: window.baseURL+'/explore/lineChart/'+this.lineType,
+                    method: 'GET',
+                    data: {},
+                    params: {}
+                }
+                this.axios(options, config)
+                    .then(res => {
+                        this.chartLoading = false;
+                        this.charts = [{name:'Views', data: res.data.rows.series}];
+                        this.chartOption.xaxis = {categories: res.data.rows.xaxis};
 
-            //             // Call Next Func
-            //             if(next) { this.fetchCountries(this.pie_days, true); }
+                        // Call Next Func
+                        if(next) { this.fetchPieChart(this.pieDays, true); }
                            
-            //         })
-            //         .catch(err => {
-            //             //
-            //         });
-            // },
+                    })
+                    .catch(() => {});
+            },
 
-            // // fetch Countries
-            // fetchCountries(days, next=false){
-            //     this.pieLoading = true;
-            //     axios.defaults.headers.common = {
-            //         'X-Requested-With': 'XMLHttpRequest',
-            //         'X-CSRF-TOKEN': window.csrf_token,
-            //         'accesstoken': this.auth.accessToken
-            //     };
-            //     const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-            //     let vm = this;
-            //     let params = {};
-            //     params['api_key'] = window.api_key;
-            //     params['days'] = days;
-            //     this.pie_days = days;
-            //     axios.get('/api/v1/dashboard/explore/pieChart', {params:params}, config)
-            //         .then(res => {
-            //             this.pieLoading = false;
-            //             if(res.data.statusCode == 200) {
-            //                 this.series2 = res.data.data.rows.total;
-            //                 this.chartOptions2.labels = res.data.data.rows.countries;
-            //             }
+            // fetch PieChart
+            fetchPieChart(days, next=false){
+                this.pieLoading = true;
+                this.pieDays = days;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                const options = {
+                    url: window.baseURL+'/explore/pieChart/'+this.pieDays,
+                    method: 'GET',
+                    data: {},
+                    params: {}
+                }
+                this.axios(options, config)
+                    .then(res => {
+                        this.pieLoading = false;
+                        this.pies = res.data.rows.total;
+                        this.pieOption.labels = res.data.rows.countries;
 
-            //             // Call Next Func
-            //             if(next) { this.fetchTrendingPosts(true); }
-                           
-            //         })
-            //         .catch(err => {
-            //             //
-            //         });
-            // },
+                        // Call Next Func
+                        if(next) { 
+                            this.fetchRecentPackages(true); 
+                        }
+                    })
+                    .catch(() => { });
+            },
 
-            // // Fetch Top Five Posts
-            // fetchTrendingPosts(next=false){
-            //     this.dataLoading = true;
-            //     axios.defaults.headers.common = {
-            //         'X-Requested-With': 'XMLHttpRequest',
-            //         'X-CSRF-TOKEN': window.csrf_token,
-            //         'accesstoken': this.auth.accessToken
-            //     };
-            //     const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-            //     let vm = this;
-            //     let params = {};
-            //     params['api_key'] = window.api_key;
-            //     axios.get('/api/v1/dashboard/explore/trendingPosts', {params:params}, config)
-            //         .then(res => {
-            //             this.dataLoading = false;
-            //             if(res.data.statusCode == 200) {
-            //                 this.rows = res.data.data.rows;
-            //             }
+            // Fetch RecentPackages
+            fetchRecentPackages(next=false){
+                this.dataLoading = true;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                const options = {
+                    url: window.baseURL+'/explore/recentPackages',
+                    method: 'GET',
+                    data: {},
+                    params: {}
+                }
+                this.axios(options, config)
+                    .then(res => {
+                        this.dataLoading = false;
+                        this.rows = res.data.rows;
 
-            //             // Call Next Func
-            //             if(next) { this.fetchTopCategories(); }
-            //         })
-            //         .catch(err => {
-            //             //
-            //         });
-            // },
+                        // Call Next Func
+                        if(next) { 
+                            this.fetchTopDestinations(); 
+                        }
+                    })
+                    .catch(() => {});
+            },
 
 
-            // // Top Categories
-            // fetchTopCategories(){
-            //     this.catLoading = true;
-            //     axios.defaults.headers.common = {
-            //         'X-Requested-With': 'XMLHttpRequest',
-            //         'X-CSRF-TOKEN': window.csrf_token,
-            //         'accesstoken': this.auth.accessToken
-            //     };
-            //     const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-            //     let params = {};
-            //     params['api_key'] = window.api_key;
-            //     axios.get('/api/v1/dashboard/explore/topCategories', {params:params}, config)
-            //         .then(res => {
-            //             this.catLoading = false;
-            //             if(res.data.statusCode == 200) {
-            //                 this.chartOptions3 = { xaxis: { categories: res.data.data.xaxis}};
-            //                 this.series3 = [{ name:'Posts', data: res.data.data.series }];
-            //             }
-            //         })
-            //         .catch(err => {
-            //             //
-            //         });
-            // },
+            // Top Destinations
+            fetchTopDestinations(){
+                this.topLoading = true;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                const options = {
+                    url: window.baseURL+'/explore/topDestinations',
+                    method: 'GET',
+                    data: {},
+                    params: {}
+                }
+                this.axios(options, config)
+                    .then(res => {
+                        this.topLoading = false;
+                        this.topOptions = { xaxis: { categories: res.data.xaxis}};
+                        this.destinations = [{ name:'Destinations', data: res.data.series }];
+                    })
+                    .catch(() => { });
+            },
 
-
-
+                
+            checkUpdate(){
+                this.updateLoading = true;
+                setTimeout(() => {
+                    iziToast.warning({
+                        icon: 'ti-alert',
+                        title: 'Wow-man,',
+                        message: "There's no new updates available!"
+                    });
+                    this.updateLoading = false;
+                },3000);
+            }
         },
     }
 </script>

@@ -8,7 +8,7 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Destinations
+                    <h1 class="h2 mb-2">Users
 
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
@@ -29,7 +29,7 @@
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
                             <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'destinations' }">Destinations</router-link>
+                                <router-link :to="{ name: 'users' }">Users</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
@@ -54,163 +54,69 @@
                 <div class="row">        
                     <div class="col-md-8 mb-5">
 
-                        <!-- CardMeta -->
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="accordion" class="accordion">
-                                    <div id="TabMeta" class="card-header">
+
+                    <!-- Card User -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="accordion" class="accordion">
+                                <div id="TabUser" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Meta')"
+                                            @click="collapseToggle('User')"
                                             aria-expanded="false" 
-                                            aria-controls="collapseMeta" 
+                                            aria-controls="collapseUser" 
                                             data-toggle="collapse"
-                                            data-target="#collapseMeta">Meta
-                                            <span id="iconToggleMeta" 
+                                            data-target="#collapseUser">User
+                                            <span id="iconToggleUser" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseMeta" 
+                                    <div id="collapseUser" 
                                         class="collapse show" 
-                                        aria-labelledby="TabMeta" 
+                                        aria-labelledby="TabUser" 
                                         data-parent="#accordion">
 
                                     <div class="col-12 pt-3">
 
-                                        <!-- Meta title -->
+                                        <!-- Name -->
                                         <div class="form-group">
-                                            <div class="pull-right f12" 
-                                                v-if="row.meta_title"
-                                                v-text="(row.meta_title.length)">
-                                            </div>
-                                            <label for="inputText4">Meta title</label>
+                                            <label for="inputUser1">Name</label>
                                             <input class="form-control"
-                                                    id="inputText4"  
+                                                    id="inputUser1"  
                                                     type="text" 
-                                                    v-model="row.meta_title">
+                                                    v-model="row.name">
                                         </div>
-                                        <!-- End Meta title -->
+                                        <!-- End Name -->
                                             
-                                        <!-- Meta keywords -->
+                                        <!-- Email Address -->
                                         <div class="form-group">
-                                            <div class="pull-right f12"
-                                                v-if="row.meta_keywords" 
-                                                v-text="(row.meta_keywords.length)">
-                                            </div>
-                                            <label for="inputText5">Meta keywords</label>
-                                            <textarea class="form-control"
-                                                    id="inputText5" 
-                                                    rows="5"  
-                                                    v-model="row.meta_keywords">
-                                            </textarea>
+                                            <label for="inputUser2">Email Address</label>
+                                            <input class="form-control"
+                                                    id="inputUser2" 
+                                                    type="text"  
+                                                    v-model="row.email">
                                         </div>
-                                        <!-- End Meta keywords -->
+                                        <!-- End Email Address -->
 
-                                        <!-- Meta description -->
+                                        <!-- Password -->
                                         <div class="form-group">
-                                            <div class="pull-right f12" 
-                                                v-if="row.meta_description" 
-                                                v-text="(row.meta_description.length)">
-                                            </div>
-                                            <label for="inputText6">Meta description</label>
-                                            <textarea class="form-control" 
-                                                    id="inputText6" 
-                                                    rows="5" 
-                                                    v-model="row.meta_description">
-                                            </textarea>
+                                            <label for="inputUser3">Password</label>
+                                            <input class="form-control"
+                                                    id="inputUser3" 
+                                                    type="password"  
+                                                    placeholder="********************" 
+                                                    v-model="row.password">
                                         </div>
-                                        <!-- End Meta description -->
+                                        <!-- End Password -->
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End CardMeta -->
-
-                        <!-- CardDest -->
-                        <div class="card mt-5">
-                            <div class="card-body">
-                                <div id="accordion" class="accordion">
-                                    <div id="TabDest" class="card-header">
-                                        <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Dest')"
-                                            aria-expanded="false" 
-                                            aria-controls="collapseDest" 
-                                            data-toggle="collapse"
-                                            data-target="#collapseDest">Destination
-                                            <span id="iconToggleDest" 
-                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow 
-                                                    pull-right black">
-                                            </span>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseDest" 
-                                        class="collapse" 
-                                        aria-labelledby="TabDest" 
-                                        data-parent="#accordion">
-
-                                <div class="col-12 pt-3">
-                                    
-                                    <!-- Title -->
-                                    <div class="form-group">
-                                        <label for="inputText1">Title</label>
-                                        <input class="form-control" 
-                                                id="inputText1" 
-                                                type="text" 
-                                                v-model="row.title" 
-                                                @keyup="onTitleChange">
-                                    </div>
-                                    <!-- End Title -->
-
-                                    <!-- Slug -->
-                                    <div class="form-group">
-                                        <label for="inputText2">Slug</label>
-                                        <input class="form-control text-lowercase"
-                                                id="inputText2"  
-                                                type="text" 
-                                                v-model="row.slug" 
-                                                @keydown.space.prevent 
-                                                @paste="onSlugPaste"
-                                                @change="onSlugChange">
-                                    </div>
-                                    <!-- End Slug -->
-
-
-                                    <!-- Body -->
-                                    <div class="form-group">
-                                        <label for="inputText3">Body</label>
-                                        <editor
-                                            id="inputText3"
-                                            v-model="row.body"
-                                            api-key="xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b"
-                                            :init="{
-                                                height: 600,
-                                                menubar: 'file edit view insert format tools table tc help',
-                                                plugins: [
-                                                    'advlist autolink lists link image charmap print preview anchor',
-                                                    'searchreplace visualblocks code fullscreen',
-                                                    'insertdatetime media table paste code help wordcount'
-                                                ],
-                                                toolbar:
-                                                    'undo redo | formatselect | bold italic backcolor | \
-                                                    alignleft aligncenter alignright alignjustify | \
-                                                    bullist numlist outdent indent | removeformat | help'
-                                            }"
-                                        />
-                                    </div>
-                                    <!-- End Body -->
-
-                                </div>
-                                
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End CardDest -->
+                        <!-- End Card User -->
 
                 </div>
-
 
 
 
@@ -223,43 +129,43 @@
                         <div class="card">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
-                                    <div id="NavRegion" class="card-header">
+                                    <div id="NavRole" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Region')" 
+                                            @click="collapseToggle('Role')" 
                                             aria-expanded="false" 
-                                            aria-controls="collapseNavRegion" 
+                                            aria-controls="collapseNavRole" 
                                             data-toggle="collapse" 
-                                            data-target="#collapseNavRegion">Region
-                                            <span id="iconToggleRegion" 
+                                            data-target="#collapseNavRole">Role
+                                            <span id="iconToggleRole" 
                                                     class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseNavRegion" 
+                                    <div id="collapseNavRole" 
                                         class="collapse" 
-                                        aria-labelledby="NavRegion" 
+                                        aria-labelledby="NavRole" 
                                         data-parent="#accordionNav">
                                         <div class="col-12 pt-3">
-                                            <!-- Region -->
+                                            <!-- Role -->
                                             <div class="form-group">
-                                                <div v-if="regionLoading" class="text-center">
+                                                <div v-if="roleLoading" class="text-center">
                                                     <span class="spinner-grow spinner-grow-sm mr-1" 
                                                         role="status" 
                                                         aria-hidden="true">
                                                     </span>
                                                 </div>
                                                 <select class="form-control custom-select"
-                                                    v-if="!regionLoading" 
-                                                    v-model="row.region_id">
-                                                    <option value="">Select Region</option>
-                                                    <option v-for="(region, index) in regions" 
+                                                    v-if="!roleLoading" 
+                                                    v-model="row.role">
+                                                    <option value="">Select Role</option>
+                                                    <option v-for="(role, index) in roles" 
                                                             :key="index"
-                                                            :value="region.id">
-                                                            {{ region.title }}
+                                                            :value="role.name">
+                                                            {{ role.name }}
                                                     </option>
                                                 </select>
-                                                <!-- Region -->
                                             </div>
+                                            <!-- End Region -->
                                         </div>
                                     </div>
                                 </div>
@@ -291,23 +197,11 @@
                                             <!-- Image -->
                                             <div class="form-group">
                                                 <img :src="row.preview" 
-                                                    class="mb-2 h200 custom-image">
+                                                    class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
                                                     ref="myDropify" 
                                                     v-on:change="onImageChange">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Image alt</label>
-                                                <input type="text" 
-                                                    class="form-control"
-                                                    v-model="row.image_alt">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Image title</label>
-                                                <input type="text" 
-                                                    class="form-control"
-                                                    v-model="row.image_title">
                                             </div>
                                             <!-- Image -->
                                         </div>
@@ -353,7 +247,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <!-- Status -->
+                                            <!-- End Status -->
                                         </div>
                                     </div>
                                 </div>
@@ -377,7 +271,7 @@
                                     </span>Loading...
                                 </span>
                                 <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> Update Destination</span>
+                                <span v-if="!btnLoading"> Update User</span>
                             </button>
                         </div>
 
@@ -408,16 +302,14 @@
     import Header from '../layouts/Header.vue';
     import Navigation from '../layouts/Navigation';
     import Footer from '../layouts/Footer.vue';
-    import Editor from '@tinymce/tinymce-vue';
     import iziToast from 'izitoast';
     
     export default {
-        name: 'Create',
+        name: 'Edit',
         components: {
             Header,
             Navigation,
-            Footer,
-            Editor
+            Footer
         },
         data(){
             return {
@@ -427,26 +319,18 @@
                     access_token: '',
                 },
                 row: {
-                    region_id: '',
+                    role: '',
                     status: true,
-                    preview: "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e",
+                    preview: "",
                     image: '',
-                    image_alt: '',
-                    image_title: '',
-                    
-                    slug: '',
-                    title: '',
-                    body: '',
-
-                    meta_title: '',
-                    meta_keywords: '',
-                    meta_description: '',
+                    name: '',
+                    email: '',
+                    password: '',
                 },
-                regions: [],
-                regionLoading: true,
-
-                pgLoading: true,
+                roles: [],
+                roleLoading: true,
                 btnLoading: false,
+                pgLoading: true,
             }
         },
         mounted() {},
@@ -474,7 +358,7 @@
                     el.classList.remove('ti-angle-up');
                     el.classList.add('ti-angle-down');
                 }
-            },  
+            },
 
             // fetch Row
             fetchRow() {
@@ -484,7 +368,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/destinations/'+this.$route.params.id,
+                    url: window.baseURL+'/users/'+this.$route.params.id,
                     method: 'GET',
                     data: {},
                     params: {},
@@ -493,47 +377,41 @@
                     .then(res => {
                     this.pgLoading = false;
 
-                    this.row.region_id = (res.data.row.region) ? res.data.row.region.id : null;
+                    this.row.role = res.data.row.role;
                     this.row.status= res.data.row.status;
 
                     this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.age_title : null;
-                        
-                    this.row.slug = res.data.row.slug;
-                    this.row.title = res.data.row.title;
-                    this.row.body = res.data.row.body;
 
-                this.row.meta_title = (res.data.row.meta) ? res.data.row.meta.meta_title : null;
-                this.row.meta_keywords = (res.data.row.meta) ? res.data.row.meta.meta_keywords : null;
-                this.row.meta_description = (res.data.row.meta) ? res.data.row.meta.meta_description : null;
+                    this.row.name = res.data.row.name;
+                    this.row.email = res.data.row.email;
 
-                    this.fetchRegions();
+                    this.fetchRoles();
                     })
                     .catch(() => {})
                     .finally(() => {});
+
             },
 
-            // Fetch Regions
-            fetchRegions() {
-                this.regionLoading = true;
+            // Fetch Roles
+            fetchRoles(){
+                this.roleLoading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/regions',
+                    url: window.baseURL+'/roles',
                     method: 'GET',
                     data: {},
                     params: {
                         status: 'active',
-                        paginate: 25,
+                        paginate: 100,
                     },
                 }
                 this.axios(options)
                     .then(res => {
-                        this.regionLoading = false;
-                        this.regions = res.data.rows;
+                        this.roleLoading = false;
+                        this.roles = res.data.rows;
                     })
                     .catch(() => {})
                     .finally(() => {});
@@ -547,7 +425,7 @@
             },
 
 
-            // Add New
+            // edtiRow
             editRow(){
                 this.btnLoading = true;
                 this.axios.defaults.headers.common = {
@@ -556,23 +434,15 @@
                 };
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 const options = {
-                    url: window.baseURL+'/destinations/'+this.$route.params.id,
+                    url: window.baseURL+'/users/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
-                        region_id: this.row.region_id,
+                        role: this.row.role,
                         status: this.row.status,
-
-                        image_url: this.row.image,
-                        image_alt: this.row.image_alt,
-                        image_title: this.row.image_title,
-
-                        title: this.row.title,
-                        slug: this.row.slug,
-                        body: this.row.body,
-
-                        meta_title: this.row.meta_title,
-                        meta_keywords: this.row.meta_keywords,
-                        meta_description: this.row.meta_description
+                        image: this.row.image,
+                        name: this.row.name,
+                        email: this.row.email,
+                        password: this.row.password,
                     }
                 }
                 this.axios(options, config)
@@ -583,7 +453,7 @@
                             title: 'Great job,',
                             message: 'Item Updated Successfully.',
                         });
-                        this.$router.push({ name: 'destinations' })
+                        this.$router.push({ name: 'users' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -612,7 +482,10 @@
                 let str = this.row.slug;
                 this.onSlugChange(str);
             },
-            onSlugChange(str){
+            onSlugChange(str=''){
+                if(!str) {
+                    str = this.row.slug;
+                }
                 this.row.slug = str.replace(/\s+/g, '-');
             },
 
@@ -627,30 +500,11 @@
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'destinations' });
+                    this.$router.push({ name: 'users' });
                 }
             },
 
         },
-
-        // Before Enter..
-        //beforeRouteEnter (to, from, next) { 
-          // next(vm => { 
-          //   //next();
-          // }) 
-        //},
-
-        // Before Leaving.. 
-        // beforeRouteLeave(to, from, next) { 
-        //     if(this.row.title && !this.isSubmit) {
-        //         const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-        //         if (answer) {
-        //             next()
-        //         } else {
-        //             next(false)
-        //         }
-        //     } else { next() }
-        // },
     }
 </script>
 
