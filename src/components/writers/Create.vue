@@ -173,7 +173,7 @@
                                         <editor
                                             id="inputWriter3"
                                             v-model="row.body"
-                                           :api-key="editor.api_key"
+                                            :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
                                                 menubar: editor.menubar,

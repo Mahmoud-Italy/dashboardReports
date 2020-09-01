@@ -203,7 +203,7 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th style="width:30%">Title
+                                        <th style="width:20%">Title
                                             <span v-if="!orderLoading"
                                                 @click="onOrderBy('title')"
                                                 class="cursor-pointer " 
@@ -217,8 +217,18 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 20%">Author</th>
-                                        <th class="text-center" style="width: 15%">No. Packages</th>
+                                        <th class="text-center" style="width: 10%">Stars</th>
+                                        <th class="text-center" style="width: 20%">Author
+                                            <span v-if="!authorLoading && filter_by == 'author'"
+                                                @click="removeFilter()"
+                                                class="cursor-pointer ti-close">
+                                            </span>
+                                            <span v-if="authorLoading">
+                                                <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                    role="status" aria-hidden="true"></span>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" style="width: 10%">Packages No.</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -226,7 +236,7 @@
 
                                 <tbody v-if="dataLoading">
                                     <tr>
-                                        <td colspan="6" class="text-center">
+                                        <td colspan="7" class="text-center">
                                             <div class="spinner-grow" role="status">
                                               <span class="sr-only">Loading...</span>
                                             </div>
@@ -236,7 +246,7 @@
 
                                 <tbody v-if="!dataLoading && !rows.length">
                                     <tr>
-                                        <td colspan="6" class="text-center">
+                                        <td colspan="7" class="text-center">
                                             <span>No results found.</span>
                                         </td>
                                     </tr>
@@ -267,23 +277,29 @@
                                         <span v-if="!permissions.edit">{{ row.title }}</span>
                                     </td>
 
+                                    <td class="font-weight-semi-bold text-center">
+                                        <span v-for="(star, index) in row.stars"
+                                            :key="index"
+                                            class="ti-star">
+                                        </span>
+                                    </td>
 
                                     <td class="font-weight-semi-bold text-center">
                                         <span v-if="!row.user" class="text-center"> - </span>
                                         <router-link v-if="row.user" 
                                             :to="{ name: 'filter-hotels', 
-                                                params:{filter_by: 'author', 'filter':row.user.id}}" 
+                                                params:{filter_by: 'author', 'filter':row.user.encrypt_id}}" 
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
                                                 <img class="u-avatar-xs rounded-circle mr-2"
-                                                    src="/assets/img/default_avatar.png">
+                                                    :src="row.user.image">
                                                 <span class="media-body">{{ row.user.name }}</span>
                                             </div>
                                         </router-link>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                        0
+                                        {{ row.packages }}
                                     </td>
 
                                     <td v-html="(row.deleted_at) ? row.deleted_at : 
@@ -372,8 +388,9 @@
                                             </div>
                                         </th>
                                         <th>Title</th>
+                                        <th class="text-center">Stars</th>
                                         <th class="text-center">Author</th>
-                                        <th class="text-center">No. Packages</th>
+                                        <th class="text-center">Packages No.</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
@@ -481,6 +498,7 @@
                 sortLoading: false,
                 showLoading: false,
                 orderLoading: false,
+                authorLoading: false,
                 something_went_wrong: false,
                 rows: [],
                 show: 10,
@@ -559,6 +577,13 @@
                 this.fetchData('', true);
             },
 
+            removeFilter(){
+                this.authorLoading = true;
+                this.filter = '';
+                this.filter_by = '';
+                this.$router.push({ name: 'hotels' })
+            },
+
             // Fetch Data
             fetchData(page_url, loading=false) {
                 if(loading) { this.dataLoading = true; }
@@ -592,6 +617,7 @@
                         this.bulkLoading = false;
                         this.showLoading = false;
                         this.orderLoading = false;
+                        this.authorLoading = false;
 
                         this.statusBar.all = res.data.statusBar.all;
                         this.statusBar.active = res.data.statusBar.active;

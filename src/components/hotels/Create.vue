@@ -9,7 +9,6 @@
             <div class="u-content">
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2">Hotels
-
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
                             <div class="dropdown">
@@ -19,7 +18,6 @@
                             </div>
                         </div>
                         <!-- End Role -->
-
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -37,11 +35,11 @@
                     <!-- End Breadcrumb -->
 
 
-        <form @submit.prevent="addNew" enctype="multipart/form-data" class="h-100">
+            <form @submit.prevent="addNew" enctype="multipart/form-data" class="h-100">
 
-            <!-- Content -->
-            <div class="tab-content">
-                <div class="row">    
+                <!-- Content -->
+                <div class="tab-content">
+                    <div class="row">    
 
 
                 <!-- ******* Cards ******* -->  
@@ -52,57 +50,84 @@
                         <div class="card-body">
                             <div id="accordion" class="accordion">
                                 <div id="TabHotel" class="card-header">
-                                        <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Hotel')"
-                                            aria-expanded="false" 
-                                            aria-controls="collapseHotel" 
-                                            data-toggle="collapse"
-                                            data-target="#collapseHotel">Hotel
-                                            <span id="iconToggleHotel" 
-                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
-                                            </span>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseHotel" 
-                                        class="collapse show" 
-                                        aria-labelledby="TabHotel" 
-                                        data-parent="#accordion">
+                                    <h2 class="h4 card-header-title" 
+                                        @click="collapseToggle('Hotel')"
+                                        aria-expanded="false" 
+                                        aria-controls="collapseHotel" 
+                                        data-toggle="collapse"
+                                        data-target="#collapseHotel">Hotel
+                                        <span id="iconToggleHotel" 
+                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="collapseHotel" 
+                                    class="collapse show" 
+                                    aria-labelledby="TabHotel" 
+                                    data-parent="#accordion">
 
                                     <div class="col-12 pt-3">
 
-                                   
-                                    <div class="row">
-                                         <!-- Link -->
-                                        <div class="form-group col-8">
-                                            <label for="inputText1">Link</label>
-                                            <input class="form-control"
-                                                    id="inputText1"  
-                                                    type="text" 
-                                                    v-model="row.name">
-                                        </div>
-                                        <!-- End Link -->
-
-                                        <!-- Stars -->
-                                        <div class="form-group col-4">
-                                            <label for="inputText2">Stars</label>
-                                            <input class="form-control"
-                                                    id="inputTex2"  
-                                                    type="number" 
-                                                    v-model.number="row.stars">
-                                        </div>
-                                        <!-- End Stars -->
-                                    </div>
-                                        
-
-                                         <!-- Title -->
+                                        <!-- Title -->
                                         <div class="form-group">
-                                            <label for="inputText3">Title</label>
+                                            <label for="inputText1">Title</label>
+                                            <input class="form-control" 
+                                                    id="inputText1" 
+                                                    type="text" 
+                                                    v-model="row.title" 
+                                                    @keyup="onTitleChange">
+                                        </div>
+                                        <!-- End Title -->
+
+                                        <!-- Slug -->
+                                        <div class="form-group">
+                                            <label for="inputText2">Slug</label>
+                                            <input class="form-control text-lowercase"
+                                                    id="inputText2"  
+                                                    type="text" 
+                                                    v-model="row.slug" 
+                                                    @keydown.space.prevent 
+                                                    @paste="onSlugPaste"
+                                                    @change="onSlugChange(false)">
+                                        </div>
+                                        <!-- End Slug -->
+
+                                                                                <!-- Link -->
+                                        <div class="form-group">
+                                            <label for="inputText3">Link</label>
                                             <input class="form-control"
                                                     id="inputText3"  
                                                     type="text" 
-                                                    v-model="row.title">
+                                                    v-model="row.link">
                                         </div>
-                                        <!-- End Title -->
+                                        <!-- End Link -->
+
+
+                                        <div class="row">
+                                            <!-- Sort -->
+                                            <div class="form-group col-6">
+                                                <label for="inputText4">Sort</label>
+                                                <input class="form-control"
+                                                        id="inputTex4"  
+                                                        type="number"
+                                                        min="0" 
+                                                        v-model.number="row.sort">
+                                            </div>
+                                            <!-- End Stars -->
+
+                                            <!-- Stars -->
+                                            <div class="form-group col-6">
+                                                <label for="inputText5">Stars</label>
+                                                <input class="form-control"
+                                                        id="inputTex5"  
+                                                        type="number"
+                                                        min="0"
+                                                        max="5" 
+                                                        v-model.number="row.stars">
+                                            </div>
+                                            <!-- End Stars -->
+                                        </div>
+                                        
 
                                         <!-- Body -->
                                         <div class="form-group">
@@ -119,22 +144,22 @@
                                                 }"
                                             />
                                         </div>
-                                        <!-- End Body -->
+                                        <!-- End Body -->    
                                         
-                                        </div>
                                     </div>
+
                                 </div>
                             </div>
+                        </div>
                     </div>
                     <!-- End Card Hotel -->
 
                 </div>
+                 <!-- ******* End Cards ******** -->
 
 
-
-                <!-- ******* SideNavbar ******** -->
+                <!-- ******* Navbar ******** -->
                 <div class="col-md-4 mb-5">
-
 
                     <!-- Nav Image -->
                     <div class="card">
@@ -148,7 +173,7 @@
                                         data-toggle="collapse" 
                                         data-target="#collapseNavImage">Featued Image
                                         <span id="iconToggleImage" 
-                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
+                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                         </span>
                                     </h2>
                                 </div>
@@ -156,87 +181,101 @@
                                         class="collapse" 
                                         aria-labelledby="NavImage" 
                                         data-parent="#accordionNav">
-                                        <div class="col-12 pt-3">
-                                            <!-- Image -->
-                                            <div class="form-group">
-                                                <img v-if="row.preview" 
-                                                    :src="row.preview" 
-                                                    class="mb-2 h200 custom-image">
-                                                <input type="file" 
-                                                    class="form-control" 
-                                                    ref="myDropify" 
-                                                    v-on:change="onImageChange">
-                                            </div>
-                                            <div class="form-group">
+                                    
+                                    <div class="col-12 pt-3">
+                                        <!-- Image -->
+                                        <div class="form-group">
+                                            <label>Image</label>
+                                            <img v-if="row.preview" 
+                                                :src="row.preview" 
+                                                class="mb-2 custom-image">
+                                            <input type="file" 
+                                                class="form-control" 
+                                                ref="myDropify" 
+                                                v-on:change="onImageChange">
+                                        </div>
+                                        <!-- End Image -->
+
+                                        <!-- Image alt -->
+                                        <div class="form-group">
                                                 <label>Image alt</label>
                                                 <input type="text" 
                                                     class="form-control"
                                                     v-model="row.image_alt">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Image title</label>
-                                                <input type="text" 
-                                                    class="form-control"
-                                                    v-model="row.image_title">
-                                            </div>
-                                            <!-- Image -->
                                         </div>
+                                        <!-- End Image alt -->
+
+                                        <!-- Image title -->
+                                        <div class="form-group">
+                                            <label>Image title</label>
+                                            <input type="text" 
+                                                class="form-control"
+                                                v-model="row.image_title">
+                                        </div>
+                                        <!-- End Image title -->
+                                    
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End Nav Image -->
+                    </div>
+                    <!-- End Nav Image -->
 
-                        <!-- Nav Status -->
-                        <div class="card mt-5">
-                            <div class="card-body">
-                                <div id="accordionNav" class="accordion">
-                                    <div id="NavStatus" class="card-header">
-                                        <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Status')"
-                                            aria-expanded="false" 
-                                            aria-controls="collapseNavStatus" 
-                                            data-toggle="collapse"
-                                            data-target="#collapseNavStatus">Status & Visibility
-                                            <span id="iconToggleStatus" 
-                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
-                                            </span>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseNavStatus" 
-                                        class="collapse" 
-                                        aria-labelledby="NavStatus" 
-                                        data-parent="#accordionNav">
-                                        <div class="col-12 pt-3">
-                                            <!-- Status -->
-                                            <div class="form-group">
-                                                <div class="custom-control custom-switch mb-2">
-                                                    <input type="checkbox" 
-                                                        class="custom-control-input" 
-                                                        id="customSwitch1" 
-                                                        :checked="row.status"
-                                                        @click="onStatus">
-                                                    <label class="custom-control-label" 
-                                                        for="customSwitch1"
-                                                        v-html="(row.status) ? 'Active' : 'Inactive'">
-                                                    </label>
-                                                </div>
+                    <!-- Nav Status -->
+                    <div class="card mt-5">
+                        <div class="card-body">
+                            <div id="accordionNav" class="accordion">
+                                <div id="NavStatus" class="card-header">
+                                    <h2 class="h4 card-header-title" 
+                                        @click="collapseToggle('Status')"
+                                        aria-expanded="false" 
+                                        aria-controls="collapseNavStatus" 
+                                        data-toggle="collapse"
+                                        data-target="#collapseNavStatus">Status & Visibility
+                                        <span id="iconToggleStatus" 
+                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="collapseNavStatus" 
+                                    class="collapse" 
+                                    aria-labelledby="NavStatus" 
+                                    data-parent="#accordionNav">
+                                    
+                                    <div class="col-12 pt-3">
+                                        <!-- Status -->
+                                        <div class="form-group">
+                                            <div class="custom-control custom-switch mb-2">
+                                                <input type="checkbox" 
+                                                    class="custom-control-input" 
+                                                    id="customSwitch1" 
+                                                    :checked="row.status"
+                                                    @click="onStatus">
+                                                <label class="custom-control-label" 
+                                                    for="customSwitch1"
+                                                    v-html="(row.status) ? 'Active' : 'Inactive'">
+                                                </label>
                                             </div>
-                                            <!-- End Status -->
                                         </div>
+                                        <!-- End Status -->
+                                    
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End Nav Status -->
+                    </div>
+                    <!-- End Nav Status -->
 
-                        </div>
+                </div>
+                <!-- ******* End Navbar ******** -->
+
+
                     </div>
                 </div>
                 <!-- End Content -->
 
                     
-
+                    <!-- Button -->
                     <div class="col-md-12 row">
                         <div class="form-group mr-2">
                             <button class="btn btn-primary" :disabled="btnLoading">
@@ -259,6 +298,7 @@
                             </button>
                         </div>
                     </div>
+                    <!-- End Button -->
 
 
                 </form>
@@ -296,27 +336,28 @@
                     access_token: '',
                 },
                 row: {
-                    status: true,
-                    name: '',
+                    // row
                     link: '',
                     stars: '',
+                    sort: 0,
+                    title: '',
+                    slug: '',
+                    body: '',
 
+                    // image
                     preview: '',
-                    image_url: '',
+                    image_base: '',
                     image_alt: '',
                     image_title: '',
+
+                    // status & visibility
+                    status: 1,
                 },
                 editor: {
-                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
-                    menubar: 'file edit view insert format tools table tc help',
-                    plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | removeformat | help',
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
                 },
 
                 btnLoading: false,
@@ -336,18 +377,7 @@
         },
         methods: {
 
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },
-
+            
             // Add New
             addNew(){
                 this.btnLoading = true;
@@ -360,14 +390,21 @@
                     url: window.baseURL+'/hotels',
                     method: 'POST',
                     data: {
-                        status: this.row.status,
-                        name: this.row.name,
+                        // row
                         link: this.row.link,
-                        stars: this.row.starts,
+                        stars: this.row.stars,
+                        sort: this.row.sort,
+                        title: this.row.title,
+                        slug: this.row.slug,
+                        body: this.row.body,
 
-                        image_url: this.row.image_url,
+                        // image
+                        image_base64: this.row.image_base64,
                         image_alt: this.row.image_alt,
-                        image_title: this.row.image_title
+                        image_title: this.row.image_title,
+
+                        // status & visiblity
+                        status: this.row.status,
                     }
                 }
                 this.axios(options, config)
@@ -397,19 +434,58 @@
                     .finally(() => {})
             },
 
-            // active status
-            onStatus(){
-                if(this.row.status)
-                    this.row.status = false;
-                else
-                    this.row.status = true;
+            // Title
+            onTitleChange() {
+                this.onSlugChange(this.row.title);
+            },
+
+            // on Paste
+            onSlugPaste(){
+                let str = this.row.slug;
+                this.onSlugChange(str);
+            },
+            onSlugChange(str){
+                if(!str) {
+                   let str = this.row.slug;
+                   this.row.slug = str.replace(/\s+/g, '-');
+                } else {
+                    this.row.slug = str.replace(/\s+/g, '-');
+                }
             },
 
             // Upload Featured image
             onImageChange(e){
                 const file = e.target.files[0];
                 this.row.preview = URL.createObjectURL(file);
-                this.row.image_url = file;
+                this.createBase64Image(file);
+            },
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.image_base64 = e.target.result;
+                };
+            },
+
+            // active status
+            onStatus(){
+                if(this.row.status)
+                    this.row.status = 0;
+                else
+                    this.row.status = 1;
+            },
+
+            
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
             },
 
             // Cancel
@@ -420,25 +496,6 @@
             },
 
         },
-
-        // Before Enter..
-        //beforeRouteEnter (to, from, next) { 
-          // next(vm => { 
-          //   //next();
-          // }) 
-        //},
-
-        // Before Leaving.. 
-        // beforeRouteLeave(to, from, next) { 
-        //     if(this.row.title && !this.isSubmit) {
-        //         const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-        //         if (answer) {
-        //             next()
-        //         } else {
-        //             next(false)
-        //         }
-        //     } else { next() }
-        // },
     }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

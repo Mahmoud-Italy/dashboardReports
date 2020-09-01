@@ -221,7 +221,7 @@
                                         </th>
                                         <th class="text-center" style="width: 10%">Hotels</th>
                                         <th class="text-center" style="width: 20%">Author
-                                            <span v-if="!authorLoading && filter_by=='author'"
+                                            <span v-if="!authorLoading && filter_by == 'author'"
                                                 @click="removeFilter()"
                                                 class="cursor-pointer ti-close">
                                             </span>
@@ -230,7 +230,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">No. Packages</th>
+                                        <th class="text-center" style="width: 10%">Packages No.</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -281,18 +281,22 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                       
+                                       <span v-for="(hotel, index) in row.hotelsValues"
+                                            :key="index"
+                                            v-tooltip="hotel"
+                                            class="ti-medall cursor-pointer">
+                                        </span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
                                         <span v-if="!row.user" class="text-center"> - </span>
                                         <router-link v-if="row.user" 
-                                            :to="{ name: 'filter-acommodations', 
-                                                params:{filter_by:'author',filter:row.user.encrypt_id}}" 
+                                            :to="{ name: 'filter-accommodations', 
+                                                params:{filter_by:'author', filter:row.user.encrypt_id}}" 
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
                                                 <img class="u-avatar-xs rounded-circle mr-2"
-                                                    src="/assets/img/default_avatar.png">
+                                                    :src="row.user.image">
                                                 <span class="media-body">{{ row.user.name }}</span>
                                             </div>
                                         </router-link>
@@ -387,10 +391,10 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th>Title</th>
+                                        <th>Name</th>
                                         <th class="text-center">Hotels</th>
                                         <th class="text-center">Author</th>
-                                        <th class="text-center">No. Packages</th>
+                                        <th class="text-center">Packages No.</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
@@ -437,7 +441,7 @@
     import Navigation from '../layouts/Navigation';
     import Footer from '../layouts/Footer.vue';
     import iziToast from 'izitoast';
-    
+
     export default {
         name: 'List',
         components: {

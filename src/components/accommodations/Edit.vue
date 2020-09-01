@@ -9,7 +9,6 @@
             <div class="u-content">
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2">Accommodations
-
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
                             <div class="dropdown">
@@ -19,7 +18,6 @@
                             </div>
                         </div>
                         <!-- End Role -->
-
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -37,32 +35,28 @@
                     <!-- End Breadcrumb -->
 
 
-        <div v-if="pgLoading" class="row h-100">
-            <div class="container text-center">
-                <p><br/></p>
-                <div class="spinner-grow" role="status">
-                    <span class="sr-only">Loading...</span>
+            <div v-if="pgLoading" class="row h-100">
+                <div class="container text-center">
+                    <div class="spinner-grow mt-5" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </div>
-                <p><br/></p>
             </div>
-        </div>
 
-        <form v-if="!pgLoading" @submit.prevent="editRow" enctype="multipart/form-data" class="h-100">
+            <form v-if="!pgLoading" @submit.prevent="editRow" enctype="multipart/form-data" class="h-100">
 
-            <!-- Content -->
-            <div class="tab-content">
-                <div class="row">    
+                <!-- Content -->
+                <div class="tab-content">
+                    <div class="row">    
 
+                    <!-- ******* Cards ******* -->  
+                    <div class="col-md-8 mb-5">
 
-                <!-- ******* Cards ******* -->  
-                <div class="col-md-8 mb-5">
-
-
-                    <!-- Card Accommodation -->
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="accordion" class="accordion">
-                                <div id="TabAccommodation" class="card-header">
+                        <!-- Card Accommodation -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="accordion" class="accordion">
+                                    <div id="TabAccommodation" class="card-header">
                                         <h2 class="h4 card-header-title" 
                                             @click="collapseToggle('Accommodation')"
                                             aria-expanded="false" 
@@ -74,162 +68,160 @@
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseAccommodation" 
-                                        class="collapse show" 
-                                        aria-labelledby="TabAccommodation" 
-                                        data-parent="#accordion">
-
-                                    <div class="col-12 pt-3">
-
-                                        <!-- Name -->
-                                        <div class="form-group">
-                                            <label for="inputText1">Name</label>
-                                            <input class="form-control"
-                                                    id="inputText1"  
-                                                    type="text" 
-                                                    v-model="row.name">
-                                        </div>
-                                        <!-- Name -->
-                                        
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
-                    <!-- End Card Accommodation -->
-
-
-                    <!-- Card Prices -->
-                    <div class="card mt-5">
-                        <div class="card-body">
-                            <div id="accordion" class="accordion">
-                                <div id="TabPrices" class="card-header">
-                                    <h2 class="h4 card-header-title" 
-                                        @click="collapseToggle('Prices')"
-                                        aria-expanded="false" 
-                                        aria-controls="collapsePrices" 
-                                        data-toggle="collapse"
-                                        data-target="#collapsePrices">Prices
-                                        <span id="iconTogglePrices" 
-                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow 
-                                                pull-right black">
-                                        </span>
-                                    </h2>
-                                </div>
-                                <div id="collapsePrices" 
-                                    class="collapse" 
-                                    aria-labelledby="TabPrices" 
-                                    data-parent="#accordion">
-
-                            <div class="col-12 pt-3">
-
-                                <!-- For Loop -->
-                                <div v-for="i in 10" 
-                                    :key="i" 
-                                    :class="(i > prices_length.length) ? 'hidden' : '' " 
-                                    :id="'frm_'+i">
-
-                                     <!--  Remove -->
-                                    <div class="pull-right ui-mt-10">
-                                        <button v-if="i != 1"
-                                            type="button" 
-                                            class="btn btn-danger btn-circle btn-with-icon btn-sm"
-                                            @click="removeOption(i)">
-                                            <span class="btn-icon ti-close font-bold"></span>
-                                         </button>
-                                    </div>
-                                    <!-- End Remove -->
-
-                                    <!-- Price Name -->
-                                    <div class="form-group">
-                                        <label :for="'iInput'+i">Price Name</label>
-                                        <input class="form-control" 
-                                                :id="'iInput'+i" 
-                                                type="text" 
-                                                v-model="row.price_names[i]">
-                                    </div>
-                                    <!-- End Price Name -->
-
                                     
-                                    <!-- Price Items -->
-                                    <div v-for="x in 10" 
-                                        :key="x" 
-                                        :class="(x > prices_items_length[i-1]) ? 'hidden' : ''" 
-                                        :id="'sub_'+i+'_'+x">
+                                    <div id="collapseAccommodation" 
+                                            class="collapse show" 
+                                            aria-labelledby="TabAccommodation" 
+                                            data-parent="#accordion">
 
-                                    <div class="row col-12 ui-ml-unset">
-                                        <div class="form-group col-1">
-                                            <button type="button"
-                                                :class="(x < prices_items_length[i-1]) ? 'hidden' : ''"
-                                                :id="'subBtn_'+i+'_'+x"
-                                                @click="opnSub(i,x+1)"
-                                                class="btn btn-secondary btn-circle btn-with-icon ui-mt30 ui-ml-20">
-                                                <span class="btn-icon ti-plus font-bold"></span>
-                                            </button>
-                                        </div>
-                                        <div class="form-group col-5">
-                                            <label :for="'pvInput'+i+'_'+x">Price Value</label>
-                                            <input class="form-control" 
-                                                    :id="'pvInput'+i+'_'+x" 
-                                                    type="text" 
-                                                    v-model="row.price_item_values[i+'_'+x]">
-                                        </div>
-                                        <div class="form-group col-5">
-                                            <label :for="'pcInput'+i+'_'+x">Content</label>
-                                            <input class="form-control" 
-                                                    :id="'pcInput'+i+'_'+x" 
-                                                    type="text" 
-                                                    v-model="row.price_item_body[i+'_'+x]">
-                                        </div>
-                                        <div class="form-group col-1">
-                                            <button type="button" 
-                                                v-if="x != 1"
-                                                @click="removeSubOption(i,x)"
-                                                class="btn btn-circle btn-with-icon ui-mt30">
-                                                <span class="btn-icon ti-close font-bold"></span>
-                                            </button>
+                                        <div class="col-12 pt-3">
+
+                                            <!-- Name -->
+                                            <div class="form-group">
+                                                <label for="inputText1">Name</label>
+                                                <input class="form-control"
+                                                        id="inputText1"  
+                                                        type="text" 
+                                                        v-model="row.name">
+                                            </div>
+                                            <!-- Name -->
+                                            
                                         </div>
                                     </div>
-
-                                    </div>
-                                    <!-- End Price Items -->
-
-
-                                    <!-- Button -->
-                                    <div class="row pull-right ui-mt15" 
-                                        :id="'btn_'+i">
-                                        <button type="button" 
-                                            class="btn btn-dark btn-circle btn-with-icon"
-                                            @click="opnFrm(i+1)">
-                                            <span class="btn-icon ti-plus font-bold"></span>
-                                        </button>
-                                    </div>
-                                    <!-- End Button -->
-
-                                    <div class="form-group">
-                                        <br/><hr><br/>
-                                    </div>
-                                </div>
-
-
-                                </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- End Card Accommodation -->
+
+
+                        <!-- Card Prices -->
+                        <div class="card mt-5">
+                            <div class="card-body">
+                                <div id="accordion" class="accordion">
+                                    <div id="TabPrices" class="card-header">
+                                        <h2 class="h4 card-header-title" 
+                                            @click="collapseToggle('Prices')"
+                                            aria-expanded="false" 
+                                            aria-controls="collapsePrices" 
+                                            data-toggle="collapse"
+                                            data-target="#collapsePrices">Prices
+                                            <span id="iconTogglePrices" 
+                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
+                                            </span>
+                                        </h2>
+                                    </div>
+                                    <div id="collapsePrices" 
+                                        class="collapse" 
+                                        aria-labelledby="TabPrices" 
+                                        data-parent="#accordion">
+
+                                        <div class="col-12 pt-3">
+
+                                            <!-- For Loop -->
+                                            <div v-for="i in row.price_key" 
+                                                :key="i" 
+                                                :id="'frm_'+i"
+                                                class="ui-for-div">
+
+                                                 <!-- Remove -->
+                                                <div class="pull-right ui-mt-10">
+                                                    <button v-if="i != 0"
+                                                        type="button" 
+                                                        class="btn btn-danger btn-circle btn-with-icon btn-sm"
+                                                        @click="removeOption(i)">
+                                                        <span class="btn-icon ti-close font-bold"></span>
+                                                     </button>
+                                                </div>
+                                                <!-- End Remove -->
+
+                                                <!-- Price Name -->
+                                                <div class="form-group">
+                                                    <label :for="'iInput'+i">Price Name</label>
+                                                    <input class="form-control" 
+                                                            :id="'iInput'+i" 
+                                                            type="text" 
+                                                            v-model="row.price_names[i]">
+                                                </div>
+                                                <!-- End Price Name -->
+
+                                                
+                                                <!-- Price Items -->
+                                                <div v-for="x in 10" 
+                                                    :key="x" 
+                                                    :class="((prices_items_length[i-1])
+                                                             ? x > prices_items_length[i-1]
+                                                             : x > 1 )
+                                                            ? 'hidden' : ''"
+                                                    :id="'sub_'+i+'_'+x">
+
+                                                    <div class="row col-12 ui-ml-unset">
+                                                        <div class="form-group col-1"></div>
+                                                        <div class="form-group col-5">
+                                                            <label :for="'pvInput'+i+'_'+x">
+                                                            Price Value</label>
+                                                            <input class="form-control" 
+                                                                :id="'pvInput'+i+'_'+x" 
+                                                                type="text" 
+                                                                v-model="row.price_item_values[i+'_'+x]">
+                                                        </div>
+                                                        <div class="form-group col-5">
+                                                            <label :for="'pcInput'+i+'_'+x">Content</label>
+                                                            <input class="form-control" 
+                                                                :id="'pcInput'+i+'_'+x" 
+                                                                type="text" 
+                                                                v-model="row.price_item_body[i+'_'+x]">
+                                                        </div>
+                                                        <div class="form-group col-1">
+                                                            <button type="button" 
+                                                                v-if="x != 0"
+                                                                @click="removeSubOption(i,x)"
+                                                                class="btn btn-circle btn-with-icon ui-mt30">
+                                                                <span class="btn-icon ti-close font-bold"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <!-- End Price Items -->
+
+                                                <!-- Price add more -->
+                                                <div class="form-group col-1">
+                                                    <button type="button" 
+                                                        @click="opnSub(i)"
+                                                        class="btn btn-secondary btn-circle btn-with-icon ui-mt30 ui-ml-20">
+                                                        <span class="btn-icon ti-plus font-bold"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- End Price add more -->
+
+                                            </div>
+
+                                            <!-- Add more -->
+                                            <div class="row pull-right">
+                                                <button type="button" 
+                                                    class="btn btn-dark btn-circle btn-with-icon"
+                                                    @click="opnFrm()">
+                                                    <span class="btn-icon ti-plus font-bold"></span>
+                                                </button>
+                                            </div>
+                                            <!-- End more -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Card Prices -->
+
                     </div>
-                    <!-- End CardDest -->
-
-
-                </div>
+                    <!-- ******* End Cards ******* -->  
 
 
 
-
-
-                    <!-- ******* SideNavbar ******** -->
+                    <!-- ******* Navbar ******** -->
                     <div class="col-md-4 mb-5">
 
-                        <!-- NavOne -->
+                        <!-- Nav Hotels -->
                         <div class="card">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
@@ -239,18 +231,19 @@
                                             aria-expanded="false" 
                                             aria-controls="collapseNavHotels" 
                                             data-toggle="collapse" 
-                                            data-target="#collapseNavHotels">Hotels
+                                            data-target="#collapseNavHotels">Multiple Hotels
                                             <span id="iconToggleHotels" 
-                                                    class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
+                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
+
                                     <div id="collapseNavHotels" 
                                         class="collapse" 
                                         aria-labelledby="NavHotels" 
                                         data-parent="#accordionNav">
+
                                         <div class="col-12 pt-3">
-                                            <!-- Region -->
                                             <div class="form-group">
                                                 <div v-if="hotelLoading" class="text-center">
                                                     <span class="spinner-grow spinner-grow-sm mr-1" 
@@ -262,7 +255,7 @@
                                                     id="multiselect"
                                                     ref="multiselectRef"
                                                     autocomplete="on"
-                                                    v-model="hotelsValue" 
+                                                    v-model="row.hotelsValues" 
                                                     :options="hotelsOptions" 
                                                     :multiple="true"
                                                     :close-on-select="false" 
@@ -274,15 +267,14 @@
                                                     :preselect-first="false">
                                                 </multiselect>
                                             </div>
-                                            <!-- End Region -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End NavOne -->
+                        <!-- End Nav Hotels -->
 
-                        <!-- NavThree -->
+                        <!-- Nav Status -->
                         <div class="card mt-5">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
@@ -302,6 +294,7 @@
                                         class="collapse" 
                                         aria-labelledby="NavStatus" 
                                         data-parent="#accordionNav">
+                                        
                                         <div class="col-12 pt-3">
                                             <!-- Status -->
                                             <div class="form-group">
@@ -323,15 +316,16 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- End NavThree -->
+                        <!-- End Nav Status -->
 
-                        </div>
+                    </div>
+                    <!-- ******* End Navbar ******** -->
+
                     </div>
                 </div>
                 <!-- End Content -->
-
                     
-
+                    <!-- Button -->
                     <div class="col-md-12 row">
                         <div class="form-group mr-2">
                             <button class="btn btn-primary" :disabled="btnLoading">
@@ -354,7 +348,7 @@
                             </button>
                         </div>
                     </div>
-
+                    <!-- Button -->
 
                 </form>
             </div>
@@ -391,17 +385,24 @@
                     access_token: '',
                 },
                 row: {
-                    status: 1,
+                    // row
                     name: '',
 
+                    // prices & items
+                    price_key: 0,
                     prices: [],
                     items: [],
-
+                    item_key: [],
                     price_names: [],
                     price_item_values: [],
-                    price_item_body: []
+                    price_item_body: [],
+
+                    // hotels
+                    hotelsValues: [],
+
+                    // status & visibility
+                    status: 1,
                 },
-                hotelsValue: [],
                 hotelsOptions: [],
                 hotelLoading: true,
 
@@ -427,19 +428,7 @@
         },
         methods: {
 
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },
-
-            // fetch Row
+            // fetchRow
             fetchRow() {
                 this.pgLoading = true;
                 this.axios.defaults.headers.common = {
@@ -455,23 +444,20 @@
                 this.axios(options)
                     .then(res => {
                     this.pgLoading = false;
-                    this.row.status = res.data.row.status;
-                    this.hotelsValue = (res.data.row.hotels_value) ? res.data.row.hotels_value : null;
 
-                    this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
-                    
+                    // row
                     this.row.name = res.data.row.name;
 
+                    // price & items
                     this.prices_length = res.data.row.prices;
+                    this.row.price_key = this.prices_length.length;
+                    console.log('here '+this.row.price_key);
                     if(this.prices_length) {
                         for(let i = 1; i <= this.prices_length.length; i++) {
                             let x = i-1;
-                            // get price names
                             this.row.price_names[i] = res.data.row.prices[x].name;
-
-                            // get price items
+                            this.row.item_key[i] = res.data.row.prices[x].items.length;
+                            
                             this.prices_items_length[x] = res.data.row.prices[x].items.length;
                             for( let y = 1; y <= res.data.row.prices[x].items.length; y++) {
                                 let z = y-1;
@@ -480,19 +466,25 @@
                                 this.row.price_item_body[i+'_'+y] 
                                         = res.data.row.prices[x].items[z].body;
                             }
-                            //
                         }
                     }
-                    
+
+                    // hotels
+                    this.row.hotelsValues = (res.data.row.hotelsValues) ? res.data.row.hotelsValues : null;
+
+                    // status & visiblity
+                    this.row.status = res.data.row.status;
+
+                    // call fetchHotels func                    
                     this.fetchHotels();
                     })
-                    .catch(() => {})
+                    .catch((err) => { console.log('err' + err) })
                     .finally(() => {});
             },
 
-            // Fetch Hotels
+            // fetchHotels
             fetchHotels(){
-                this.regionLoading = true;
+                this.hotelLoading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
@@ -501,10 +493,7 @@
                     url: window.baseURL+'/hotels',
                     method: 'GET',
                     data: {},
-                    params: {
-                        status: 'active',
-                        paginate: 100,
-                    },
+                    params: {},
                 }
                 this.axios(options)
                     .then(res => {
@@ -526,7 +515,7 @@
 
                 // Multi dimension array
                 for( let i = 1; i < this.row.price_names.length; i++ ) {
-                    for( let x = 1; x <= 10; x++) {
+                        for( let x = 1; x <= 10; x++) {
                         let item_value = this.row.price_item_values[i+'_'+x];
                         let item_body  = this.row.price_item_body[i+'_'+x];
                         if(item_value) {
@@ -548,10 +537,17 @@
                     url: window.baseURL+'/accommodations/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
-                        status: this.row.status,
+                        // row
                         name: this.row.name,
-                        hotels_ids: this.hotelsValue,
-                        prices: this.row.prices
+
+                        // price & items
+                        prices: this.row.prices,
+
+                        // hotels
+                        hotels: this.row.hotelsValues,
+
+                        // status & visibility
+                        status: this.row.status,
                     }
                 }
                 this.axios(options, config)
@@ -581,37 +577,37 @@
                     .finally(() => {})
             },
 
-            // items add more
-            opnFrm(i) {
-                let prev = i - 1;
-                let pvt = document.querySelector('#btn_'+prev);
-                let frm = document.querySelector('#frm_'+i);
-                pvt.classList.add('hidden');
-                frm.classList.remove('hidden');
+            // add more
+            opnFrm() {
+                this.row.price_key++;
+                this.row.item_key[this.row.price_key] = 0;
             },
             removeOption(i) {
-                let prev = i - 1;
-                let pvt = document.querySelector('#btn_'+prev);
-                let frm = document.querySelector('#frm_'+i);
-                frm.classList.add('hidden');
-                pvt.classList.remove('hidden');
+                document.querySelector('#frm_'+i).remove();
                 this.row.price_names[i] = '';
+                this.row.item_key[i] = '';
+                // this.row.price_key--; // makes issue
+
+                // clear all sub
+                let n = [1,2,3,4,5,6,7,8,9,10];
+                n.forEach(x => {
+                    this.row.price_item_values[i+'_'+x] = '';
+                    this.row.price_item_body[i+'_'+x] = '';
+                });
             },
-            opnSub(i,x) {
-                let prev = x - 1;
-                let pvt = document.querySelector('#subBtn_'+i+'_'+prev);
-                let frm = document.querySelector('#sub_'+i+'_'+x);
-                pvt.classList.add('hidden');
-                frm.classList.remove('hidden');
+            opnSub(i) {
+                if(this.row.item_key[i] == 0) {
+                    this.row.item_key[i] = 2; // default in case new element...
+                } else {
+                    this.row.item_key[i] += 1;
+                }
+                document.querySelector('#sub_'+i+'_'+this.row.item_key[i]).classList.remove('hidden');
             },
             removeSubOption(i,x) {
-                let prev = x - 1;
-                let pvt = document.querySelector('#subBtn_'+i+'_'+prev);
-                let frm = document.querySelector('#sub_'+i+'_'+x);
-                frm.classList.add('hidden');
-                pvt.classList.remove('hidden');
+                document.querySelector('#sub_'+i+'_'+x).classList.add('hidden');
                 this.row.price_item_values[i+'_'+x] = '';
                 this.row.price_item_body[i+'_'+x] = '';
+                this.row.item_key[i] -= 1;
             },
 
             // active status
@@ -620,6 +616,27 @@
                     this.row.status = 0;
                 else
                     this.row.status = 1;
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+            },
+
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
             },
 
             // Cancel

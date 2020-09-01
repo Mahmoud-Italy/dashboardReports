@@ -58,7 +58,7 @@
                 <!-- Messages -->
                 <div class="u-header-section">
                     <div class="u-header-dropdown dropdown pt-1">
-                        <router-link :to="{ name: 'messages' }" class="u-header-invoker d-flex align-items-center">
+                        <router-link :to="{ name: 'inbox' }" class="u-header-invoker d-flex align-items-center">
                             <span class="position-relative">
                                 <span class="ti-email u-header-invoker__icon"></span>
                                 <!-- <span class="u-indicator u-indicator-top-right u-indicator-xxs bg-danger"></span> -->
@@ -182,7 +182,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/logout',
+                    url: window.baseURL+'/auth/logout',
                     method: 'POST',
                     data: {},
                     params: {},

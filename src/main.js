@@ -43,6 +43,11 @@ Vue.use(VueApexCharts);
 Vue.component('apexchart', VueApexCharts);
 /* End VueApexCharts */
 
+/* Vue Tooltip */
+import VTooltip from "v-tooltip";
+Vue.use(VTooltip);
+/* End VueTooltip */
+
 /* Vue Editor */
 window.editor_apiKey  = 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b';
 window.editor_menubar = 'file edit view insert format tools table tc help';
@@ -55,7 +60,7 @@ window.editor_toolbar = 'undo redo | formatselect | bold italic backcolor | \
 /* Vue End Editor */
 
 // baseURL
-window.baseURL = 'http://localhost:8000/api/v1/dashboard';
+window.baseURL = 'http://localhost:8000/v1/dashboard';
 Vue.config.productionTip = false
 
 new Vue({
