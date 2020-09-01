@@ -60,7 +60,8 @@ window.editor_toolbar = 'undo redo | formatselect | bold italic backcolor | \
 /* Vue End Editor */
 
 // baseURL
-window.baseURL = 'http://localhost:8000/v1/dashboard';
+//window.baseURL = 'http://localhost:8000/v1/dashboard';
+window.baseURL = 'https://dashboard.dubaidaytrips.com';
 Vue.config.productionTip = false
 
 new Vue({
