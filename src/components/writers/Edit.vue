@@ -235,8 +235,8 @@
                                         <!-- Image -->
                                         <div class="form-group">
                                             <label>Image</label>
-                                            <img v-if="row.preview" 
-                                                :src="row.preview" 
+                                            <img v-if="row.image_preview" 
+                                                :src="row.image_preview" 
                                                 class="mb-2 custom-image">
                                             <input type="file" 
                                                 class="form-control" 
@@ -392,10 +392,11 @@
                     // writer
                     slug: '',
                     title: '',
+                    sort: 0,
                     body: '',
 
                     // image
-                    preview: '',
+                    image_preview: '',
                     image_base64: '',
                     image_alt: '',
                     image_title: '',
@@ -444,41 +445,36 @@
                 }
                 this.axios(options)
                     .then(res => {
-                this.pgLoading = false;
+                    this.pgLoading = false;
 
-                // meta
-                this.row.meta_title = (res.data.row.meta) ? res.data.row.meta.meta_title : null;
-                this.row.meta_keywords = (res.data.row.meta) ? res.data.row.meta.meta_keywords : null;
-                this.row.meta_description = (res.data.row.meta) ? res.data.row.meta.meta_description :null;
+                    // meta
+                    this.row.meta_title = (res.data.row.meta) ? res.data.row.meta.meta_title : null;
+                    this.row.meta_keywords = (res.data.row.meta) ? res.data.row.meta.meta_keywords : null;
+                    this.row.meta_description = (res.data.row.meta) ? res.data.row.meta.meta_description:null;
 
-                // row
-                this.row.slug = res.data.row.slug;
-                this.row.title = res.data.row.title;
-                this.row.body = res.data.row.body;
+                    // row
+                    this.row.slug = res.data.row.slug;
+                    this.row.title = res.data.row.title;
+                    this.row.sort = res.data.row.sort;
+                    this.row.body = res.data.row.body;
 
-                // image
-                this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-                this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
-                this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
+                    // image
+                    this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
+                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
 
-                // status & visibility
-                this.row.status = res.data.row.status;
+                    // status & visibility
+                    this.row.status = res.data.row.status;
 
                     })
                     .catch(err => {
-                        // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage()
-                            this.$router.push({ name: 'forbidden' })
-                        } else {
-                            this.btnLoading = false;
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow-man,',
-                                message: (err.response) ? err.response.data.message : ''+err
-                            });
-                        }
+                        this.btnLoading = false;
+                        iziToast.warning({
+                            icon: 'ti-alert',
+                            title: 'Wow-man,',
+                            message: (err.response) ? err.response.data.message : ''+err
+                        });
                     })
                     .finally(() => {});
             },
@@ -504,6 +500,7 @@
                         // rows
                         title: this.row.title,
                         slug: this.row.slug,
+                        sort: this.row.sort,
                         body: this.row.body,
 
                         // image
@@ -559,8 +556,7 @@
             // Upload Featured image
             onImageChange(e){
                 const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                //this.row.image = file;
+                this.row.image_preview = URL.createObjectURL(file);
                 this.createBase64Image(file);
             },
             createBase64Image(fileObject){

@@ -11,7 +11,7 @@
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2">Cruise Types
                         <router-link v-if="permissions.add"
-                            :to="{ name: 'create-cruiseTypes' }" 
+                            :to="{ name: 'create-cruisetypes' }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
@@ -130,20 +130,20 @@
                     <header class="card-header">
                         <h2 class="h4 card-header-title">
                             <router-link class="pg-hd"
-                                :to="{ name: 'cruiseTypes' }"
+                                :to="{ name: 'cruisetypes' }"
                                 :class="(status == '') ? 'active' : '' ">All</router-link> 
                             <span class="pg-hd no-decoration f14"> ({{statusBar.all}}) </span>&nbsp;|&nbsp; 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-cruiseTypes', params:{status: 'active'} }" 
+                                :to="{ name: 'status-cruisetypes', params:{status: 'active'} }" 
                                 :class="(status == 'active') ? 'active' : '' ">Active</router-link>
                            <span class="pg-hd no-decoration f14"> ({{statusBar.active}}) </span>&nbsp;|&nbsp; 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-cruiseTypes', params:{status: 'inactive'} }" 
+                                :to="{ name: 'status-cruisetypes', params:{status: 'inactive'} }" 
                                 :class="(status == 'inactive') ? 'active' : '' ">Inactive</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.inactive}}) </span>&nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-cruiseTypes', params:{status: 'trash'} }" 
+                                :to="{ name: 'status-cruisetypes', params:{status: 'trash'} }" 
                                 :class="(status == 'trash') ? 'active' : '' ">Trash</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.trash}}) </span>
 
@@ -205,9 +205,9 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th style="width:20%">Name
+                                        <th style="width:20%">Title
                                             <span v-if="!orderLoading"
-                                                @click="onOrderBy('name')"
+                                                @click="onOrderBy('title')"
                                                 class="cursor-pointer " 
                                                 :class="(order == 'DESC') 
                                                     ? 'ti-arrow-down' 
@@ -230,7 +230,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">No. Cruises</th>
+                                        <th class="text-center" style="width: 10%">Cruises No.</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -272,22 +272,25 @@
 
                                     <td class="font-weight-semi-bold">
                                         <router-link v-if="permissions.edit"
-                                            :to="{ name: 'edit-cruiseTypes', 
+                                            :to="{ name: 'edit-cruisetypes', 
                                                 params:{id:row.encrypt_id} }" 
                                             class="default-color text-decoration-hover">
-                                            {{ row.name }} 
+                                            {{ row.title }} 
                                         </router-link>
-                                        <span v-if="!permissions.edit">{{ row.name }}</span>
+                                        <span v-if="!permissions.edit">{{ row.title }}</span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                        <span class=""></span>    
+                                        <span class="badge badge-md badge-pill badge-danger-soft">
+                                            <span v-if="row.parent"> {{ row.parent.title }}</span>
+                                            <span v-if="!row.parent"> No Parent </span>
+                                        </span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
                                         <span v-if="!row.user" class="text-center"> - </span>
                                         <router-link v-if="row.user" 
-                                            :to="{ name: 'filter-cruiseTypes', 
+                                            :to="{ name: 'filter-cruisetypes', 
                                                 params:{filter_by:'author',filter:row.user.encrypt_id}}" 
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
@@ -330,7 +333,7 @@
                                                         <li v-if="!row.trash">
                                                             <router-link v-if="permissions.edit"
                                                                 class="d-block link-dark"
-                                                                :to="{ name: 'edit-cruiseTypes', 
+                                                                :to="{ name: 'edit-cruisetypes', 
                                                                 params:{id: row.encrypt_id}}">
                                                                 Edit
                                                             </router-link>
@@ -390,7 +393,7 @@
                                         <th>Title</th>
                                         <th class="text-center">Parent</th>
                                         <th class="text-center">Author</th>
-                                        <th class="text-center">No. Cruises</th>
+                                        <th class="text-center">Cruises No.</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
@@ -451,8 +454,8 @@
                    json_fields: {
                         'id': 'id',
                         'parent_id': 'parent_id',
+                        'title': 'title',
                         'slug' : 'slug',
-                        'name': 'name',
                         'created_at': 'created_at',
                     }, 
                     json_data: [],

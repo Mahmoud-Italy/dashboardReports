@@ -166,16 +166,16 @@
                                     </div>
                                     <!-- End Slug -->
 
-                                    <!-- Order -->
+                                    <!-- Sort -->
                                     <div class="form-group">
-                                        <label for="inputText2">Order</label>
+                                        <label for="inputText2">Sort</label>
                                         <input class="form-control" 
                                                 id="inputText2" 
                                                 type="number"
                                                 min="0" 
-                                                v-model.number="row.order">
+                                                v-model.number="row.sort">
                                     </div>
-                                    <!-- End Order -->
+                                    <!-- End Sort -->
 
 
 
@@ -222,9 +222,9 @@
                                             <!-- Image -->
                                             <div class="form-group">
                                                 <label>Image</label>
-                                                <img v-if="row.preview" 
-                                                    :src="row.preview" 
-                                                    class="mb-2 h200 custom-image">
+                                                <img v-if="row.image_preview" 
+                                                    :src="row.image_preview" 
+                                                    class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
                                                     ref="myDropify" 
@@ -366,7 +366,7 @@
                     // row
                     title: '',
                     slug: '',
-                    order: 0,
+                    sort: 0,
                     
                     // image
                     preview: '',
@@ -420,7 +420,7 @@
                         // row
                         title: this.row.title,
                         slug: this.row.slug,
-                        order: this.row.order,
+                        sort: this.row.sort,
 
                         // image
                         image_base64: this.row.image_base64,
@@ -444,7 +444,7 @@
                     .catch(err => {
                         // 403 Forbidden
                         if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage()
+                            this.removeLocalStorage();
                             this.$router.push({ name: 'forbidden' })
                         } else {
                             this.btnLoading = false;
@@ -462,8 +462,7 @@
             // Upload Featured image
             onImageChange(e){
                 const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                //this.row.image = file;
+                this.row.image_preview = URL.createObjectURL(file);
                 this.createBase64Image(file);
             },
             createBase64Image(fileObject){
@@ -497,6 +496,15 @@
                     this.row.status = 0;
                 else
                     this.row.status = 1;
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
             },
 
             // toggleCollapse

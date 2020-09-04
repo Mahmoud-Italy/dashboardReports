@@ -63,11 +63,11 @@ export default new Router({
   { path: '/cruises/edit/:id', name: 'edit-cruises', component: require('../components/cruises/Edit.vue').default, beforeEnter: requireAuth },
 
   // CruisesType
-  { path: '/cruiseTypes', name: 'cruiseTypes', component: require('../components/cruiseTypes/List.vue').default, beforeEnter: requireAuth },
-  { path: '/cruiseTypes/status/:status', name: 'status-cruiseTypes', component: require('../components/cruiseTypes/List.vue').default, beforeEnter: requireAuth },
-  { path: '/cruiseTypes/filter/:filter_by/:filter', name: 'filter-cruiseTypes', component: require('../components/cruiseTypes/List.vue').default, beforeEnter: requireAuth },
-  { path: '/cruiseTypes/create', name: 'create-cruiseTypes', component: require('../components/cruiseTypes/Create.vue').default, beforeEnter: requireAuth },
-  { path: '/cruiseTypes/edit/:id', name: 'edit-cruiseTypes', component: require('../components/cruiseTypes/Edit.vue').default, beforeEnter: requireAuth },
+  { path: '/cruiseTypes', name: 'cruisetypes', component: require('../components/cruiseTypes/List.vue').default, beforeEnter: requireAuth },
+  { path: '/cruiseTypes/status/:status', name: 'status-cruisetypes', component: require('../components/cruiseTypes/List.vue').default, beforeEnter: requireAuth },
+  { path: '/cruiseTypes/filter/:filter_by/:filter', name: 'filter-cruisetypes', component: require('../components/cruiseTypes/List.vue').default, beforeEnter: requireAuth },
+  { path: '/cruiseTypes/create', name: 'create-cruisetypes', component: require('../components/cruiseTypes/Create.vue').default, beforeEnter: requireAuth },
+  { path: '/cruiseTypes/edit/:id', name: 'edit-cruisetypes', component: require('../components/cruiseTypes/Edit.vue').default, beforeEnter: requireAuth },
 
   // Destinations
   { path: '/destinations', name: 'destinations', component: require('../components/destinations/List.vue').default, beforeEnter: requireAuth },

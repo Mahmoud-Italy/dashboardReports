@@ -212,28 +212,20 @@
                 this.btn1Loading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': window.csrf_token,
-                    'accesstoken': this.auth.accessToken
                 };
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-                let formData = new FormData();
-                formData.append('api_key', window.api_key);
-                this.axios.post('/api/v1/dashboard/artisan/cache-clear', formData, config)
-                    .then(res => {
+                const options = {
+                    url: window.baseURL+'/caches/cache-clear',
+                    method: 'GET',
+                    data: {}
+                }
+                this.axios(options)
+                    .then(() => {
                         this.btn1Loading = false;
-                        if(res.data.statusCode == 200) {
-                            iziToast.success({
-                                icon: 'ti-check',
-                                title: 'Great job,',
-                                message: 'Cache Cleared Successfully',
-                            });
-                        } else {
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow, man',
-                                message: 'Slow down, '+res.data.errors,
-                            });
-                        }
+                        iziToast.success({
+                            icon: 'ti-check',
+                            title: 'Great job,',
+                            message: 'Cache Cleared Successfully',
+                        });
                     })
                     .catch(() => {
                         this.btn1Loading = false;
@@ -253,28 +245,20 @@
                 this.btn2Loading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': window.csrf_token,
-                    'accesstoken': this.auth.accessToken
                 };
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-                let formData = new FormData();
-                formData.append('api_key', this.api_key);
-                this.axios.post('/api/v1/dashboard/artisan/config-clear', formData, config)
-                    .then(res => {
+                const options = {
+                    url: window.baseURL+'/caches/config-clear',
+                    method: 'GET',
+                    data: {}
+                }
+                this.axios(options)
+                    .then(() => {
                         this.btn2Loading = false;
-                        if(res.data.statusCode == 200) {
-                            iziToast.success({
-                                icon: 'ti-check',
-                                title: 'Great job,',
-                                message: 'Config Cleared Successfully',
-                            });
-                        } else {
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow, man',
-                                message: 'Slow down, '+res.data.errors,
-                            });
-                        }
+                        iziToast.success({
+                            icon: 'ti-check',
+                            title: 'Great job,',
+                            message: 'Config Cleared Successfully',
+                        });
                     })
                     .catch(() => {
                         this.btn2Loading = false;
@@ -293,28 +277,20 @@
                 this.btn3Loading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': window.csrf_token,
-                    'accesstoken': this.auth.accessToken
                 };
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-                let formData = new FormData();
-                formData.append('api_key', this.api_key);
-                this.axios.post('/api/v1/dashboard/artisan/view-clear', formData, config)
-                    .then(res => {
+                const options = {
+                    url: window.baseURL+'/caches/view-clear',
+                    method: 'GET',
+                    data: {}
+                }
+                this.axios(options)
+                    .then(() => {
                         this.btn3Loading = false;
-                        if(res.data.statusCode == 200) {
-                            iziToast.success({
-                                icon: 'ti-check',
-                                title: 'Great job,',
-                                message: 'View Cleared Successfully',
-                            });
-                        } else {
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow, man',
-                                message: 'Slow down, '+res.data.errors,
-                            });
-                        }
+                        iziToast.success({
+                            icon: 'ti-check',
+                            title: 'Great job,',
+                            message: 'View Cleared Successfully',
+                        });
                     })
                     .catch(() => {
                         this.btn3Loading = false;
@@ -333,28 +309,20 @@
                 this.btn4Loading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': window.csrf_token,
-                    'accesstoken': this.auth.accessToken
                 };
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-                let formData = new FormData();
-                formData.append('api_key', this.api_key);
-                this.axios.post('/api/v1/dashboard/artisan/route-cache', formData, config)
-                    .then(res => {
+                const options = {
+                    url: window.baseURL+'/caches/route-cache',
+                    method: 'GET',
+                    data: {}
+                }
+                this.axios(options)
+                    .then(() => {
                         this.btn4Loading = false;
-                        if(res.data.statusCode == 200) {
-                            iziToast.success({
-                                icon: 'ti-check',
-                                title: 'Great job,',
-                                message: 'Route Cached Successfully',
-                            });
-                        } else {
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow, man',
-                                message: 'Slow down, '+res.data.errors,
-                            });
-                        }
+                        iziToast.success({
+                            icon: 'ti-check',
+                            title: 'Great job,',
+                            message: 'Route Cached Successfully',
+                        });
                     })
                     .catch(() => {
                         this.btn4Loading = false;
@@ -374,28 +342,20 @@
                 this.btn5Loading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': window.csrf_token,
-                    'accesstoken': this.auth.accessToken
                 };
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-                let formData = new FormData();
-                formData.append('api_key', this.api_key);
-                this.axios.post('/api/v1/dashboard/artisan/route-clear', formData, config)
-                    .then(res => {
+                const options = {
+                    url: window.baseURL+'/caches/route-clear',
+                    method: 'GET',
+                    data: {}
+                }
+                this.axios(options)
+                    .then(() => {
                         this.btn5Loading = false;
-                        if(res.data.statusCode == 200) {
-                            iziToast.success({
-                                icon: 'ti-check',
-                                title: 'Great job,',
-                                message: 'Route Cleared Successfully',
-                            });
-                        } else {
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow, man',
-                                message: 'Slow down, '+res.data.errors,
-                            });
-                        }
+                        iziToast.success({
+                            icon: 'ti-check',
+                            title: 'Great job,',
+                            message: 'Route Cleared Successfully',
+                        });
                     })
                     .catch(() => {
                         this.btn5Loading = false;

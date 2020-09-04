@@ -132,7 +132,7 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th style="width:40%">Log</th>
+                                        <th style="width:30%">Log</th>
                                         <th class="text-center">Action</th>
                                         <th class="text-center">Author</th>
                                         <th class="text-center">Date</th>
@@ -303,7 +303,7 @@
                 selectAll: false,
                 plural: '',
 
-                dataLoading: true,
+                dataLoading: false,
                 showLoading: false,
                 exportLoading: false,
                 something_went_wrong: false,
@@ -323,7 +323,7 @@
             }
 
             //
-            this.fetchData('', true);
+            //this.fetchData('', true);
         },
         methods: {
 

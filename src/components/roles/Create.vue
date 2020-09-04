@@ -55,7 +55,7 @@
                                             aria-expanded="false" 
                                             aria-controls="collapseContent" 
                                             data-toggle="collapse"
-                                            data-target="#collapseContent">Content
+                                            data-target="#collapseContent">Role
                                             <span id="iconToggleContent" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
@@ -304,25 +304,26 @@
                     access_token: '',
                 },
                 row: {
-                    authority: 1,
-                    status: true,
+                    // row
                     name: '',
+
+                    // navbar
+                    authority: 1,
                     permissions_ids: [],
+
+                    // status & visiblity
+                    status: true,
                 },
                 editor: {
-                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
-                    menubar: 'file edit view insert format tools table tc help',
-                    plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | removeformat | help',
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
                 },
+
                 permissions: [],
                 permissionLoading: true,
+
                 btnLoading: false,
             }
         },
@@ -341,18 +342,6 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },
-
             // fetchPermission
             fetchPermissions() {
                 this.permissionLoading = true;
@@ -375,13 +364,6 @@
                 .finally(() => {});
             },
 
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
-
 
             // Add New
             addNew(){
@@ -395,10 +377,15 @@
                     url: window.baseURL+'/roles',
                     method: 'POST',
                     data: {
+                        // row
                         name: this.row.name,
-                        status: this.row.status,
+
+                        // navbar
                         authority: this.row.authority,
-                        permissions_ids: this.row.permissions_ids
+                        permissions_ids: this.row.permissions_ids,
+
+                        // status & visiblity
+                        status: this.row.status,
                     }
                 }
                 this.axios(options, config)
@@ -431,9 +418,9 @@
             // active status
             onStatus(){
                 if(this.row.status)
-                    this.row.status = false;
+                    this.row.status = 0;
                 else
-                    this.row.status = true;
+                    this.row.status = 1;
             },
 
             // get id from Box Checked
@@ -442,6 +429,27 @@
                     this.row.permissions_ids.push(id)
                 } else {
                     this.row.permissions_ids.splice(this.row.permissions_ids.indexOf(id), 1)
+                }
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+            },
+
+             // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
                 }
             },
 

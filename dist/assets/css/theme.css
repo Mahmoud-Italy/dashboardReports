@@ -114,7 +114,7 @@
 .black { color: #000 !important }
 .custom-image {
     /*border: 1px solid #e8eaf3;*/
-    width: 100%;
+    max-width: 100%;
 }
 .h200 { height: 200px }
 .h150 { height: 150px }

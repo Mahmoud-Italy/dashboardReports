@@ -186,7 +186,7 @@
                                             <!-- Image -->
                                             <div class="form-group">
                                                 <label>Image</label>
-                                                <img :src="row.preview" 
+                                                <img :src="row.image_preview" 
                                                     class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
@@ -309,13 +309,20 @@
                     access_token: '',
                 },
                 row: {
-                    role: '',
-                    status: true,
-                    preview: "",
-                    image: '',
+                    // row
                     name: '',
                     email: '',
                     password: '',
+
+                    // navbar
+                    role: '',
+
+                    // image
+                    image_preview: '',
+                    image_base64: '',
+
+                    // status & visibility
+                    status: 1,
                 },
                 roles: [],
                 roleLoading: true,
@@ -336,18 +343,6 @@
             this.fetchRoles();
         },
         methods: {
-            
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },
 
             // Fetch Roles
             fetchRoles(){
@@ -374,14 +369,7 @@
                     .finally(() => {});
             },
 
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
-
-
+            
             // Add New
             addNew(){
                 this.btnLoading = true;
@@ -394,12 +382,19 @@
                     url: window.baseURL+'/users',
                     method: 'POST',
                     data: {
-                        role: this.row.role,
-                        status: this.row.status,
-                        image: this.row.image,
+                        // row
                         name: this.row.name,
                         email: this.row.email,
                         password: this.row.password,
+
+                        // navbar
+                        role: this.row.role,
+
+                        // image
+                        image_base64: this.row.image_base64,
+
+                        // status & visibility
+                        status: this.row.status,
                     }
                 }
                 this.axios(options, config)
@@ -446,12 +441,40 @@
                 this.row.slug = str.replace(/\s+/g, '-');
             },
 
+
+            // Upload Featured image
+            onImageChange(e){
+                const file = e.target.files[0];
+                this.row.image_preview = URL.createObjectURL(file);
+                this.createBase64Image(file);
+            },
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.image_base64 = e.target.result;
+                };
+            },
+
             // active status
             onStatus(){
                 if(this.row.status)
-                    this.row.status = false;
+                    this.row.status = 0;
                 else
-                    this.row.status = true;
+                    this.row.status = 1;
+            },
+
+
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
             },
 
             // Cancel

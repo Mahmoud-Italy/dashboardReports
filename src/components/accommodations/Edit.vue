@@ -451,7 +451,6 @@
                     // price & items
                     this.prices_length = res.data.row.prices;
                     this.row.price_key = this.prices_length.length;
-                    console.log('here '+this.row.price_key);
                     if(this.prices_length) {
                         for(let i = 1; i <= this.prices_length.length; i++) {
                             let x = i-1;

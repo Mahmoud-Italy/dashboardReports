@@ -39,11 +39,9 @@
 
         <div v-if="pgLoading" class="row h-100">
             <div class="container text-center">
-                <p><br/></p>
-                <div class="spinner-grow" role="status">
+                <div class="spinner-grow mt-5" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
-                <p><br/></p>
             </div>
         </div>
 
@@ -59,22 +57,22 @@
                         <div class="card mt-5">
                             <div class="card-body">
                                 <div id="accordion" class="accordion">
-                                    <div id="TabPage" class="card-header">
+                                    <div id="Tabfaq" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Page')"
+                                            @click="collapseToggle('faq')"
                                             aria-expanded="false" 
-                                            aria-controls="collapsePage" 
+                                            aria-controls="collapsefaq" 
                                             data-toggle="collapse"
-                                            data-target="#collapsePage">FAQ
-                                            <span id="iconTogglePage" 
+                                            data-target="#collapsefaq">FAQ
+                                            <span id="iconTogglefaq" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow 
                                                     pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapsePage" 
+                                    <div id="collapsefaq" 
                                         class="collapse show" 
-                                        aria-labelledby="TabPage" 
+                                        aria-labelledby="Tabfaq" 
                                         data-parent="#accordion">
 
                                 <div class="col-12 pt-3">
@@ -91,11 +89,12 @@
 
                                     <!-- Slug -->
                                     <div class="form-group">
-                                        <label for="inputText2">Order</label>
-                                        <input class="form-control text-lowercase"
+                                        <label for="inputText2">Sort</label>
+                                        <input class="form-control"
                                                 id="inputText2"  
-                                                type="text" 
-                                                v-model="row.order">
+                                                type="number"
+                                                min="0" 
+                                                v-model.number="row.sort">
                                     </div>
                                     <!-- End Slug -->
 
@@ -108,7 +107,7 @@
                                             v-model="row.body"
                                             :api-key="editor.api_key"
                                             :init="{
-                                                height: 900,
+                                                height: 600,
                                                 menubar: editor.menubar,
                                                 plugins: editor.plugins,
                                                 toolbar: editor.toolbar
@@ -125,8 +124,8 @@
                     </div>
                     <!-- End CardDest -->
 
-                </div>
 
+                </div>
 
 
 
@@ -135,32 +134,29 @@
                     <!-- ******* SideNavbar ******** -->
                     <div class="col-md-4 mb-5">
 
-                            <!-- Nav Destination -->
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="accordionNav" class="accordion">
-                                <div id="NavDestination" class="card-header">
-                                    <h2 class="h4 card-header-title" 
-                                        @click="collapseToggle('NavDestination')" 
-                                        aria-expanded="false" 
-                                        aria-controls="collapseNavDestination" 
-                                        data-toggle="collapse" 
-                                        data-target="#collapseNavDestination">Destination
-                                        <span id="iconToggleNavDestination" 
-                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow 
-                                            pull-right black">
-                                        </span>
-                                    </h2>
-                                </div>
-                                
-                                <div id="collapseNavDestination" 
-                                    class="collapse" 
-                                    aria-labelledby="NavDestination" 
-                                    data-parent="#accordionNav">
-
-                                    <div class="col-12 pt-3">
+                        <!-- Nav Destination -->
+                        <div class="card mt-5">
+                            <div class="card-body">
+                                <div id="accordionNav" class="accordion">
+                                    <div id="NavDestination" class="card-header">
+                                        <h2 class="h4 card-header-title" 
+                                            @click="collapseToggle('Destination')" 
+                                            aria-expanded="false" 
+                                            aria-controls="collapseNavDestination" 
+                                            data-toggle="collapse" 
+                                            data-target="#collapseNavDestination">Destination
+                                            <span id="iconToggleDestination" 
+                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
+                                            </span>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseNavDestination" 
+                                        class="collapse" 
+                                        aria-labelledby="NavDestination" 
+                                        data-parent="#accordionNav">
                                         
-                                        <!-- Destination -->
+                                    <div class="col-12 pt-3">
+                                        <!-- Destinations -->
                                         <div class="form-group">
                                             <div v-if="destinationLoading" class="text-center">
                                                 <span class="spinner-grow spinner-grow-sm mr-1" 
@@ -172,24 +168,28 @@
                                                     v-if="!destinationLoading" 
                                                     v-model="row.destination_id">
                                                     <option value="">Select Destination</option>
-                                                    <option v-for="(destination, index) in destinations" 
+                                                    <optgroup v-for="(region, index) in destinations" 
                                                             :key="index"
+                                                            :label="region.title">
+                                                        <option v-for="(destination,idx) in region.destinations"
+                                                            :key="idx"
                                                             :value="destination.id">
                                                             {{ destination.title }}
-                                                    </option>
+                                                        </option>
+                                                    </optgroup>
                                             </select>
                                         </div>
                                         <!-- End Destination -->
-                                    
+                                        
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- End Nav Destination -->
+                        <!-- End Nav Destination -->
 
                         <!-- NavTwo -->
-                        <div class="card5 mt-5">
+                        <div class="card mt-5">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
                                     <div id="NavImage" class="card-header">
@@ -211,7 +211,9 @@
                                         <div class="col-12 pt-3">
                                             <!-- Image -->
                                             <div class="form-group">
-                                                <img :src="row.preview" 
+                                                <label>Image</label>
+                                                <img v-if="row.preview" 
+                                                    :src="row.preview" 
                                                     class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
@@ -274,7 +276,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <!-- Status -->
+                                            <!-- End Status -->
 
                                             <!-- View Home -->
                                             <div class="form-group">
@@ -292,7 +294,6 @@
                                                 </div>
                                             </div>
                                             <!-- End Home -->
-
                                         </div>
                                     </div>
                                 </div>
@@ -366,35 +367,33 @@
                     access_token: '',
                 },
                 row: {
-                    view_in_home: 0,
-                    status: 1,
+                    // row
+                    title: '',
+                    sort: 0,
+                    body: '',
+
+                    // navbar
+                    destination_id: '',
+
+                    // image
                     preview: '',
-                    image: '',
+                    image_base64: '',
                     image_alt: '',
                     image_title: '',
-                    
-                    title: '',
-                    body: '',
-                    order: 0,
 
-                    meta_title: '',
-                    meta_keywords: '',
-                    meta_description: '',
+                    // status & visibility
+                    status: 1,
+                    view_in_home: 0,
                 },
                 editor: {
-                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
-                    menubar: 'file edit view insert format tools table tc help',
-                    plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | removeformat | help',
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
                 },
-                destinationLoading: true,
+                // destination
                 destinations: [],
+                destinationLoading: true,
 
                 pgLoading: true,
                 btnLoading: false,
@@ -415,18 +414,6 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },  
-
             // fetch Row
             fetchRow() {
                 this.pgLoading = true;
@@ -443,36 +430,58 @@
                 this.axios(options)
                     .then(res => {
                     this.pgLoading = false;
+                    // row
+                    this.row.title = res.data.row.title;
+                    this.row.sort = res.data.row.sort;
+                    this.row.body = res.data.row.body;
+                    
+                    // navbar
+                    this.row.destination_id = (res.data.row.destination) ? res.data.row.destination.id : null;
 
+                    // image
+                    this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
+                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
+
+                    // status & visibility
                     this.row.status = res.data.row.status;
                     this.row.view_in_home = res.data.row.view_in_home;
 
-                    this.row.destination_id = (res.data.row.destination) ? res.data.row.destination.id : null;
-
-                    this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.age_title : null;
-                        
-                    this.row.title = res.data.row.title;
-                    this.row.body = res.data.row.body;
-                    this.row.order = res.data.row.order;
-
-                    this.fetchDestinations();
+                    this.fetchDestinations(); // call next func
+                    })
+                    .catch(() => {})
+                    .finally(() => {});
+            },
+            
+            // fetch Destinations
+            fetchDestinations(){
+                this.destinationLoading = true;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const options = {
+                    url: window.baseURL+'/regions',
+                    method: 'GET',
+                    data: {},
+                    params: {
+                        status: 'active',
+                        paginate: 100,
+                    },
+                }
+                this.axios(options)
+                    .then(res => {
+                        this.destinationLoading = false;
+                        this.destinations = res.data.rows;
                     })
                     .catch(() => {})
                     .finally(() => {});
             },
 
-            
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
 
 
-            // Add New
+            // edit Row
             editRow(){
                 this.btnLoading = true;
                 this.axios.defaults.headers.common = {
@@ -484,17 +493,22 @@
                     url: window.baseURL+'/faqs/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
-                        destination_id: this.row.destination_id,
-                        status: this.row.status,
-                        view_in_home: this.row.view_in_home,
+                        // row
+                        title: this.row.title,
+                        sort: this.row.sort,
+                        body: this.row.body,
 
-                        image_url: this.row.image,
+                        // navbar
+                        destination_id: this.row.destination_id,
+
+                        // image
+                        image_base64: this.row.image_base64,
                         image_alt: this.row.image_alt,
                         image_title: this.row.image_title,
 
-                        title: this.row.title,
-                        body: this.row.body,
-                        order: this.row.order
+                        // status & visibility
+                        status: this.row.status,
+                        view_in_home: this.row.view_in_home,
                     }
                 }
                 this.axios(options, config)
@@ -503,7 +517,7 @@
                         iziToast.success({
                             icon: 'ti-check',
                             title: 'Great job,',
-                            message: 'Item Updated Successfully.',
+                            message: 'Item Udpated Successfully.',
                         });
                         this.$router.push({ name: 'faqs' })
                     })
@@ -525,6 +539,21 @@
             },
 
 
+
+            // Upload Featured image
+            onImageChange(e){
+                const file = e.target.files[0];
+                this.row.preview = URL.createObjectURL(file);
+                this.createBase64Image(file);
+            },
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.image_base64 = e.target.result;
+                };
+            },
+          
             // active status
             onStatus(){
                 if(this.row.status)
@@ -539,6 +568,18 @@
                     this.row.view_in_home = 1;
             },
 
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
+            },
+
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
@@ -547,7 +588,6 @@
             },
 
         },
-
     }
 </script>
 

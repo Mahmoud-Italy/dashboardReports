@@ -8,7 +8,7 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Cruise Types
+                    <h1 class="h2 mb-2">Cabins
 
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
@@ -29,144 +29,232 @@
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
                             <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'cruiseTypes' }">Cruise Types</router-link>
+                                <router-link :to="{ name: 'cabins' }">Cabins</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
                     </nav>
                     <!-- End Breadcrumb -->
 
-
-        <div v-if="pgLoading" class="row h-100">
-            <div class="container text-center">
-                <p><br/></p>
-                <div class="spinner-grow" role="status">
-                    <span class="sr-only">Loading...</span>
+            <div v-if="pgLoading" class="row h-100">
+                <div class="container text-center">
+                    <div class="spinner-grow mt-5" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </div>
-                <p><br/></p>
             </div>
-        </div>
 
-        <form v-if="!pgLoading" @submit.prevent="editRow" enctype="multipart/form-data" class="h-100">
+            <form v-if="!pgLoading" @submit.prevent="editRow" enctype="multipart/form-data" class="h-100">
 
-            <!-- Content -->
-            <div class="tab-content">
-                <div class="row">        
+                <!-- Content -->
+                <div class="tab-content">
+                    <div class="row">  
+
+                    <!-- ********** Cards ******* -->
                     <div class="col-md-8 mb-5">
 
-                         <!-- Card packageType -->
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="accordion" class="accordion">
-                                <div id="TabType" class="card-header">
+                        <!-- Card Cabin -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="accordion" class="accordion">
+                                    <div id="TabCabin" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Type')"
+                                            @click="collapseToggle('Cabin')"
                                             aria-expanded="false" 
-                                            aria-controls="collapseMeta" 
+                                            aria-controls="collapseCabin" 
                                             data-toggle="collapse"
-                                            data-target="#collapseType">Cruise Type
-                                            <span id="iconToggleType" 
+                                            data-target="#collapseCabin">Cabin
+                                            <span id="iconToggleCabin" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseType" 
+                                    <div id="collapseCabin" 
                                         class="collapse show" 
-                                        aria-labelledby="TabType" 
+                                        aria-labelledby="TabCabin" 
                                         data-parent="#accordion">
 
-                                    <div class="col-12 pt-3">
+                                        <div class="col-12 pt-3">
 
-                                        <!-- Title -->
-                                        <div class="form-group">
-                                            <label for="inputText1">Name</label>
-                                            <input class="form-control" 
-                                                    id="inputText1" 
-                                                    type="text" 
-                                                    v-model="row.name" 
-                                                    @keyup="onTitleChange">
-                                        </div>
-                                        <!-- End Title -->
+                                            <!-- Title -->
+                                            <div class="form-group">
+                                                <label for="input1">Title</label>
+                                                <input class="form-control" 
+                                                        id="input1" 
+                                                        type="text" 
+                                                        v-model="row.title" 
+                                                        @keyup="onTitleChange">
+                                            </div>
+                                            <!-- End Title -->
 
-                                        <!-- Slug -->
-                                        <div class="form-group">
-                                            <label for="inputText2">Slug</label>
-                                            <input class="form-control text-lowercase"
-                                                    id="inputText2"  
-                                                    type="text" 
-                                                    v-model="row.slug" 
-                                                    @keydown.space.prevent 
-                                                    @paste="onSlugPaste"
-                                                    @change="onSlugChange">
-                                        </div>
-                                        <!-- End Slug -->
+                                            <!-- Slug -->
+                                            <div class="form-group">
+                                                <label for="input2">Slug</label>
+                                                <input class="form-control text-lowercase"
+                                                        id="input2"  
+                                                        type="text" 
+                                                        v-model="row.slug" 
+                                                        @keydown.space.prevent 
+                                                        @paste="onSlugPaste"
+                                                        @change="onSlugChange(false)">
+                                            </div>
+                                            <!-- End Slug -->
 
+                                            <div class="row">
+                                                <!-- Sort -->
+                                                <div class="form-group col-6">
+                                                    <label for="inputT3">Sort</label>
+                                                    <input class="form-control"
+                                                            id="input3"  
+                                                            type="number"
+                                                            min="0" 
+                                                            v-model.number="row.sort">
+                                                </div>
+                                                <!-- End Stars -->
+
+                                                <!-- Price -->
+                                                <div class="form-group col-6">
+                                                    <label for="input4">Price</label>
+                                                    <input class="form-control"
+                                                            id="input4"  
+                                                            type="number"
+                                                            min="0"
+                                                            v-model.number="row.price">
+                                                </div>
+                                                <!-- End Price -->
+                                            </div>
+
+                                            <!-- Body -->
+                                            <div class="form-group">
+                                                <label for="inputEditor1">Body</label>
+                                                <editor
+                                                    id="inputEditor1"
+                                                    v-model="row.body"
+                                                    :api-key="editor.api_key"
+                                                    :init="{
+                                                        height: 300,
+                                                        menubar: editor.menubar,
+                                                        plugins: editor.plugins,
+                                                        toolbar: editor.toolbar
+                                                    }"
+                                                />
+                                            </div>
+                                            <!-- End Body -->
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
-                        <!-- End Card packageType -->
+                        <!-- End Card Cabin -->
 
-                </div>
-
-
-
-
-
-                    <!-- ******* SideNavbar ******** -->
-                    <div class="col-md-4 mb-5">
-
-                        <!-- Nav Category -->
-                        <div class="card">
+                        <!-- Card Icons -->
+                        <div class="card mt-5">
                             <div class="card-body">
-                                <div id="accordionNav" class="accordion">
-                                    <div id="NavCategory" class="card-header">
+                                <div id="accordion" class="accordion">
+                                    <div id="TabIcons" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Category')" 
+                                            @click="collapseToggle('Icons')"
                                             aria-expanded="false" 
-                                            aria-controls="collapseNavCategory" 
-                                            data-toggle="collapse" 
-                                            data-target="#collapseNavCategory">Parent
-                                            <span id="iconToggleCategory" 
-                                                    class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
+                                            aria-controls="collapseIcons" 
+                                            data-toggle="collapse"
+                                            data-target="#collapseIcons">Icons
+                                            <span id="iconToggleIcons" 
+                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow 
+                                                    pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseNavCategory" 
+                                    <div id="collapseIcons" 
                                         class="collapse" 
-                                        aria-labelledby="NavCategory" 
-                                        data-parent="#accordionNav">
-                                        <div class="col-12 pt-3">
-                                            <!-- Category -->
-                                            <div class="form-group">
-                                                <div v-if="parentLoading" class="text-center">
-                                                    <span class="spinner-grow spinner-grow-sm mr-1" 
-                                                        role="status" 
-                                                        aria-hidden="true">
-                                                    </span>
-                                                </div>
-                                                <select class="form-control custom-select"
-                                                    v-if="!parentLoading" 
-                                                    v-model="row.parent_id">
-                                                    <option value="">Select Parent</option>
-                                                    <option value="">No Parent</option>
-                                                    <option v-for="(parent, index) in parents" 
-                                                            :key="index"
-                                                            :value="parent.id">
-                                                            {{ parent.name }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <!-- End Region -->
+                                        aria-labelledby="TabIcons" 
+                                        data-parent="#accordion">
+
+                                    <div class="col-12 pt-3">
+                                    
+                                    <!-- For Loop -->
+                                    <div v-for="i in row.icons_key" 
+                                        :key="i" 
+                                        :class="(i == 0) ? 'hidden' : '' " 
+                                        :id="'frm_'+i"
+                                        class="ui-for-div">
+
+                                        <!-- Remove -->
+                                        <div class="pull-right ui-mt-10">
+                                            <button v-if="i != 0"
+                                                type="button" 
+                                                class="btn btn-danger btn-circle btn-with-icon btn-sm" 
+                                                @click="removeOption(i)">
+                                                <span class="btn-icon ti-close font-bold"></span>
+                                            </button>
                                         </div>
+                                        <!-- End Remove -->
+
+                                        <!-- image -->
+                                        <div class="form-group">
+                                            <label :for="'input6'+i">Icon</label>
+                                            <p><img v-if="row.icons_image_preview[i]" 
+                                                :src="row.icons_image_preview[i]"
+                                                class="custom-image">
+                                            </p>
+                                            <input class="form-control" 
+                                                    :id="'input6'+i" 
+                                                    type="file"
+                                                    ref="myDropify" 
+                                                    v-on:change="onIconsImageChange($event, i)">
+                                        </div>
+                                        <!-- End image -->
+
+                                        <!-- image alt -->
+                                        <div class="form-group">
+                                            <label :for="'input4'+i">Icon alt</label>
+                                            <input class="form-control" 
+                                                    :id="'input4'+i" 
+                                                    type="text" 
+                                                    v-model="row.icons_image_alt[i]">
+                                        </div>
+                                        <!-- End image alt -->
+
+                                        <!-- image title -->
+                                        <div class="form-group">
+                                            <label :for="'input5'+i">Icon title</label>
+                                            <input class="form-control" 
+                                                    :id="'input5'+i" 
+                                                    type="text" 
+                                                    v-model="row.icons_image_title[i]">
+                                        </div>
+                                        <!-- End image title -->
+                                        
+                                    </div>
+                                    <!-- End Loop -->
+
+                                        <!-- Add more -->
+                                        <div class="row pull-right">
+                                            <button type="button" 
+                                                class="btn btn-dark btn-circle btn-with-icon"
+                                                @click="opnFrm()">
+                                                <span class="btn-icon ti-plus font-bold"></span>
+                                            </button>
+                                        </div>
+                                        <!-- End more -->
+                                    
+                                    </div>
+                                
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End NavOne -->
-                        <!-- NavTwo -->
-                        <div class="card mt-5">
+                        <!-- End Card Icons -->
+
+                    </div>
+                    <!-- ********** End Cards ******* -->
+
+
+                    <!-- ******* Navbar ******** -->
+                    <div class="col-md-4 mb-5">
+
+                         <!-- Nav Image -->
+                        <div class="card">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
                                     <div id="NavImage" class="card-header">
@@ -188,8 +276,9 @@
                                         <div class="col-12 pt-3">
                                             <!-- Image -->
                                             <div class="form-group">
-                                                <img :src="row.preview" 
-                                                    class="mb-2 h200 custom-image">
+                                                <label>Image</label>
+                                                <img :src="row.image_preview" 
+                                                    class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
                                                     ref="myDropify" 
@@ -213,10 +302,9 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- End NavTwo -->
+                        <!-- End Nav Image -->
 
-
-                        <!-- NavThree -->
+                        <!-- Nav Status -->
                         <div class="card mt-5">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
@@ -251,54 +339,20 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <!-- Status -->
-
-                                            <!-- Header -->
-                                            <div class="form-group">
-                                                <div class="custom-control custom-switch mb-2">
-                                                    <input type="checkbox" 
-                                                        class="custom-control-input" 
-                                                        id="customSwitch2" 
-                                                        :checked="row.view_in_header"
-                                                        @click="onHeader">
-                                                    <label class="custom-control-label" 
-                                                        for="customSwitch2"
-                                                        v-html="(row.view_in_header) 
-                                                            ? 'View In Header' 
-                                                            : 'Hide In Header'">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <!-- End Header -->
-
-                                            <!-- Footer -->
-                                            <div class="form-group">
-                                                <div class="custom-control custom-switch mb-2">
-                                                    <input type="checkbox" 
-                                                        class="custom-control-input" 
-                                                        id="customSwitch3" 
-                                                        :checked="row.view_in_footer"
-                                                        @click="onFooter">
-                                                    <label class="custom-control-label" 
-                                                        for="customSwitch3"
-                                                        v-html="(row.view_in_footer) 
-                                                            ? 'View In Footer' 
-                                                            : 'Hide In Footer'">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <!-- End Footer -->
+                                            <!-- End Status -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End NavThree -->
+                        <!-- End Nav Status -->
 
-                        </div>
                     </div>
+                    <!-- ******** End Navbar ******** -->
+
                 </div>
-                <!-- End Content -->
+            </div>
+            <!-- End Content -->
 
                     
 
@@ -311,7 +365,7 @@
                                     </span>Loading...
                                 </span>
                                 <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> Update Cruise Type</span>
+                                <span v-if="!btnLoading"> Update Cabin</span>
                             </button>
                         </div>
 
@@ -342,6 +396,7 @@
     import Header from '../layouts/Header.vue';
     import Navigation from '../layouts/Navigation';
     import Footer from '../layouts/Footer.vue';
+    import Editor from '@tinymce/tinymce-vue';
     import iziToast from 'izitoast';
     
     export default {
@@ -349,7 +404,8 @@
         components: {
             Header,
             Navigation,
-            Footer
+            Footer,
+            Editor
         },
         data(){
             return {
@@ -359,25 +415,36 @@
                     access_token: '',
                 },
                 row: {
-                    parent_id: '',
-                    status: 1,
-                    view_in_header: 0,
-                    view_in_footer: 0,
+                    // row
+                    title: '',
+                    slug: '',
+                    sort: 0,
+                    price: '',
+                    body: '',
 
-                    preview: '',
-                    image: '',
+                    // icons
+                    icons: [],
+                    icons_key: 0,
+                    icons_image_preview: [],
+                    icons_image_base64: [],
+                    icons_image_alt: [],
+                    icons_image_title: [],
+
+                    // image
+                    image_preview: '',
+                    image_base64: '',
                     image_alt: '',
                     image_title: '',
-                    
-                    slug: '',
-                    name: '',
 
-                    meta_title: '',
-                    meta_keywords: '',
-                    meta_description: '',
+                    // status & visibility
+                    status: 1,
                 },
-                parnets: [],
-                parentLoading: true,
+                editor: {
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
+                },
 
                 pgLoading: true,
                 btnLoading: false,
@@ -398,18 +465,7 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },  
-
+            
             // fetch Row
             fetchRow() {
                 this.pgLoading = true;
@@ -418,7 +474,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/cruiseTypes/'+this.$route.params.id,
+                    url: window.baseURL+'/cabins/'+this.$route.params.id,
                     method: 'GET',
                     data: {},
                     params: {},
@@ -427,80 +483,87 @@
                     .then(res => {
                     this.pgLoading = false;
 
-                    this.row.parent_id = (res.data.row.parent) ? res.data.row.parent.id : null;
-                    this.row.status = res.data.row.status;
-                    this.row.view_in_header = res.data.row.view_in_header;
-                    this.row.view_in_footer = res.data.row.view_in_footer;
-
-                    this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.age_title : null;
-                        
+                    // row
+                    this.row.title = res.data.row.title;
                     this.row.slug = res.data.row.slug;
-                    this.row.name = res.data.row.name;
+                    this.row.sort = res.data.row.sort;
+                    this.row.price = res.data.row.price;
+                    this.row.body = res.data.row.body;
 
-                    this.fetchParents();
+                    // icons
+                    this.row.icons_key = res.data.row.icons.length;
+                    if(res.data.row.icons) {
+                        for(let i = 1; i <= this.row.icons_key; i++) {
+                            let x = i-1;
+                            this.row.icons_image_preview[i] = (res.data.row.icons[x]) 
+                                                            ? res.data.row.icons[x].image_url
+                                                            : ''; 
+                            this.row.icons_image_base64[i] = (res.data.row.icons[x]) 
+                                                            ? res.data.row.icons[x].image_url
+                                                            : ''; 
+                            this.row.icons_image_alt[i] = (res.data.row.icons[x]) 
+                                                            ? res.data.row.icons[x].image_alt
+                                                            : ''; 
+                            this.row.icons_image_title[i] = (res.data.row.icons[x]) 
+                                                            ? res.data.row.icons[x].image_title
+                                                            : ''; 
+                            
+                        }
+                    }
+
+
+                    // image
+                    this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
+                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
+
+                    // status & visibility
+                    this.row.status = res.data.row.status;
                     })
                     .catch(() => {})
                     .finally(() => {});
             },
 
-             // Fetch fetchParents
-            fetchParents(){
-                this.parentLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
-                const options = {
-                    url: window.baseURL+'/cruiseTypes',
-                    method: 'GET',
-                    data: {},
-                    params: {
-                        status: 'active',
-                        parent_id: false,
-                        paginate: 100,
-                    },
-                }
-                this.axios(options)
-                    .then(res => {
-                        this.parentLoading = false;
-                        this.parents = res.data.rows;
-                    })
-                    .catch(() => {})
-                    .finally(() => {});
-            },
-
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
-
-
-            // Add New
+            // Edit row
             editRow(){
                 this.btnLoading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-                const options = {
-                    url: window.baseURL+'/cruiseTypes/'+this.$route.params.id,
-                    method: 'PUT',
-                    data: {
-                        parent_id: this.row.parent_id,
-                        status: this.row.status,
-                        view_in_header: this.row.view_in_header,
-                        view_in_footer: this.row.view_in_footer,
-
-                        name: this.row.name,
-                        slug: this.row.slug,
+                // items
+                for( let i = 1; i <= this.row.icons_key; i++ ) {
+                    this.row.icons[i] = {
+                        'icon_base64' : this.row.icons_image_base64[i],
+                        'icon_alt' : this.row.icons_image_alt[i],
+                        'icon_title' : this.row.icons_image_title[i]
                     }
                 }
-                this.axios(options, config)
+                const options = {
+                    url: window.baseURL+'/cabins/'+this.$route.params.id,
+                    method: 'PUT',
+                    data: {
+                        // row
+                        title: this.row.title,
+                        slug: this.row.slug,
+                        sort: this.row.sort,
+                        price: this.row.price,
+                        body: this.row.body,
+
+                        // icons
+                        icons: this.row.icons,
+
+                        // image
+                        image_base64: this.row.image_base64,
+                        image_alt: this.row.image_alt,
+                        image_title: this.row.image_title,
+
+                        // status & visibility
+                        status: this.row.status,
+                    }
+                }
+                this.axios(options)
                     .then(() => {
                         this.btnLoading = false;
                         iziToast.success({
@@ -508,7 +571,7 @@
                             title: 'Great job,',
                             message: 'Item Updated Successfully.',
                         });
-                        this.$router.push({ name: 'cruiseTypes' })
+                        this.$router.push({ name: 'cabins' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -520,7 +583,7 @@
                             iziToast.warning({
                                 icon: 'ti-alert',
                                 title: 'Wow-man,',
-                                message: err.response.data.message
+                                message: (err.response) ? err.response.data.message : ''+err
                             });
                         }
                     })
@@ -529,7 +592,7 @@
 
             // Title
             onTitleChange() {
-                this.onSlugChange(this.row.name);
+                this.onSlugChange(this.row.title);
             },
 
             // on Paste
@@ -537,8 +600,51 @@
                 let str = this.row.slug;
                 this.onSlugChange(str);
             },
-            onSlugChange(str){
+            onSlugChange(str=''){
+                if(!str) {
+                    str = this.row.slug;
+                }
                 this.row.slug = str.replace(/\s+/g, '-');
+            },
+
+
+            // Upload Featured image
+            onImageChange(e){
+                const file = e.target.files[0];
+                this.row.image_preview = URL.createObjectURL(file);
+                this.createBase64Image(file);
+            },
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.image_base64 = e.target.result;
+                };
+            },
+
+            onIconsImageChange(e, i) {
+                const file = e.target.files[0];
+                this.row.icons_image_preview[i] = URL.createObjectURL(file);
+                this.createIconsBase64Image(file, i);
+            },
+            createIconsBase64Image(fileObject, i){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.icons_image_base64[i] = e.target.result;
+                };
+            },
+
+            // items add more
+            opnFrm() {
+                this.row.icons_key++;
+            },
+            removeOption(i) {
+                document.querySelector('#frm_'+i).remove();
+                this.row.icons_image_preview[i] = '';
+                this.row.icons_image_base64[i] = '';
+                this.row.icons_image_alt[i] = '';
+                this.row.icons_image_title[i] = '';
             },
 
             // active status
@@ -548,25 +654,23 @@
                 else
                     this.row.status = 1;
             },
-             // active view_in_header
-            onHeader(){
-                if(this.row.view_in_header)
-                    this.row.view_in_header = 0;
-                else
-                    this.row.view_in_header = 1;
-            },
-             // active view_in_footer
-            onFooter(){
-                if(this.row.view_in_footer)
-                    this.row.view_in_footer = 0;
-                else
-                    this.row.view_in_footer = 1;
+
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
             },
 
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'cruiseTypes' });
+                    this.$router.push({ name: 'cabins' });
                 }
             },
 

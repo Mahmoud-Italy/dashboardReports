@@ -175,16 +175,16 @@
                                     </div>
                                     <!-- End Slug -->
 
-                                    <!-- Order -->
+                                    <!-- Sort -->
                                     <div class="form-group">
-                                        <label for="inputText2">Order</label>
+                                        <label for="inputText2">Sort</label>
                                         <input class="form-control" 
                                                 id="inputText2" 
                                                 type="number"
                                                 min="0" 
-                                                v-model.number="row.order">
+                                                v-model.number="row.sort">
                                     </div>
-                                    <!-- End Order -->
+                                    <!-- End Sort -->
 
 
 
@@ -230,7 +230,8 @@
                                             <!-- Image -->
                                             <div class="form-group">
                                                 <label>Image</label>
-                                                <img :src="row.preview" 
+                                                <img v-if="row.image_preview" 
+                                                    :src="row.image_preview" 
                                                     class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
@@ -373,7 +374,7 @@
                     // row
                     slug: '',
                     title: '',
-                    order: 0,
+                    sort: 0,
                     
                     // image
                     preview: '',
@@ -436,19 +437,19 @@
                     // row
                     this.row.slug = res.data.row.slug;
                     this.row.title = res.data.row.title;
-                    this.row.order = res.data.row.order;
+                    this.row.sort = res.data.row.sort;
 
                     // image
-                    this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
                     this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
                     this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
 
                     // status & visibility
-                    this.row.status= res.data.row.status;
+                    this.row.status = res.data.row.status;
                     })
-                    .catch((err) => { console.log('err'+err); })
-                    .finally(() => {});
+                .catch(() => {})
+                .finally(() => {});
             },
 
             // Add New
@@ -471,7 +472,7 @@
                         // row
                         slug: this.row.slug,
                         title: this.row.title,
-                        order: this.row.order,
+                        sort: this.row.sort,
 
                         // image
                         image_base64: this.row.image_base64,
@@ -513,8 +514,7 @@
             // Upload Featured image
             onImageChange(e){
                 const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                //this.row.image = file;
+                this.row.image_preview = URL.createObjectURL(file);
                 this.createBase64Image(file);
             },
             createBase64Image(fileObject){
@@ -550,6 +550,15 @@
                     this.row.status = 0;
                 else
                     this.row.status = 1;
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
             },
 
             // toggleCollapse

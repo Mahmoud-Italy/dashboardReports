@@ -166,7 +166,6 @@
                                     </div>
                                     <!-- End Slug -->
 
-
                                     <!-- Body -->
                                     <div class="form-group">
                                         <label for="inputWriter3">Body</label>
@@ -225,8 +224,8 @@
                                         <!-- Image -->
                                         <div class="form-group">
                                             <label>Image</label>
-                                            <img v-if="row.preview" 
-                                                :src="row.preview" 
+                                            <img v-if="row.image_preview" 
+                                                :src="row.image_preview" 
                                                 class="mb-2 custom-image">
                                             <input type="file" 
                                                 class="form-control" 
@@ -286,15 +285,15 @@
                                         <!-- Status -->
                                         <div class="form-group">
                                             <div class="custom-control custom-switch mb-2">
-                                                    <input type="checkbox" 
-                                                        class="custom-control-input" 
-                                                        id="customSwitch1" 
-                                                        :checked="row.status"
-                                                        @click="onStatus">
-                                                    <label class="custom-control-label" 
-                                                        for="customSwitch1"
-                                                        v-html="(row.status) ? 'Active' : 'Inactive'">
-                                                    </label>
+                                                <input type="checkbox" 
+                                                    class="custom-control-input" 
+                                                    id="customSwitch1" 
+                                                    :checked="row.status"
+                                                    @click="onStatus">
+                                                <label class="custom-control-label" 
+                                                    for="customSwitch1"
+                                                    v-html="(row.status) ? 'Active' : 'Inactive'">
+                                                </label>
                                             </div>
                                         </div>
                                         <!-- End Status -->
@@ -382,10 +381,11 @@
                     // writer
                     slug: '',
                     title: '',
+                    sort: 0,
                     body: '',
 
                     // image
-                    preview: '',
+                    image_preview: '',
                     image_base64: '',
                     image_alt: '',
                     image_title: '',
@@ -437,6 +437,7 @@
                         // rows
                         title: this.row.title,
                         slug: this.row.slug,
+                        sort: this.row.sort,
                         body: this.row.body,
 
                         // image
@@ -461,7 +462,7 @@
                     .catch(err => {
                         // 403 Forbidden
                         if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage()
+                            this.removeLocalStorage();
                             this.$router.push({ name: 'forbidden' })
                         } else {
                             this.btnLoading = false;
@@ -498,8 +499,7 @@
             // Upload Featured image
             onImageChange(e){
                 const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                //this.row.image = file;
+                this.row.image_preview = URL.createObjectURL(file);
                 this.createBase64Image(file);
             },
             createBase64Image(fileObject){
@@ -516,6 +516,15 @@
                     this.row.status = 0;
                 else
                     this.row.status = 1;
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
             },
 
             // toggleCollapse

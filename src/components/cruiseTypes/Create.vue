@@ -9,7 +9,6 @@
             <div class="u-content">
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2">Cruise Types
-
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
                             <div class="dropdown">
@@ -19,7 +18,6 @@
                             </div>
                         </div>
                         <!-- End Role -->
-
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -29,7 +27,7 @@
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
                             <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'cruiseTypes' }">Cruise Types</router-link>
+                                <router-link :to="{ name: 'cruisetypes' }">Cruise Types</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Add New</li>
                         </ol>
@@ -37,23 +35,25 @@
                     <!-- End Breadcrumb -->
 
 
-        <form @submit.prevent="addNew" enctype="multipart/form-data" class="h-100">
+            <form @submit.prevent="addNew" enctype="multipart/form-data" class="h-100">
 
-            <!-- Content -->
-            <div class="tab-content">
-                <div class="row">        
+                <!-- Content -->
+                <div class="tab-content">
+                    <div class="row">      
+
+
+                    <!-- ********** Cards ******* -->
                     <div class="col-md-8 mb-5">
 
-
-                    <!-- Card packageType -->
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="accordion" class="accordion">
-                                <div id="TabType" class="card-header">
+                        <!-- Card Cruise Type -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="accordion" class="accordion">
+                                    <div id="TabType" class="card-header">
                                         <h2 class="h4 card-header-title" 
                                             @click="collapseToggle('Type')"
                                             aria-expanded="false" 
-                                            aria-controls="collapseMeta" 
+                                            aria-controls="collapseType" 
                                             data-toggle="collapse"
                                             data-target="#collapseType">Cruise Type
                                             <span id="iconToggleType" 
@@ -70,42 +70,51 @@
 
                                         <!-- Title -->
                                         <div class="form-group">
-                                            <label for="inputText1">Name</label>
+                                            <label for="input1">Title</label>
                                             <input class="form-control" 
-                                                    id="inputText1" 
+                                                    id="input1" 
                                                     type="text" 
-                                                    v-model="row.name" 
+                                                    v-model="row.title" 
                                                     @keyup="onTitleChange">
                                         </div>
                                         <!-- End Title -->
 
                                         <!-- Slug -->
                                         <div class="form-group">
-                                            <label for="inputText2">Slug</label>
+                                            <label for="input2">Slug</label>
                                             <input class="form-control text-lowercase"
-                                                    id="inputText2"  
+                                                    id="input2"  
                                                     type="text" 
                                                     v-model="row.slug" 
                                                     @keydown.space.prevent 
                                                     @paste="onSlugPaste"
-                                                    @change="onSlugChange">
+                                                    @change="onSlugChange(false)">
                                         </div>
                                         <!-- End Slug -->
+
+                                        <!-- Sort -->
+                                        <div class="form-group">
+                                            <label for="input3">Sort</label>
+                                            <input class="form-control" 
+                                                    id="input3" 
+                                                    type="number"
+                                                    min="0" 
+                                                    v-model.number="row.sort">
+                                        </div>
+                                        <!-- End Title -->
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End Card packageType -->
+                        <!-- End Card Cruise Type -->
 
-                </div>
-
-
-
+                    </div>
+                    <!-- ********** End Cards ******* -->
 
 
-                    <!-- ******* SideNavbar ******** -->
+                    <!-- ******* Navbar ******** -->
                     <div class="col-md-4 mb-5">
 
                         <!-- Nav Category -->
@@ -140,7 +149,7 @@
                                                 <select class="form-control custom-select"
                                                     v-if="!parentLoading" 
                                                     v-model="row.parent_id">
-                                                    <option value="">Select Parent</option>
+                                                    <option>Select Parent</option>
                                                     <option value="">No Parent</option>
                                                     <option v-for="(parent, index) in parents" 
                                                             :key="index"
@@ -149,13 +158,13 @@
                                                     </option>
                                                 </select>
                                             </div>
-                                            <!-- End Region -->
+                                            <!-- End Category -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End NavOne -->
+                        <!-- End Nav Category -->
 
                         <!-- Nav Status -->
                         <div class="card mt-5">
@@ -236,7 +245,9 @@
                         </div>
                         <!-- End NavThree -->
 
-                        </div>
+                    </div>
+                    <!-- ******* End Navbar ******** -->
+                    
                     </div>
                 </div>
                 <!-- End Content -->
@@ -300,13 +311,18 @@
                     access_token: '',
                 },
                 row: {
+                    // row
+                    title: '',
+                    slug: '',
+                    sort: 0,
+
+                    // navbar
                     parent_id: '',
+
+                    // status & visibility
                     status: 1,
                     view_in_header: 0,
                     view_in_footer: 0,
-
-                    slug: '',
-                    name: '',
                 },
                 parnets: [],
                 parentLoading: true,
@@ -329,19 +345,8 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },
 
-            // Fetch fetchParents
+            // Fetch Parents
             fetchParents(){
                 this.parentLoading = true;
                 this.axios.defaults.headers.common = {
@@ -380,13 +385,18 @@
                     url: window.baseURL+'/cruiseTypes',
                     method: 'POST',
                     data: {
-                        parent_id: this.row.parent_id,
+                        // row
+                        title: this.row.title,
+                        slug: this.row.slug,
+                        sort: this.row.sort,
+
+                        // navbar
+                         parent_id: this.row.parent_id,
+
+                        // status & visibility
                         status: this.row.status,
                         view_in_header: this.row.view_in_header,
                         view_in_footer: this.row.view_in_footer,
-
-                        name: this.row.name,
-                        slug: this.row.slug,
                     }
                 }
                 this.axios(options, config)
@@ -397,7 +407,7 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        this.$router.push({ name: 'cruiseTypes' })
+                        this.$router.push({ name: 'cruisetypes' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -418,7 +428,7 @@
 
             // Title
             onTitleChange() {
-                this.onSlugChange(this.row.name);
+                this.onSlugChange(this.row.title);
             },
 
             // on Paste
@@ -455,10 +465,22 @@
                     this.row.view_in_footer = 1;
             },
 
+             // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
+            },
+
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'cruiseTypes' });
+                    this.$router.push({ name: 'cruisetypes' });
                 }
             },
 

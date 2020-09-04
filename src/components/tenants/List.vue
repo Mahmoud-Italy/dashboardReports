@@ -195,7 +195,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 15%">No. Domains</th>
+                                        <th class="text-center" style="width: 15%">Domains No.</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -321,7 +321,7 @@
                                             </div>
                                         </th>
                                         <th>Name</th>
-                                        <th class="text-center">No. Domains</th>
+                                        <th class="text-center">Domains No.</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
@@ -357,7 +357,8 @@
             <div class="col-md-4 mb-5">
                 <div class="card">
                     <header class="card-header">
-                        <h2 class="h4 card-header-title">Add New</h2>
+                        <h2 class="h4 card-header-title" 
+                            v-html="(btn_status == 'Update' ? 'Edit Row' : 'Add New')"></h2>
                     </header>
 
                 <form @submit.prevent="createOrUpdate" enctype="multipart/form-data">
@@ -370,6 +371,7 @@
                                 id="input1"  
                                 type="text" 
                                 v-model="row.name"
+                                @keydown.space.prevent
                                 required="">
                         </div>
                         <!-- End Name -->
@@ -658,7 +660,6 @@
 
             // remove sessions
             removeLocalStorage() {
-                localStorage.removeItem('permissions');
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('user_image');
                 localStorage.removeItem('user_name');

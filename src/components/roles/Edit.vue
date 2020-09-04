@@ -39,11 +39,9 @@
 
         <div v-if="pgLoading" class="row h-100">
             <div class="container text-center">
-                <p><br/></p>
-                <div class="spinner-grow" role="status">
+                <div class="spinner-grow mt-5" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
-                <p><br/></p>
             </div>
         </div>
 
@@ -65,7 +63,7 @@
                                             aria-expanded="false" 
                                             aria-controls="collapseContent" 
                                             data-toggle="collapse"
-                                            data-target="#collapseContent">Content
+                                            data-target="#collapseContent">Role
                                             <span id="iconToggleContent" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
@@ -314,27 +312,28 @@
                     access_token: '',
                 },
                 row: {
-                    authority: 1,
-                    status: true,
+                    // row
                     name: '',
+
+                    // navbar
+                    authority: 1,
                     permissions_ids: [],
+
+                    // status & visiblity
+                    status: true,
                 },
                 editor: {
-                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
-                    menubar: 'file edit view insert format tools table tc help',
-                    plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | removeformat | help',
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
                 },
+
                 permissions: [],
                 permissionLoading: true,
-                btnLoading: false,
+
                 pgLoading: true,
+                btnLoading: false,
             }
         },
         mounted() {},
@@ -352,18 +351,7 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },
-
+            
             // fetch Row
             fetchRow() {
                 this.pgLoading = true;
@@ -379,13 +367,18 @@
                 }
                 this.axios(options)
                 .then(res => {
-                this.pgLoading = false;
+                    this.pgLoading = false;
+                    // row
+                    this.row.name = res.data.row.name;
 
-                this.row.status = res.data.row.status;
-                this.row.name = res.data.row.name;
-                this.row.authority = res.data.row.authority;
-                this.row.permissions_ids = res.data.permissions_ids;
-                this.fetchPermissions();
+                    // navbar
+                    this.row.authority = res.data.row.authority;
+                    this.row.permissions_ids = res.data.permissions_ids;
+
+                    // status & visiblity
+                    this.row.status = res.data.row.status;
+                    
+                    this.fetchPermissions(); // call next func
                 })
                 .catch(() => {})
                 .finally(() => {});
@@ -427,10 +420,15 @@
                     url: window.baseURL+'/roles/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
+                        // row
                         name: this.row.name,
-                        status: this.row.status,
+
+                        // navbar
                         authority: this.row.authority,
-                        permissions_ids: this.row.permissions_ids
+                        permissions_ids: this.row.permissions_ids,
+
+                        // status & visiblity
+                        status: this.row.status,
                     }
                 }
                 this.axios(options, config)
@@ -463,9 +461,9 @@
             // active status
             onStatus(){
                 if(this.row.status)
-                    this.row.status = false;
+                    this.row.status = 0;
                 else
-                    this.row.status = true;
+                    this.row.status = 1;
             },
 
             // get id from Box Checked
@@ -474,6 +472,27 @@
                     this.row.permissions_ids.push(id)
                 } else {
                     this.row.permissions_ids.splice(this.row.permissions_ids.indexOf(id), 1)
+                }
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+            },
+
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
                 }
             },
 

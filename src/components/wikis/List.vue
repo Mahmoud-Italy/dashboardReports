@@ -220,7 +220,7 @@
                                             </span>
                                         </th>
                                         <th class="text-center" style="width: 20%">Destination
-                                            <span v-if="!authorLoading && filter_by=='destination'"
+                                            <span v-if="!authorLoading && filter_by == 'destination'"
                                                 @click="removeFilter()"
                                                 class="cursor-pointer ti-close">
                                             </span>
@@ -230,7 +230,7 @@
                                             </span>
                                         </th>
                                         <th class="text-center" style="width: 20%">Author
-                                            <span v-if="!authorLoading && filter_by=='author'"
+                                            <span v-if="!authorLoading && filter_by == 'author'"
                                                 @click="removeFilter()"
                                                 class="cursor-pointer ti-close">
                                             </span>
@@ -239,7 +239,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">No. Packages</th>
+                                        <th class="text-center" style="width: 10%">Packages No.</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -305,11 +305,11 @@
                                         <span v-if="!row.user" class="text-center"> - </span>
                                         <router-link v-if="row.user" 
                                             :to="{ name: 'filter-wikis', 
-                                                params:{filter_by:'author',filter:row.user.encrypt_id}}" 
+                                                params:{filter_by:'author', filter:row.user.encrypt_id}}" 
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
                                                 <img class="u-avatar-xs rounded-circle mr-2"
-                                                    src="/assets/img/default_avatar.png">
+                                                    :src="row.user.image">
                                                 <span class="media-body">{{ row.user.name }}</span>
                                             </div>
                                         </router-link>
@@ -407,7 +407,7 @@
                                         <th>Title</th>
                                         <th class="text-center">Destination</th>
                                         <th class="text-center">Author</th>
-                                        <th class="text-center">No. Packages</th>
+                                        <th class="text-center">Packages No.</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>

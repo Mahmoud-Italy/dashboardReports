@@ -87,7 +87,7 @@
 
                         <!-- PackageType -->
                         <li class="u-sidebar-nav-menu__item">
-                            <router-link :to="{ name: 'packageTypes' }" class="u-sidebar-nav-menu__link"
+                            <router-link :to="{ name: 'packagetypes' }" class="u-sidebar-nav-menu__link"
                                 :class="(this.$route.path == '/packageTypes' || 
                                         this.$route.path == '/packageTypes/status/active' ||
                                         this.$route.path == '/packageTypes/status/inactive' ||

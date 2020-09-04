@@ -27,7 +27,7 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Tags</li>
+                            <li class="breadcrumb-item active" aria-current="page">Settings</li>
                         </ol>
                         <!-- End Breadcrumb -->
 
@@ -113,20 +113,20 @@
                      <header class="card-header">
                         <h2 class="h4 card-header-title">
                             <router-link class="pg-hd"
-                                :to="{ name: 'tags' }"
+                                :to="{ name: 'settings' }"
                                 :class="(status == '') ? 'active' : '' ">All</router-link> 
                             <span class="pg-hd no-decoration f14"> ({{statusBar.all}}) </span>&nbsp;|&nbsp; 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-tags', params:{status: 'active'} }" 
+                                :to="{ name: 'status-settings', params:{status: 'active'} }" 
                                 :class="(status == 'active') ? 'active' : '' ">Active</router-link>
                            <span class="pg-hd no-decoration f14"> ({{statusBar.active}}) </span>&nbsp;|&nbsp; 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-tags', params:{status: 'inactive'} }" 
+                                :to="{ name: 'status-settings', params:{status: 'inactive'} }" 
                                 :class="(status == 'inactive') ? 'active' : '' ">Inactive</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.inactive}}) </span>&nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-tags', params:{status: 'trash'} }" 
+                                :to="{ name: 'status-settings', params:{status: 'trash'} }" 
                                 :class="(status == 'trash') ? 'active' : '' ">Trash</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.trash}}) </span>
 
@@ -254,7 +254,7 @@
                                     <td class="font-weight-semi-bold text-center">
                                         <span v-if="!row.user" class="text-center"> - </span>
                                         <router-link v-if="row.user" 
-                                            :to="{ name: 'filter-tags', 
+                                            :to="{ name: 'filter-settings', 
                                                 params:{filter_by:'author',filter:row.user.encrypt_id}}" 
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
@@ -375,22 +375,34 @@
             <div class="col-md-4 mb-5">
                 <div class="card">
                     <header class="card-header">
-                        <h2 class="h4 card-header-title">Add New</h2>
+                        <h2 class="h4 card-header-title" 
+                            v-html="(btn_status == 'Update' ? 'Edit Row' : 'Add New')"></h2>
                     </header>
 
                 <form @submit.prevent="createOrUpdate" enctype="multipart/form-data">
                     <div class="card-body pt-0">
                         
-                        <!-- Name -->
+                        <!-- Title -->
                         <div class="form-group">
-                            <label for="input1">Name</label>
+                            <label for="input1">Title</label>
                             <input class="form-control"
                                 id="input1"  
                                 type="text" 
-                                v-model="row.name"
+                                v-model="row.title"
                                 required="">
                         </div>
-                        <!-- End Name -->
+                        <!-- End Title -->
+
+                        <!-- Body 1 -->
+                        <div class="form-group">
+                            <label for="input2">Body</label>
+                            <textarea class="form-control"
+                                id="input2"  
+                                rows="5" 
+                                v-model="row.body1">
+                            </textarea>
+                        </div>
+                        <!-- End Body1 -->
                         
                         
                         <div class="form-group">
@@ -401,7 +413,7 @@
                                     </span>Loading...
                                 </span>
                                 <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> {{ btn_status }} Tag</span>
+                                <span v-if="!btnLoading"> {{ btn_status }} Setting</span>
                             </button>
                         </div>
 
@@ -461,7 +473,8 @@
                 },
                 row: {
                     encrypt_id: '',
-                    name: '',
+                    title: '',
+                    body1: '',
                 },
                 permissions: {
                     add: false,
@@ -591,7 +604,7 @@
                 };
                 let vm = this;
                 const options = {
-                    url: page_url || window.baseURL+'/tags',
+                    url: page_url || window.baseURL+'/settings',
                     method: 'GET',
                     data: {},
                     params: {
@@ -659,7 +672,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/tags/export?id='+this.selected);
+                    this.axios.post(window.baseURL+'/settings/export?id='+this.selected);
                 return res.data.rows;
             },
             startDownload(){
@@ -676,7 +689,6 @@
 
             // remove sessions
             removeLocalStorage() {
-                localStorage.removeItem('permissions');
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('user_image');
                 localStorage.removeItem('user_name');
@@ -691,7 +703,8 @@
                 this.btn_status = 'Update';
 
                 this.row.encrypt_id = row.encrypt_id;
-                this.row.name = row.name;
+                this.row.title = row.title;
+                this.row.body1 = row.body1;
             },
 
             // createOrUpdate
@@ -702,18 +715,19 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 let type = 'POST';
-                let path = 'tags';
+                let path = 'settings';
                 let msg  = 'Added';
                 if(this.edit) {
                     type = 'PUT';
-                    path = 'tags/'+this.row.encrypt_id;
+                    path = 'settings/'+this.row.encrypt_id;
                     msg  = 'Updated';
                 }
                 const options = {
                     url: window.baseURL+'/'+path,
                     method: type,
                     data: {
-                        name: this.row.name
+                        title: this.row.title,
+                        body1: this.row.body1
                     }
                 }
                 this.axios(options)
@@ -723,7 +737,8 @@
 
                         // Clear rows
                     this.row.encrypt_id = '';
-                    this.row.name = '';
+                    this.row.title = '';
+                    this.row.body1 = '';
 
                     iziToast.success({
                         icon: 'ti-check',
@@ -789,7 +804,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/tags/active/'+id,
+                  url: window.baseURL+'/settings/active/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -822,7 +837,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/tags/inactive/'+id,
+                  url: window.baseURL+'/settings/inactive/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -866,7 +881,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/tags/trash/'+id,
+                  url: window.baseURL+'/settings/trash/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -911,7 +926,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/tags/restore/'+id,
+                  url: window.baseURL+'/settings/restore/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -956,7 +971,7 @@
                         'Authorization': `Bearer `+this.auth.access_token,
                     };
                     const options = {
-                        url: window.baseURL+'/tags/'+id,
+                        url: window.baseURL+'/settings/'+id,
                         method: 'DELETE',
                         data: {},
                     }

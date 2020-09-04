@@ -202,7 +202,7 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th style="width:25%">Title
+                                        <th style="width:30%">Title
                                             <span v-if="!orderLoading"
                                                 @click="onOrderBy('title')"
                                                 class="cursor-pointer " 
@@ -218,7 +218,6 @@
                                         </th>
                                         <th class="text-center" style="width: 10%">Writer</th>
                                         <th class="text-center" style="width: 20%">Author</th>
-                                        <th class="text-center" style="width: 15%">No. Packages</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -226,7 +225,7 @@
 
                                 <tbody v-if="dataLoading">
                                     <tr>
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <div class="spinner-grow" role="status">
                                               <span class="sr-only">Loading...</span>
                                             </div>
@@ -236,7 +235,7 @@
 
                                 <tbody v-if="!dataLoading && !rows.length">
                                     <tr>
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <span>No results found.</span>
                                         </td>
                                     </tr>
@@ -267,13 +266,12 @@
                                         <span v-if="!permissions.edit">{{ row.title }}</span>
                                     </td>
 
-                                
                                     <td class="font-weight-semi-bold text-center">
                                         <router-link :to="{ name: 'filter-articles', 
-                                            params:{filter_by: 'region', 'filter':row.title} }" 
+                                            params:{filter_by: 'writer', 'filter':row.writer.title} }" 
                                             class="text-decoration-hover">
                                             <span class="badge badge-md badge-pill badge-danger-soft">
-                                                {{ row.title }}
+                                                {{ row.writer.title }}
                                             </span>
                                         </router-link>
                                     </td>
@@ -290,10 +288,6 @@
                                                 <span class="media-body">{{ row.user.name }}</span>
                                             </div>
                                         </router-link>
-                                    </td>
-
-                                    <td class="font-weight-semi-bold text-center">
-                                        <span> 0 </span>
                                     </td>
 
                                     <td v-html="(row.deleted_at) ? row.deleted_at : 
@@ -384,7 +378,6 @@
                                         <th>Title</th>
                                         <th class="text-center">Writer</th>
                                         <th class="text-center">Author</th>
-                                        <th class="text-center">No. Packages</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>

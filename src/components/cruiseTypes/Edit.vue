@@ -9,7 +9,6 @@
             <div class="u-content">
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2">Cruise Types
-
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
                             <div class="dropdown">
@@ -19,7 +18,6 @@
                             </div>
                         </div>
                         <!-- End Role -->
-
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -29,7 +27,7 @@
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
                             <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'cruiseTypes' }">Cruise Types</router-link>
+                                <router-link :to="{ name: 'cruisetypes' }">Cruise Types</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
@@ -37,32 +35,33 @@
                     <!-- End Breadcrumb -->
 
 
-        <div v-if="pgLoading" class="row h-100">
-            <div class="container text-center">
-                <p><br/></p>
-                <div class="spinner-grow" role="status">
-                    <span class="sr-only">Loading...</span>
+            <div v-if="pgLoading" class="row h-100">
+                <div class="container text-center">
+                    <div class="spinner-grow mt-5" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </div>
-                <p><br/></p>
             </div>
-        </div>
 
-        <form v-if="!pgLoading" @submit.prevent="editRow" enctype="multipart/form-data" class="h-100">
+            <form v-if="!pgLoading" @submit.prevent="editRow" enctype="multipart/form-data" class="h-100">
 
-            <!-- Content -->
-            <div class="tab-content">
-                <div class="row">        
+                <!-- Content -->
+                <div class="tab-content">
+                    <div class="row">      
+
+
+                    <!-- ********** Cards ******* -->
                     <div class="col-md-8 mb-5">
 
-                         <!-- Card packageType -->
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="accordion" class="accordion">
-                                <div id="TabType" class="card-header">
+                        <!-- Card Cruise Type -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="accordion" class="accordion">
+                                    <div id="TabType" class="card-header">
                                         <h2 class="h4 card-header-title" 
                                             @click="collapseToggle('Type')"
                                             aria-expanded="false" 
-                                            aria-controls="collapseMeta" 
+                                            aria-controls="collapseType" 
                                             data-toggle="collapse"
                                             data-target="#collapseType">Cruise Type
                                             <span id="iconToggleType" 
@@ -79,42 +78,51 @@
 
                                         <!-- Title -->
                                         <div class="form-group">
-                                            <label for="inputText1">Name</label>
+                                            <label for="input1">Title</label>
                                             <input class="form-control" 
-                                                    id="inputText1" 
+                                                    id="input1" 
                                                     type="text" 
-                                                    v-model="row.name" 
+                                                    v-model="row.title" 
                                                     @keyup="onTitleChange">
                                         </div>
                                         <!-- End Title -->
 
                                         <!-- Slug -->
                                         <div class="form-group">
-                                            <label for="inputText2">Slug</label>
+                                            <label for="input2">Slug</label>
                                             <input class="form-control text-lowercase"
-                                                    id="inputText2"  
+                                                    id="input2"  
                                                     type="text" 
                                                     v-model="row.slug" 
                                                     @keydown.space.prevent 
                                                     @paste="onSlugPaste"
-                                                    @change="onSlugChange">
+                                                    @change="onSlugChange(false)">
                                         </div>
                                         <!-- End Slug -->
+
+                                        <!-- Sort -->
+                                        <div class="form-group">
+                                            <label for="input3">Sort</label>
+                                            <input class="form-control" 
+                                                    id="input3" 
+                                                    type="number"
+                                                    min="0" 
+                                                    v-model.number="row.sort">
+                                        </div>
+                                        <!-- End Title -->
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End Card packageType -->
+                        <!-- End Card Cruise Type -->
 
-                </div>
-
-
-
+                    </div>
+                    <!-- ********** End Cards ******* -->
 
 
-                    <!-- ******* SideNavbar ******** -->
+                    <!-- ******* Navbar ******** -->
                     <div class="col-md-4 mb-5">
 
                         <!-- Nav Category -->
@@ -149,7 +157,7 @@
                                                 <select class="form-control custom-select"
                                                     v-if="!parentLoading" 
                                                     v-model="row.parent_id">
-                                                    <option value="">Select Parent</option>
+                                                    <option>Select Parent</option>
                                                     <option value="">No Parent</option>
                                                     <option v-for="(parent, index) in parents" 
                                                             :key="index"
@@ -158,65 +166,15 @@
                                                     </option>
                                                 </select>
                                             </div>
-                                            <!-- End Region -->
+                                            <!-- End Category -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End NavOne -->
-                        <!-- NavTwo -->
-                        <div class="card mt-5">
-                            <div class="card-body">
-                                <div id="accordionNav" class="accordion">
-                                    <div id="NavImage" class="card-header">
-                                        <h2 class="h4 card-header-title"
-                                            @click="collapseToggle('Image')"  
-                                            aria-expanded="false" 
-                                            aria-controls="collapseNavImage" 
-                                            data-toggle="collapse" 
-                                            data-target="#collapseNavImage">Featued Image
-                                            <span id="iconToggleImage" 
-                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
-                                            </span>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseNavImage" 
-                                        class="collapse" 
-                                        aria-labelledby="NavImage" 
-                                        data-parent="#accordionNav">
-                                        <div class="col-12 pt-3">
-                                            <!-- Image -->
-                                            <div class="form-group">
-                                                <img :src="row.preview" 
-                                                    class="mb-2 h200 custom-image">
-                                                <input type="file" 
-                                                    class="form-control" 
-                                                    ref="myDropify" 
-                                                    v-on:change="onImageChange">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Image alt</label>
-                                                <input type="text" 
-                                                    class="form-control"
-                                                    v-model="row.image_alt">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Image title</label>
-                                                <input type="text" 
-                                                    class="form-control"
-                                                    v-model="row.image_title">
-                                            </div>
-                                            <!-- Image -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End NavTwo -->
+                        <!-- End Nav Category -->
 
-
-                        <!-- NavThree -->
+                        <!-- Nav Status -->
                         <div class="card mt-5">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
@@ -251,7 +209,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <!-- Status -->
+                                            <!-- End Status -->
 
                                             <!-- Header -->
                                             <div class="form-group">
@@ -295,7 +253,9 @@
                         </div>
                         <!-- End NavThree -->
 
-                        </div>
+                    </div>
+                    <!-- ******* End Navbar ******** -->
+                    
                     </div>
                 </div>
                 <!-- End Content -->
@@ -359,22 +319,18 @@
                     access_token: '',
                 },
                 row: {
+                    // row
+                    title: '',
+                    slug: '',
+                    sort: 0,
+
+                    // navbar
                     parent_id: '',
+
+                    // status & visibility
                     status: 1,
                     view_in_header: 0,
                     view_in_footer: 0,
-
-                    preview: '',
-                    image: '',
-                    image_alt: '',
-                    image_title: '',
-                    
-                    slug: '',
-                    name: '',
-
-                    meta_title: '',
-                    meta_keywords: '',
-                    meta_description: '',
                 },
                 parnets: [],
                 parentLoading: true,
@@ -398,17 +354,6 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },  
 
             // fetch Row
             fetchRow() {
@@ -427,25 +372,26 @@
                     .then(res => {
                     this.pgLoading = false;
 
+                    // row
+                    this.row.title = res.data.row.title;
+                    this.row.slug = res.data.row.slug;
+                    this.row.sort = res.data.row.sort;
+
+                    // navbar
                     this.row.parent_id = (res.data.row.parent) ? res.data.row.parent.id : null;
+
+                    // status & vibisility
                     this.row.status = res.data.row.status;
                     this.row.view_in_header = res.data.row.view_in_header;
                     this.row.view_in_footer = res.data.row.view_in_footer;
 
-                    this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.age_title : null;
-                        
-                    this.row.slug = res.data.row.slug;
-                    this.row.name = res.data.row.name;
-
-                    this.fetchParents();
+                    this.fetchParents(); // call next func
                     })
                     .catch(() => {})
                     .finally(() => {});
             },
 
-             // Fetch fetchParents
+            // Fetch Parents
             fetchParents(){
                 this.parentLoading = true;
                 this.axios.defaults.headers.common = {
@@ -471,15 +417,8 @@
                     .finally(() => {});
             },
 
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
-
-
-            // Add New
+          
+            // edit New
             editRow(){
                 this.btnLoading = true;
                 this.axios.defaults.headers.common = {
@@ -491,13 +430,18 @@
                     url: window.baseURL+'/cruiseTypes/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
-                        parent_id: this.row.parent_id,
+                        // row
+                        title: this.row.title,
+                        slug: this.row.slug,
+                        sort: this.row.sort,
+
+                        // navbar
+                         parent_id: this.row.parent_id,
+
+                        // status & visibility
                         status: this.row.status,
                         view_in_header: this.row.view_in_header,
                         view_in_footer: this.row.view_in_footer,
-
-                        name: this.row.name,
-                        slug: this.row.slug,
                     }
                 }
                 this.axios(options, config)
@@ -508,7 +452,7 @@
                             title: 'Great job,',
                             message: 'Item Updated Successfully.',
                         });
-                        this.$router.push({ name: 'cruiseTypes' })
+                        this.$router.push({ name: 'cruisetypes' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -520,7 +464,7 @@
                             iziToast.warning({
                                 icon: 'ti-alert',
                                 title: 'Wow-man,',
-                                message: err.response.data.message
+                                message: (err.response) ? err.response.data.message : ''+err
                             });
                         }
                     })
@@ -529,7 +473,7 @@
 
             // Title
             onTitleChange() {
-                this.onSlugChange(this.row.name);
+                this.onSlugChange(this.row.title);
             },
 
             // on Paste
@@ -537,7 +481,10 @@
                 let str = this.row.slug;
                 this.onSlugChange(str);
             },
-            onSlugChange(str){
+            onSlugChange(str=''){
+                if(!str) {
+                    str = this.row.slug;
+                }
                 this.row.slug = str.replace(/\s+/g, '-');
             },
 
@@ -563,10 +510,22 @@
                     this.row.view_in_footer = 1;
             },
 
+             // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
+            },
+
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'cruiseTypes' });
+                    this.$router.push({ name: 'cruisetypes' });
                 }
             },
 

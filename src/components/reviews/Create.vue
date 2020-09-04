@@ -204,22 +204,27 @@
                                         aria-labelledby="NavDestinations" 
                                         data-parent="#accordionNav">
                                         <div class="col-12 pt-3">
-                                            <!-- Destination -->
+                                            <!-- Destinations -->
                                             <div class="form-group">
                                                 <div v-if="destinationLoading" class="text-center">
                                                     <span class="spinner-grow spinner-grow-sm mr-1" 
-                                                        role="status" aria-hidden="true">
+                                                        role="status" 
+                                                        aria-hidden="true">
                                                     </span>
                                                 </div>
                                                 <select class="form-control custom-select"
                                                         v-if="!destinationLoading" 
                                                         v-model="row.destination_id">
                                                         <option value="">Select Destination</option>
-                                                        <option v-for="(destination, index) in destinations" 
+                                                        <optgroup v-for="(region, index) in destinations" 
                                                                 :key="index"
+                                                                :label="region.title">
+                                                            <option v-for="(destination,idx) in region.destinations"
+                                                                :key="idx"
                                                                 :value="destination.id">
                                                                 {{ destination.title }}
-                                                        </option>
+                                                            </option>
+                                                        </optgroup>
                                                 </select>
                                             </div>
                                             <!-- End Destination -->
@@ -253,9 +258,10 @@
                                         <div class="col-12 pt-3">
                                             <!-- Image -->
                                             <div class="form-group">
-                                                <img v-if="row.preview" 
-                                                    :src="row.preview" 
-                                                    class="mb-2 h200 custom-image">
+                                                <label>Image</label>
+                                                <img v-if="row.image_preview" 
+                                                    :src="row.image_preview" 
+                                                    class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
                                                     ref="myDropify" 
@@ -408,14 +414,7 @@
                     access_token: '',
                 },
                 row: {
-                    destination_id: '',
-                    status: 1,
-                    view_in_home: 0,
-                    preview: '',
-                    image: '',
-                    image_alt: '',
-                    image_title: '',
-                    
+                    // row
                     name: '',
                     starts: '',
                     review_numbers: '',
@@ -423,25 +422,31 @@
                     email: '',
                     title: '',
                     body: '',
+                    sort: 1,
 
-                    meta_title: '',
-                    meta_keywords: '',
-                    meta_description: '',
+                    // navbar
+                    destination_id: '',
+
+                    // image
+                    image_preview: '',
+                    image_base64: '',
+                    image_alt: '',
+                    image_title: '',
+
+                    // status & visiblity
+                    status: 1,
+                    view_in_home: 0,
                 },
                 editor: {
-                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
-                    menubar: 'file edit view insert format tools table tc help',
-                    plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | removeformat | help',
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
                 },
+
                 destinationLoading: true,
                 destinations: [],
+
                 btnLoading: false,
             }
         },
@@ -460,18 +465,6 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },
-
             fetchDestinations() {
                 this.destinationLoading = true;
                 this.axios.defaults.headers.common = {
@@ -479,7 +472,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/destinations',
+                    url: window.baseURL+'/regions',
                     method: 'GET',
                     data: {},
                     params: {
@@ -496,13 +489,6 @@
                     .finally(() => {});
             },
 
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
-
 
             // Add New
             addNew(){
@@ -516,17 +502,24 @@
                     url: window.baseURL+'/reviews',
                     method: 'POST',
                     data: {
-                        destination_id: this.row.destination_id,
-                        view_in_home: this.row.view_in_home,
-                        status: this.row.status,
+                        // row
+                        name: this.row.name,
+                        email: this.row.email,
+                        title: this.row.title,
+                        body: this.row.body,
+                        sort: this.row.sort,
 
-                        image_url: this.row.image,
+                        // navbar
+                        destination_id: this.row.destination_id,
+
+                        // image
+                        image_base64: this.row.image_base64,
                         image_alt: this.row.image_alt,
                         image_title: this.row.image_title,
 
-                        name: this.row.name,
-                        title: this.row.title,
-                        body: this.row.body
+                        // status & visibility
+                        status: this.row.status,
+                        view_in_home: this.row.view_in_home,
                     }
                 }
                 this.axios(options, config)
@@ -573,6 +566,20 @@
                 this.row.slug = str.replace(/\s+/g, '-');
             },
 
+            // Upload Featured image
+            onImageChange(e){
+                const file = e.target.files[0];
+                this.row.image_preview = URL.createObjectURL(file);
+                this.createBase64Image(file);
+            },
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.image_base64 = e.target.result;
+                };
+            },
+
             // active status
             onStatus(){
                 if(this.row.status)
@@ -585,6 +592,27 @@
                     this.row.view_in_home = 0;
                 else
                     this.row.view_in_home = 1;
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+            },
+
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
             },
 
             // Cancel

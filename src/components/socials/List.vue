@@ -375,7 +375,8 @@
             <div class="col-md-4 mb-5">
                 <div class="card">
                     <header class="card-header">
-                        <h2 class="h4 card-header-title">Add New</h2>
+                        <h2 class="h4 card-header-title" 
+                            v-html="(btn_status == 'Update' ? 'Edit Row' : 'Add New')"></h2>
                     </header>
 
                 <form @submit.prevent="createOrUpdate" enctype="multipart/form-data">

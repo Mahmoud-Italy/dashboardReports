@@ -279,6 +279,11 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
+                                        <span v-if="!row.destination"> - </span>
+                                        <span v-if="row.destination" 
+                                            class="badge badge-md badge-pill badge-danger-soft">
+                                            {{ row.destination.title }}
+                                        </span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">

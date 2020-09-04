@@ -11,7 +11,7 @@
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2">Reviews
                         <router-link v-if="permissions.add"
-                            :to="{ name: 'create-pages' }" 
+                            :to="{ name: 'create-reviews' }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
@@ -797,7 +797,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/pages/trash/'+id,
+                  url: window.baseURL+'/reviews/trash/'+id,
                   method: 'POST',
                   data: {},
               }

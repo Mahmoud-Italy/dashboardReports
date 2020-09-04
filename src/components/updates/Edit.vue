@@ -88,16 +88,16 @@
                                         </div>
                                         <!-- End Title -->
 
-                                        <!-- Order -->
+                                        <!-- Sort -->
                                         <div class="form-group">
-                                            <label for="input2">Order</label>
+                                            <label for="input2">Sort</label>
                                             <input class="form-control"
                                                     id="input2"  
                                                     type="number"
                                                     min="0" 
-                                                    v-model.number="row.order">
+                                                    v-model.number="row.sort">
                                         </div>
-                                        <!-- End Order -->
+                                        <!-- End Sort -->
                                             
                                         <!-- Body -->
                                         <div class="form-group">
@@ -155,14 +155,34 @@
                                         <div class="col-12 pt-3">
                                             <!-- Image -->
                                             <div class="form-group">
-                                                <img :src="row.preview" 
+                                                <label>Image</label>
+                                                <img v-if="row.image_preview" 
+                                                    :src="row.image_preview" 
                                                     class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
                                                     ref="myDropify" 
                                                     v-on:change="onImageChange">
                                             </div>
-                                            <!-- Image -->
+                                            <!-- End Image -->
+
+                                            <!-- Image Alt -->
+                                            <div class="form-group">
+                                                    <label>Image alt</label>
+                                                    <input type="text" 
+                                                        class="form-control"
+                                                        v-model="row.image_alt">
+                                            </div>
+                                            <!-- End Image Alt -->
+
+                                            <!-- Image Title -->
+                                            <div class="form-group">
+                                                    <label>Image title</label>
+                                                    <input type="text" 
+                                                        class="form-control"
+                                                        v-model="row.image_title">
+                                            </div>
+                                            <!-- End Image Title -->
                                         </div>
                                     </div>
                                 </div>
@@ -280,27 +300,29 @@
                     access_token: '',
                 },
                 row: {
-                    status: true,
-                    preview: "",
-                    image: '',
+                    // row
                     title: '',
                     body: '',
-                    order: 0,
+                    sort: 0,
+
+                    // image
+                    image_preview: '',
+                    image_base64: '',
+                    image_alt: '',
+                    image_title: '',
+
+                    // status & visiblity
+                    status: 1, 
                 },
                 editor: {
-                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
-                    menubar: 'file edit view insert format tools table tc help',
-                    plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | removeformat | help',
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
                 },
-                btnLoading: false,
+
                 pgLoading: true,
+                btnLoading: false,
             }
         },
         mounted() {},
@@ -318,17 +340,6 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },
 
             // fetch Row
             fetchRow() {
@@ -347,27 +358,25 @@
                     .then(res => {
                     this.pgLoading = false;
 
-                    this.row.order = res.data.row.order;
-                    this.row.status= res.data.row.status;
-
-                    this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-
+                    // row
                     this.row.title = res.data.row.title;
                     this.row.body = res.data.row.body;
-                    this.fetchRoles();
+                    this.row.sort = res.data.row.sort;
+
+
+                    // image
+                    this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
+
+                    // status & visibility
+                    this.row.status = res.data.row.status;
+                    
                     })
                     .catch(() => {})
                     .finally(() => {});
 
             },
 
-
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
 
 
             // edtiRow
@@ -382,11 +391,18 @@
                     url: window.baseURL+'/updates/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
-                        order: this.row.order,
-                        status: this.row.status,
-                        image: this.row.image,
+                        // row
                         title: this.row.title,
                         body: this.row.body,
+                        sort: this.row.sort,
+
+                        // image
+                        image_base64: this.row.image_base64,
+                        image_alt: this.row.image_alt,
+                        image_title: this.row.image_title,
+
+                        // status & visibility
+                        status: this.row.status,
                     }
                 }
                 this.axios(options, config)
@@ -402,7 +418,7 @@
                     .catch(err => {
                         // 403 Forbidden
                         if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage()
+                            this.removeLocalStorage();
                             this.$router.push({ name: 'forbidden' })
                         } else {
                             this.btnLoading = false;
@@ -416,12 +432,47 @@
                     .finally(() => {})
             },
 
+            // Upload Featured image
+            onImageChange(e){
+                const file = e.target.files[0];
+                this.row.image_preview = URL.createObjectURL(file);
+                this.createBase64Image(file);
+            },
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.image_base64 = e.target.result;
+                };
+            },
+
             // active status
             onStatus(){
                 if(this.row.status)
-                    this.row.status = false;
+                    this.row.status = 0;
                 else
-                    this.row.status = true;
+                    this.row.status = 1;
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+            },
+
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
             },
 
             // Cancel

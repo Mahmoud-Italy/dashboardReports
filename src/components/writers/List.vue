@@ -15,7 +15,7 @@
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
-
+                        <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
                             <div class="dropdown">
                                 <span class="badge badge-md badge-pill badge-secondary-soft">
@@ -23,6 +23,7 @@
                                 </span>
                             </div>
                         </div>
+                        <!-- End Role -->
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -237,7 +238,7 @@
 
                                 <tbody v-if="dataLoading">
                                     <tr>
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <div class="spinner-grow" role="status">
                                               <span class="sr-only">Loading...</span>
                                             </div>
@@ -247,7 +248,7 @@
 
                                 <tbody v-if="!dataLoading && !rows.length">
                                     <tr>
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <span>No results found.</span>
                                         </td>
                                     </tr>
@@ -282,12 +283,14 @@
                                         <span v-if="!row.user" class="text-center"> - </span>
                                         <router-link v-if="row.user" 
                                             :to="{ name: 'filter-writers', 
-                                                params:{filter_by:'author',filter:row.user.encrypt_id}}" 
-                                            class="text-decoration-hover black">
+                                                params:{filter_by:'author', filter:row.user.encrypt_id}}" 
+                                                class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
                                                 <img class="u-avatar-xs rounded-circle mr-2"
-                                                    src="/assets/img/default_avatar.png">
-                                                <span class="media-body">{{ row.user.name }}</span>
+                                                    :src="row.user.image">
+                                                <span class="media-body" 
+                                                      v-tooltip="row.user.role">{{ row.user.name }}
+                                                </span>
                                             </div>
                                         </router-link>
                                     </td>
@@ -569,7 +572,7 @@
                 this.authorLoading = true;
                 this.filter = '';
                 this.filter_by = '';
-                this.fetchData('', true);
+                this.$router.push({ name: 'writers' })
             },
 
             // Fetch Data
@@ -670,7 +673,6 @@
 
             // remove sessions
             removeLocalStorage() {
-                localStorage.removeItem('permissions');
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('user_image');
                 localStorage.removeItem('user_name');

@@ -81,17 +81,17 @@
                 </div>
                 <!-- End Logs -->
 
-                <!-- App Settings -->
+                <!-- App Apps -->
                 <div class="u-header-section">
                     <div class="u-header-dropdown dropdown pt-1">
-                        <router-link :to="{ name: 'settings' }" class="u-header-invoker d-flex align-items-center">
+                        <router-link :to="{ name: 'apps' }" class="u-header-invoker d-flex align-items-center">
                           <span class="position-relative">
                                 <span class="ti-layout-grid2 u-header-invoker__icon"></span>
                             </span>
                         </router-link>
                     </div>
                 </div>
-                <!-- End App Settings -->
+                <!-- End Apps -->
 
                 <!-- User Profile -->
                 <div class="u-header-section u-header-section--profile">

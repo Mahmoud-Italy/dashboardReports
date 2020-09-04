@@ -234,18 +234,18 @@
                                             </div>
                                             <!-- End Stars No. -->
 
-                                            <!-- Order -->
+                                            <!-- Sort -->
                                             <div class="col-4 no-rpadding">
                                                 <div class="form-group">
-                                                    <label for="inputText8">Order</label>
+                                                    <label for="inputText8">Sort</label>
                                                     <input class="form-control" 
                                                             id="inputText8" 
                                                             type="number"
                                                             min="0" 
-                                                            v-model.number="row.order">
+                                                            v-model.number="row.sort">
                                                 </div>
                                             </div>
-                                            <!-- End Order -->
+                                            <!-- End Sort -->
                                         </div>
 
 
@@ -559,11 +559,11 @@
                                                             v-model="row.itinerarie_item_body[i+'_'+x]">
                                                 </div>
                                                 <div class="form-group col-2">
-                                                    <label :for="'poInput2'+i+'_'+x">Order</label>
+                                                    <label :for="'poInput2'+i+'_'+x">Sort</label>
                                                     <input class="form-control" 
                                                             :id="'poInput2'+i+'_'+x" 
                                                             type="text" 
-                                                            v-model="row.itinerarie_item_order[i+'_'+x]">
+                                                            v-model="row.itinerarie_item_sort[i+'_'+x]">
                                                 </div>
                                                 <div class="form-group col-1">
                                                     <button type="button" 
@@ -1200,7 +1200,7 @@
                                         <!-- Image -->
                                         <div class="form-group">
                                             <label>Image</label>
-                                            <img :src="row.preview" 
+                                            <img :src="row.image_preview" 
                                                 class="mb-2 custom-image">
                                             <input type="file" 
                                                 class="form-control" 
@@ -1260,7 +1260,7 @@
                                         <!-- Image -->
                                         <div class="form-group">
                                             <label>Image</label>
-                                            <img :src="row.short_preview" 
+                                            <img :src="row.short_image_preview" 
                                                 class="mb-2 custom-image">
                                             <input type="file" 
                                                 class="form-control" 
@@ -1480,7 +1480,7 @@
                     start_price: '',
                     stars: '',
                     stars_no: '',
-                    order: 0,
+                    sort: 0,
                     tour_type: '',
                     duration: '',
                     visited_locations: '',
@@ -1499,11 +1499,11 @@
                     // itienraries
                     itineraries: [],
                     itinerarie_title: [],
-                    itinerarie_order: [],
+                    itinerarie_sort: [],
                     itinerarie_items: [],
                     itinerarie_item_title: [],
                     itinerarie_item_body: [],
-                    itinerarie_item_order: [],
+                    itinerarie_item_sort: [],
 
                     // galleries
                     galleries: [],
@@ -1540,13 +1540,13 @@
                     iconsValues: [],
 
                     // image
-                    preview: '',
+                    image_preview: '',
                     image_base64: '',
                     image_alt: '',
                     image_title: '',
 
                     // short image
-                    short_preview: '',
+                    short_image_preview: '',
                     short_image_base64: '',
                     short_image_alt: '',
                     short_image_title: '',
@@ -1844,8 +1844,7 @@
             // Upload images
             onGalleryChange(e, i){
                 const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                //this.row.gallery = file;
+                this.row.gallery_preview[i] = URL.createObjectURL(file);
                 this.createBase64Gallery(file, i);
             },
             createBase64Gallery(fileObject, i){
@@ -1857,8 +1856,7 @@
             },
             onImageChange(e){
                 const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                //this.row.image = file;
+                this.row.image_preview = URL.createObjectURL(file);
                 this.createBase64Image(file);
             },
             createBase64Image(fileObject){
@@ -1870,8 +1868,7 @@
             },
             onShortImageChange(e){
                 const file = e.target.files[0];
-                this.row.short_preview = URL.createObjectURL(file);
-                //this.row.image = file;
+                this.row.short_image_preview = URL.createObjectURL(file);
                 this.createBase64ShortImage(file);
             },
             createBase64ShortImage(fileObject){
@@ -1915,18 +1912,18 @@
                         for( let x = 1; x <= 10; x++) {
                         let item_title = this.row.itinerarie_item_title[i+'_'+x];
                         let item_body  = this.row.itinerarie_item_body[i+'_'+x];
-                        let item_order = this.row.itinerarie_item_order[i+'_'+x];
+                        let item_sort = this.row.itinerarie_item_sort[i+'_'+x];
                         if(item_title) {
                             this.row.itinerarie_items[x] = {
                                 'title': item_title,
                                 'body': item_body,
-                                'order': item_order
+                                'sort': item_sort
                             }
                         }
                     }
                     this.row.itineraries[i] = {
                         'title': this.row.itinerarie_title[i],
-                        'order': this.row.itinerarie_order[i],
+                        'sort': this.row.itinerarie_sort[i],
                         'items': this.row.itinerarie_items
                     }
                     this.row.itinerarie_items = []; // clear array
@@ -1960,7 +1957,7 @@
                         start_price: this.row.start_price,
                         stars: this.row.stars,
                         stars_no: this.row.stars_no,
-                        order: this.row.order,
+                        sort: this.row.sort,
                         tour_type: this.row.tour_type,
                         duration: this.row.duration,
                         visited_locations: this.row.visited_locations,
@@ -2014,7 +2011,7 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        //this.$router.push({ name: 'packages' })
+                        this.$router.push({ name: 'packages' })
                     })
                     .catch(err => {
                         // 403 Forbidden

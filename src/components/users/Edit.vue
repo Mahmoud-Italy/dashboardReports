@@ -196,7 +196,8 @@
                                         <div class="col-12 pt-3">
                                             <!-- Image -->
                                             <div class="form-group">
-                                                <img :src="row.preview" 
+                                                <label>Image</label>
+                                                <img :src="row.image_preview" 
                                                     class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
@@ -319,18 +320,27 @@
                     access_token: '',
                 },
                 row: {
-                    role: '',
-                    status: true,
-                    preview: "",
-                    image: '',
+                    // row
                     name: '',
                     email: '',
                     password: '',
+
+                    // navbar
+                    role: '',
+
+                    // image
+                    image_preview: '',
+                    image_base64: '',
+
+                    // status & visibility
+                    status: 1,
                 },
+                // roles
                 roles: [],
                 roleLoading: true,
-                btnLoading: false,
+
                 pgLoading: true,
+                btnLoading: false,
             }
         },
         mounted() {},
@@ -348,17 +358,7 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },
+            
 
             // fetch Row
             fetchRow() {
@@ -377,15 +377,22 @@
                     .then(res => {
                     this.pgLoading = false;
 
-                    this.row.role = res.data.row.role;
-                    this.row.status= res.data.row.status;
-
-                    this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-
+                    // row
                     this.row.name = res.data.row.name;
                     this.row.email = res.data.row.email;
+                    this.row.password = res.data.row.password;
 
-                    this.fetchRoles();
+                    // navbar
+                    this.row.role = res.data.row.role;
+
+                    // image
+                    this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
+
+                    // status & visibility
+                    this.row.status = res.data.row.status;
+
+                    this.fetchRoles(); // call next func
                     })
                     .catch(() => {})
                     .finally(() => {});
@@ -417,13 +424,6 @@
                     .finally(() => {});
             },
 
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
-
 
             // edtiRow
             editRow(){
@@ -437,12 +437,19 @@
                     url: window.baseURL+'/users/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
-                        role: this.row.role,
-                        status: this.row.status,
-                        image: this.row.image,
+                        // row
                         name: this.row.name,
                         email: this.row.email,
                         password: this.row.password,
+
+                        // navbar
+                        role: this.row.role,
+
+                        // image
+                        image_base64: this.row.image_base64,
+
+                        // status & visibility
+                        status: this.row.status,
                     }
                 }
                 this.axios(options, config)
@@ -489,12 +496,47 @@
                 this.row.slug = str.replace(/\s+/g, '-');
             },
 
+            // Upload Featured image
+            onImageChange(e){
+                const file = e.target.files[0];
+                this.row.image_preview = URL.createObjectURL(file);
+                this.createBase64Image(file);
+            },
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.image_base64 = e.target.result;
+                };
+            },
+
             // active status
             onStatus(){
                 if(this.row.status)
-                    this.row.status = false;
+                    this.row.status = 0;
                 else
-                    this.row.status = true;
+                    this.row.status = 1;
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+            },
+
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
             },
 
             // Cancel

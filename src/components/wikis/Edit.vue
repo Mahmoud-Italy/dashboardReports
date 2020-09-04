@@ -9,7 +9,6 @@
             <div class="u-content">
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2">Wikis
-
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
                             <div class="dropdown">
@@ -19,7 +18,6 @@
                             </div>
                         </div>
                         <!-- End Role -->
-
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -36,15 +34,12 @@
                     </nav>
                     <!-- End Breadcrumb -->
 
-
             <!-- Loading -->
             <div v-if="pgLoading" class="row h-100">
                 <div class="container text-center">
-                    <p><br/></p>
-                    <div class="spinner-grow" role="status">
+                    <div class="spinner-grow mt-5" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
-                    <p><br/></p>
                 </div>
             </div>
             <!-- End Loading -->
@@ -182,11 +177,22 @@
                                     </div>
                                     <!-- End Slug -->
 
+                                    <!-- Sort -->
+                                    <div class="form-group">
+                                        <label for="inputWiki3">Sort</label>
+                                        <input class="form-control" 
+                                                id="inputWiki3" 
+                                                type="number" 
+                                                min="0"
+                                                v-model.number="row.sort">
+                                    </div>
+                                    <!-- End Sort -->
+
                                     <!-- Short Body -->
                                     <div class="form-group">
-                                        <label for="inputWiki3">Short body</label>
+                                        <label for="inputEditor1">Short body</label>
                                         <editor
-                                            id="inputWiki3"
+                                            id="inputEditor1"
                                             v-model="row.short_body"
                                            :api-key="editor.api_key"
                                             :init="{
@@ -201,9 +207,9 @@
 
                                     <!-- Body -->
                                     <div class="form-group">
-                                        <label for="inputWiki4">Body</label>
+                                        <label for="inputEditor2">Body</label>
                                         <editor
-                                            id="inputWiki4"
+                                            id="inputEditor2"
                                             v-model="row.body"
                                             :api-key="editor.api_key"
                                             :init="{
@@ -250,15 +256,16 @@
                                 <div class="col-12 pt-3">
                                 
                                 <!-- For Loop -->
-                                <div v-for="i in 10" 
+                                <div v-for="i in row.items_key" 
                                     :key="i" 
                                     :ref="'frm_'+i" 
-                                    :class="(i > row.items_length.length) ? 'hidden' : '' " 
-                                    :id="'frm_'+i">
+                                    :id="'frm_'+i"
+                                    :class="(i == 0) ? 'hidden' : '' "
+                                    class="ui-for-div">
 
                                     <!-- Remove -->
                                     <div class="pull-right ui-mt-10">
-                                        <button v-if="i != 1"
+                                        <button v-if="i != 0"
                                             type="button" 
                                             class="btn btn-danger btn-circle btn-with-icon btn-sm" 
                                             @click="removeOption(i)">
@@ -277,16 +284,16 @@
                                     </div>
                                     <!-- End Title -->
 
-                                    <!-- Order -->
+                                    <!-- Sort -->
                                     <div class="form-group">
-                                        <label :id="'inputItems'+i">Order</label>
+                                        <label :id="'inputItems'+i">Sort</label>
                                         <input class="form-control" 
                                                 :id="'inputItems'+i" 
                                                 type="number"
-                                                min="1" 
-                                                v-model.number="row.items_order[i]">
+                                                min="0" 
+                                                v-model.number="row.items_sort[i]">
                                     </div>
-                                    <!-- End Order -->
+                                    <!-- End Sort -->
 
                                     <!-- Body -->
                                     <div class="form-group">
@@ -304,6 +311,21 @@
                                         />
                                     </div>
                                     <!-- End Short Body -->
+
+                                    <!-- image -->
+                                    <div class="form-group">
+                                        <label :for="'inputImage'+i">Image</label>
+                                        <p>
+                                            <img v-if="row.items_image_preview[i]" 
+                                                :src="row.items_image_preview[i]"
+                                                class="custom-image">
+                                        </p>
+                                        <input class="form-control" 
+                                                :id="'inputImage'+i" 
+                                                type="file"
+                                                v-on:change="onItemsImageChange($event, i)">
+                                    </div>
+                                    <!-- End image -->
 
                                     <!-- image alt -->
                                     <div class="form-group">
@@ -324,38 +346,23 @@
                                                 v-model="row.items_image_title[i]">
                                     </div>
                                     <!-- End image title -->
-
-                                    <!-- image -->
-                                    <div class="form-group">
-                                        <label :for="'inputImage'+i">Image</label>
-                                        <img v-if="row.items_preview[i]" 
-                                            :src="row.items_preview[i]">
-                                        <input class="form-control" 
-                                                :id="'inputImage'+i" 
-                                                type="file">
-                                    </div>
-                                    <!-- End image -->
                                     
+                                </div>
+                                <!-- End Loop -->
+
                                     <!-- Button -->
-                                    <div class="row pull-right ui-mt15" :ref="'btn_'+i" :id="'btn_'+i"
-                                        :class="(i != row.items_length.length) ? 'hidden' : ''">
+                                    <div class="row pull-right ui-mt15">
                                         <button type="button" 
                                             class="btn btn-dark btn-circle btn-with-icon"
-                                            @click="opnFrm(i+1)">
+                                            @click="opnFrm()">
                                             <span class="btn-icon ti-plus font-bold"></span>
                                         </button>
                                     </div>
                                     <!-- End Button -->
 
-                                    <div class="form-group">
-                                        <br/><hr><br/>
-                                    </div>
                                 </div>
-                                <!-- End Loop -->
-
+                            
                                 </div>
-                            </div>
-
                             </div>
                         </div>
                     </div>
@@ -394,8 +401,7 @@
 
                                     <div class="col-12 pt-3">
                                         
-                                        <!-- Destination -->
-                                        
+                                        <!-- Destinations -->
                                         <div class="form-group">
                                             <div v-if="destinationLoading" class="text-center">
                                                 <span class="spinner-grow spinner-grow-sm mr-1" 
@@ -407,11 +413,15 @@
                                                     v-if="!destinationLoading" 
                                                     v-model="row.destination_id">
                                                     <option value="">Select Destination</option>
-                                                    <option v-for="(destination, index) in destinations" 
+                                                    <optgroup v-for="(region, index) in destinations" 
                                                             :key="index"
+                                                            :label="region.title">
+                                                        <option v-for="(destination,idx) in region.destinations"
+                                                            :key="idx"
                                                             :value="destination.id">
                                                             {{ destination.title }}
-                                                    </option>
+                                                        </option>
+                                                    </optgroup>
                                             </select>
                                         </div>
                                         <!-- End Destination -->
@@ -449,28 +459,28 @@
                                         
                                         <!-- Packages -->
                                         <div class="form-group">
-                                                <div v-if="packageLoading" class="text-center">
-                                                    <span class="spinner-grow spinner-grow-sm mr-1" 
-                                                        role="status" 
-                                                        aria-hidden="true">
-                                                    </span>
-                                                </div>
-                                                <multiselect v-if="!packageLoading"
-                                                    id="multiselect"
-                                                    ref="multiselectRef"
-                                                    autocomplete="on"
-                                                    v-model="packagesValue" 
-                                                    :options="packagesOptions" 
-                                                    :multiple="true"
-                                                    :close-on-select="false" 
-                                                    :clear-on-select="false" 
-                                                    :hide-selected="true" 
-                                                    :preserve-search="true" 
-                                                    :taggable="false"
-                                                    placeholder="Type to search packages"
-                                                    :preselect-first="true">
-                                                </multiselect>
+                                            <div v-if="packageLoading" class="text-center">
+                                                <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                    role="status" 
+                                                    aria-hidden="true">
+                                                </span>
                                             </div>
+                                            <multiselect v-if="!packageLoading"
+                                                id="multiselect"
+                                                ref="multiselectRef"
+                                                autocomplete="on"
+                                                v-model="row.packagesValues" 
+                                                :options="packagesOptions" 
+                                                :multiple="true"
+                                                :close-on-select="false" 
+                                                :clear-on-select="false" 
+                                                :hide-selected="true" 
+                                                :preserve-search="true" 
+                                                :taggable="false"
+                                                placeholder="Type to search packages"
+                                                :preselect-first="true">
+                                            </multiselect>
+                                        </div>
                                         <!-- End Packages -->
 
                                     </div>
@@ -506,9 +516,9 @@
                                         <!-- Image -->
                                         <div class="form-group">
                                             <label>Image</label>
-                                            <img v-if="row.preview" 
-                                                :src="row.preview" 
-                                                class="mb-2 h200 custom-image">
+                                            <img v-if="row.image_preview" 
+                                                :src="row.image_preview" 
+                                                class="mb-2 custom-image">
                                             <input type="file" 
                                                 class="form-control" 
                                                 ref="myDropify" 
@@ -566,17 +576,17 @@
                                         
                                         <!-- Status -->
                                         <div class="form-group">
-                                                <div class="custom-control custom-switch mb-2">
-                                                    <input type="checkbox" 
-                                                        class="custom-control-input" 
-                                                        id="customSwitch1" 
-                                                        :checked="row.status"
-                                                        @click="onStatus">
-                                                    <label class="custom-control-label" 
-                                                        for="customSwitch1"
-                                                        v-html="(row.status) ? 'Active' : 'Inactive'">
-                                                    </label>
-                                                </div>
+                                            <div class="custom-control custom-switch mb-2">
+                                                <input type="checkbox" 
+                                                    class="custom-control-input" 
+                                                    id="customSwitch1" 
+                                                    :checked="row.status"
+                                                    @click="onStatus">
+                                                <label class="custom-control-label" 
+                                                    for="customSwitch1"
+                                                    v-html="(row.status) ? 'Active' : 'Inactive'">
+                                                </label>
+                                            </div>
                                         </div>
                                         <!-- End Status -->
 
@@ -660,7 +670,7 @@
     import iziToast from 'izitoast';
     
     export default {
-        name: 'Create',
+        name: 'Edit',
         components: {
             Header,
             Navigation,
@@ -675,55 +685,58 @@
                     access_token: '',
                 },
                 row: {
-                    status: 1,
-                    view_in_home: 0,
-
-                    destination_id: '',
-
-                    preview: '',
-                    image: '',
-                    image_alt: '',
-                    image_title: '',
-                    
-                    slug: '',
-                    title: '',
-                    body: '',
-                    short_body: '',
-
+                    // meta
                     meta_title: '',
                     meta_keywords: '',
                     meta_description: '',
 
+                    // row
+                    slug: '',
+                    title: '',
+                    sort: 0,
+                    body: '',
+                    short_body: '',
+
+                    // items
                     items: [],
-                    items_length: 0,
+                    items_key: 0,
                     items_title: [],
-                    items_order: [],
+                    items_sort: [],
                     items_body: [],
-                    items_preview: [],
-                    items_image_url: [],
+                    items_image_preview: [],
+                    items_image_base64: [],
                     items_image_alt: [],
                     items_image_title: [],
+
+                    // navbar
+                    destination_id: '',
+                    packagesValues: [],
+
+                    // image
+                    image_preview: '',
+                    image_base64: '',
+                    image_alt: '',
+                    image_title: '',
+
+                    // status & visibility
+                    status: 1,
+                    view_in_home: 0,
                 },
                 editor: {
-                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
-                    menubar: 'file edit view insert format tools table tc help',
-                    plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | removeformat | help',
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
                 },
-                packagesValue: [],
+
+                // destinations
+                destinationLoading: true,
+                destinations: [],
+
+                // packages
+                packageLoading: true,
                 packagesOptions: [],
 
-                destinations: [],
-                packages: [],
-
-                destinationLoading: true,
-                packageLoading: true,
                 pgLoading: true,
                 btnLoading: false,
             }
@@ -760,49 +773,65 @@
                     .then(res => {
                     this.pgLoading = false;
 
-                    this.row.status = res.data.row.status;
-                    this.row.view_in_home = res.data.row.view_in_home;
-
-                    this.row.destination_id = (res.data.row.destination) ? res.data.row.destination.id : null;
-
-                    this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.age_title : null;
-                        
-                    this.row.slug = res.data.row.slug;
-                    this.row.title = res.data.row.title;
-                    this.row.body = res.data.row.body;
-                    this.row.short_body = res.data.row.short_body;
-
+                    // meta
                     this.row.meta_title = (res.data.row.meta) ? res.data.row.meta.meta_title : null;
                     this.row.meta_keywords = (res.data.row.meta) ? res.data.row.meta.meta_keywords : null;
                     this.row.meta_description = (res.data.row.meta) ? res.data.row.meta.meta_description : null;
 
-                    this.row.items_length = res.data.row.items;
-                    if(this.row.items_length) {
-                        for(let i = 1; i <= this.row.items_length.length; i++) {
+                    // row
+                    this.row.slug = res.data.row.slug;
+                    this.row.title = res.data.row.title;
+                    this.row.sort = res.data.row.sort;
+                    this.row.body = res.data.row.body;
+                    this.row.short_body = res.data.row.short_body;
+
+                    // items
+                    if(res.data.row.items) {
+                        this.row.items_key = res.data.row.items.length;
+                        for(let i = 1; i <= this.row.items_key; i++) {
                             let x = i-1;
                             this.row.items_title[i] = res.data.row.items[x].title;
                             this.row.items_body[i] = res.data.row.items[x].body;
-                            this.row.items_order[i] = res.data.row.items[x].order;
+                            this.row.items_sort[i] = res.data.row.items[x].sort;
+
+                            this.row.items_image_preview[i] = (res.data.row.items[x].image) 
+                                                        ? res.data.row.items[x].image.image_url
+                                                        : null;
+                            this.row.items_image_base64[i] = (res.data.row.items[x].image) 
+                                                        ? res.data.row.items[x].image.image_url
+                                                        : null;
+                            this.row.items_image_alt[i] = (res.data.row.items[x].image) 
+                                                        ? res.data.row.items[x].image.image_alt
+                                                        : null;
+                            this.row.items_image_title[i] = (res.data.row.items[x].image) 
+                                                        ? res.data.row.items[x].image.image_title
+                                                        : null;
                         }
                     }
 
-                    this.fetchDestinations();
+                    // navbar
+                    this.row.destination_id = (res.data.row.destination) ? res.data.row.destination.id : null;
+                    this.row.packagesValues = (res.data.row.packagesValues) ?? [];
+
+                    // image
+                    this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
+                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.age_title : null;
+
+                    // status & visibility
+                    this.row.status = res.data.row.status;
+                    this.row.view_in_home = res.data.row.view_in_home;
+
+                    this.fetchDestinations(); // call next fun
                     })
                     .catch(err => {
-                        // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage()
-                            this.$router.push({ name: 'forbidden' })
-                        } else {
-                            this.btnLoading = false;
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow-man,',
-                                message: (err.response) ? err.response.data.message : ''+err
-                            });
-                        }
+                        this.btnLoading = false;
+                        iziToast.warning({
+                            icon: 'ti-alert',
+                            title: 'Wow-man,',
+                            message: (err.response) ? err.response.data.message : ''+err
+                        });
                     })
                     .finally(() => {});
             },
@@ -815,7 +844,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/destinations',
+                    url: window.baseURL+'/regions',
                     method: 'GET',
                     data: {},
                     params: {
@@ -827,7 +856,7 @@
                     .then(res => {
                         this.destinationLoading = false;
                         this.destinations = res.data.rows;
-                        this.fetchPackages();
+                        this.fetchPackages(); // call packages
                     })
                     .catch(() => {})
                     .finally(() => {});
@@ -858,6 +887,7 @@
                     .finally(() => {});
             },
 
+
             // edit Row
             editRow(){
                 this.btnLoading = true;
@@ -867,12 +897,15 @@
                 };
 
                 // items
-                this.row.Items = []; // clear before loop
                 for( let i = 1; i < this.row.items_title.length; i++ ) {
                     this.row.items[i] = {
                         'title' : this.row.items_title[i],
                         'body' : this.row.items_body[i],
-                        'order' : this.row.items_order[i]
+                        'sort' : this.row.items_sort[i],
+
+                        'image_base64' : this.row.items_image_base64[i],
+                        'image_alt' : this.row.items_image_alt[i],
+                        'items_image_title' : this.row.items_image_title[i]
                     }
                 }
 
@@ -881,26 +914,33 @@
                     url: window.baseURL+'/wikis/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
-                        status: this.row.status,
-                        view_in_home: this.row.view_in_home,
-                        destination_id: this.row.destination_id,
-                        packages_id: [],
-
-                        image_url: this.row.image,
-                        image_alt: this.row.image_alt,
-                        image_title: this.row.image_title,
-
-                        title: this.row.title,
-                        slug: this.row.slug,
-                        body: this.row.body,
-                        short_body: this.row.short_body,
-                        order: 0,
-
+                        // meta
                         meta_title: this.row.meta_title,
                         meta_keywords: this.row.meta_keywords,
                         meta_description: this.row.meta_description,
 
-                        items: this.row.items
+                        // row
+                        title: this.row.title,
+                        slug: this.row.slug,
+                        sort: this.row.sort,
+                        body: this.row.body,
+                        short_body: this.row.short_body,
+
+                        // items
+                        items: this.row.items,
+
+                        // navbar
+                        destination_id: this.row.destination_id,
+                        packages: this.row.packagesValues,
+
+                        // image
+                        image_base64: this.row.image_base64,
+                        image_alt: this.row.image_alt,
+                        image_title: this.row.image_title,
+
+                        // status & visibility
+                        status: this.row.status,
+                        view_in_home: this.row.view_in_home,
                     }
                 }
                 this.axios(options, config)
@@ -914,12 +954,18 @@
                         this.$router.push({ name: 'wikis' })
                     })
                     .catch(err => {
-                        this.btnLoading = false;
-                        iziToast.warning({
-                            icon: 'ti-alert',
-                            title: 'Wow-man,',
-                            message: (err.response) ? err.response.data.message : ''+err
-                        });
+                        // 403 Forbidden
+                        if(err.response && err.response.status == 403) {
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'forbidden' })
+                        } else {
+                            this.btnLoading = false;
+                            iziToast.warning({
+                                icon: 'ti-alert',
+                                title: 'Wow-man,',
+                                message: (err.response) ? err.response.data.message : ''+err
+                            });
+                        }
                     })
                     .finally(() => {})
             },
@@ -944,24 +990,57 @@
                 }
             },
 
+            
+            
+            // items add more
+            opnFrm() {
+               this.row.items_key++;
+            },
+            removeOption(i) {
+                document.querySelector('#frm_'+i).remove();
+                this.row.items_title[i] = '';
+                this.row.items_sort[i] = '';
+                this.row.items_body[i] = '';
+                this.row.items_image_preview[i] = '';
+                this.row.items_image_base64[i] = '';
+                this.row.items_image_alt[i] = '';
+                this.row.items_image_title[i] = '';
+            },
+
+
             // Upload Featured image
             onImageChange(e){
                 const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
+                this.row.image_preview = URL.createObjectURL(file);
+                this.createBase64Image(file);
             },
-            onItemsImageChange(e) {
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.image_base64 = e.target.result;
+                };
+            },
+
+            onItemsImageChange(e, i) {
                 const file = e.target.files[0];
-                this.row.items_preview = URL.createObjectURL(file);
-                this.row.items_image_url = file;
+                this.row.items_image_preview[i] = URL.createObjectURL(file);
+                this.createItemsBase64Image(file, i);
+            },
+            createItemsBase64Image(fileObject, i){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.items_image_base64[i] = e.target.result;
+                };
             },
 
             // active status
             onStatus(){
                 if(this.row.status)
-                    this.row.status = false;
+                    this.row.status = 0;
                 else
-                    this.row.status = true;
+                    this.row.status = 1;
             },
             // view in home
             onViewInHome(){
@@ -973,7 +1052,6 @@
 
             // remove sessions
             removeLocalStorage() {
-                localStorage.removeItem('permissions');
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('user_image');
                 localStorage.removeItem('user_name');
@@ -993,36 +1071,12 @@
                 }
             },
 
-            // items add more
-            opnFrm(i) {
-                console.log('clicked');
-                let prev = i - 1;
-                let pvt = document.querySelector('#btn_'+prev);
-                let frm = document.querySelector('#frm_'+i);
-                pvt.classList.add('hidden');
-                frm.classList.remove('hidden');
-            },
-            removeOption(i) {
-                let prev = i - 1;
-                let pvt = document.querySelector('#btn_'+prev);
-                let frm = document.querySelector('#frm_'+i);
-                frm.classList.add('hidden');
-                pvt.classList.remove('hidden');
-                this.row.items_title[i] = '';
-                this.row.items_order[i] = '';
-                this.row.items_body[i] = '';
-                this.row.items_image_url[i] = '';
-                this.row.items_image_alt[i] = '';
-                this.row.items_image_title[i] = '';
-            },
-
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
                     this.$router.push({ name: 'wikis' });
                 }
             },
-
         }
     }
 </script>

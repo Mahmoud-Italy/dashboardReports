@@ -29,7 +29,7 @@
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
                             <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'packageTypes' }">Package Types</router-link>
+                                <router-link :to="{ name: 'packagetypes' }">Package Types</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Add New</li>
                         </ol>
@@ -88,7 +88,7 @@
                                                     v-model="row.slug" 
                                                     @keydown.space.prevent 
                                                     @paste="onSlugPaste"
-                                                    @change="onSlugChange">
+                                                    @change="onSlugChange(false)">
                                         </div>
                                         <!-- End Slug -->
 
@@ -300,13 +300,21 @@
                     access_token: '',
                 },
                 row: {
+                    // row
+                    name: '',
+                    slug: '',
+                    sort: 0,
+
+                    // navbar
                     parent_id: '',
+
+                    // image
+
+                    // status & visiblity
                     status: 1,
                     view_in_header: 0,
                     view_in_footer: 0,
 
-                    slug: '',
-                    name: '',
                 },
                 parnets: [],
                 parentLoading: true,
@@ -329,17 +337,7 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },
+            
 
             // Fetch fetchParents
             fetchParents(){
@@ -380,13 +378,19 @@
                     url: window.baseURL+'/packageTypes',
                     method: 'POST',
                     data: {
+                        // row
+                        name: this.row.name,
+                        slug: this.row.slug,
+                        sort: this.row.sort,
+
+                        // navbar
                         parent_id: this.row.parent_id,
+
+                        // status & visibility
                         status: this.row.status,
                         view_in_header: this.row.view_in_header,
                         view_in_footer: this.row.view_in_footer,
-
-                        name: this.row.name,
-                        slug: this.row.slug,
+                        
                     }
                 }
                 this.axios(options, config)
@@ -397,7 +401,7 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        this.$router.push({ name: 'packageTypes' })
+                        this.$router.push({ name: 'packagetypes' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -455,10 +459,31 @@
                     this.row.view_in_footer = 1;
             },
 
+             // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+            },
+
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
+            },
+
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'packageTypes' });
+                    this.$router.push({ name: 'packagetypes' });
                 }
             },
 

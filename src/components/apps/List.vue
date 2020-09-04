@@ -55,7 +55,13 @@
                                     <h4>{{ row.name }}</h4>
                                 </div>
                                 <div class="card-body pt-0">
-                                    <router-link :to="{ name: row.url }"
+                                    <span v-if="!row.setup"
+                                        class="btn btn-pill btn-with-icon text-uppercase"
+                                        :class="(row.setup) ? ' btn-secondary ' : ' btn-danger ' ">
+                                        <span :class="'btn-icon mr-2 '+row.icon"></span>
+                                        <span v-html="(row.setup) ? 'Update' : 'Set Up'">Update</span>
+                                    </span>
+                                    <router-link v-if="row.setup" :to="{ name: row.url }"
                                         class="btn btn-pill btn-with-icon text-uppercase"
                                         :class="(row.setup) ? ' btn-secondary ' : ' btn-danger ' ">
                                         <span :class="'btn-icon mr-2 '+row.icon"></span>

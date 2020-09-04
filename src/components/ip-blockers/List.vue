@@ -195,6 +195,16 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
+                                        <th class="text-center" style="width: 20%">Author
+                                            <span v-if="!authorLoading && filter_by=='author'"
+                                                @click="removeFilter()"
+                                                class="cursor-pointer ti-close">
+                                            </span>
+                                            <span v-if="authorLoading">
+                                                <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                    role="status" aria-hidden="true"></span>
+                                            </span>
+                                        </th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -202,7 +212,7 @@
 
                                 <tbody v-if="dataLoading">
                                     <tr>
-                                        <td colspan="4" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <div class="spinner-grow" role="status">
                                               <span class="sr-only">Loading...</span>
                                             </div>
@@ -212,7 +222,7 @@
 
                                 <tbody v-if="!dataLoading && !rows.length">
                                     <tr>
-                                        <td colspan="4" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <span>No results found.</span>
                                         </td>
                                     </tr>
@@ -237,8 +247,22 @@
                                     <td class="font-weight-semi-bold">
                                         <span @click="editRow(row)" 
                                             class="default-color text-decoration-hover cursor-pointer">
-                                            {{ row.ip }} 
+                                            {{ row.ip_address }} 
                                         </span>
+                                    </td>
+
+                                    <td class="font-weight-semi-bold text-center">
+                                        <span v-if="!row.user" class="text-center"> - </span>
+                                        <router-link v-if="row.user" 
+                                            :to="{ name: 'filter-faqs', 
+                                                params:{filter_by:'author',filter:row.user.encrypt_id}}" 
+                                            class="text-decoration-hover black">
+                                            <div v-if="row.user" class="align-items-center">
+                                                <img class="u-avatar-xs rounded-circle mr-2"
+                                                    src="/assets/img/default_avatar.png">
+                                                <span class="media-body">{{ row.user.name }}</span>
+                                            </div>
+                                        </router-link>
                                     </td>
 
                                     <td v-html="(row.deleted_at) ? row.deleted_at : 
@@ -314,8 +338,8 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th>Name</th>
-                                        <th class="text-center">No. Domains</th>
+                                        <th>IP Address</th>
+                                        <th class="text-center">Author</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
@@ -351,22 +375,22 @@
             <div class="col-md-4 mb-5">
                 <div class="card">
                     <header class="card-header">
-                        <h2 class="h4 card-header-title">Add New</h2>
+                        <h2 class="h4 card-header-title" 
+                                v-html="(btn_status == 'Update') ? 'Edit Row' : 'Add New'"></h2>
                     </header>
 
                 <form @submit.prevent="createOrUpdate" enctype="multipart/form-data">
                     <div class="card-body pt-0">
                         
-                        <!-- Name -->
+                        <!-- IP Address -->
                         <div class="form-group">
-                            <label for="input1">Name</label>
+                            <label for="input1">IP Address</label>
                             <input class="form-control"
                                 id="input1"  
                                 type="text" 
-                                v-model="row.name"
-                                required="">
+                                v-model="row.ip_address">
                         </div>
-                        <!-- End Name -->
+                        <!-- End IP Address -->
                         
                         
                         <div class="form-group">
@@ -377,7 +401,7 @@
                                     </span>Loading...
                                 </span>
                                 <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> {{ btn_status }} Tenant</span>
+                                <span v-if="!btnLoading"> {{ btn_status }} IP Address</span>
                             </button>
                         </div>
 
@@ -418,7 +442,7 @@
                 exp: {
                    json_fields: {
                         'id': 'id',
-                        'name': 'name',
+                        'ip_address': 'ip_address',
                         'created_at': 'created_at',
                     }, 
                     json_data: [],
@@ -437,7 +461,7 @@
                 },
                 row: {
                     encrypt_id: '',
-                    name: '',
+                    ip_address: '',
                 },
                 permissions: {
                     add: false,
@@ -567,7 +591,7 @@
                 };
                 let vm = this;
                 const options = {
-                    url: page_url || window.baseURL+'/tenants',
+                    url: page_url || window.baseURL+'/ipblockers',
                     method: 'GET',
                     data: {},
                     params: {
@@ -635,7 +659,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/tenants/export?id='+this.selected);
+                    this.axios.post(window.baseURL+'/ipblockers/export?id='+this.selected);
                 return res.data.rows;
             },
             startDownload(){
@@ -652,7 +676,6 @@
 
             // remove sessions
             removeLocalStorage() {
-                localStorage.removeItem('permissions');
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('user_image');
                 localStorage.removeItem('user_name');
@@ -667,7 +690,7 @@
                 this.btn_status = 'Update';
 
                 this.row.encrypt_id = row.encrypt_id;
-                this.row.name = row.name;
+                this.row.ip_address = row.ip_address;
             },
 
             // createOrUpdate
@@ -678,18 +701,18 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 let type = 'POST';
-                let path = 'tenants';
+                let path = 'ipblockers';
                 let msg  = 'Added';
                 if(this.edit) {
                     type = 'PUT';
-                    path = 'tenants/'+this.row.encrypt_id;
+                    path = 'ipblockers/'+this.row.encrypt_id;
                     msg  = 'Updated';
                 }
                 const options = {
                     url: window.baseURL+'/'+path,
                     method: type,
                     data: {
-                        name: this.row.name
+                        ip_address: this.row.ip_address
                     }
                 }
                 this.axios(options)
@@ -699,7 +722,7 @@
 
                         // Clear rows
                     this.row.encrypt_id = '';
-                    this.row.name = '';
+                    this.row.ip_address = '';
 
                     iziToast.success({
                         icon: 'ti-check',
@@ -708,7 +731,6 @@
                     });
                 })
                 .catch(err => {
-                    console.log('catch '+err);
                     // 403 Forbidden
                     if(err.response && err.response.status == 403) {
                         this.removeLocalStorage()
@@ -766,7 +788,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/tenants/active/'+id,
+                  url: window.baseURL+'/ipblockers/active/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -799,7 +821,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/tenants/inactive/'+id,
+                  url: window.baseURL+'/ipblockers/inactive/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -843,7 +865,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/tenants/trash/'+id,
+                  url: window.baseURL+'/ipblockers/trash/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -888,7 +910,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/tenants/restore/'+id,
+                  url: window.baseURL+'/ipblockers/restore/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -933,7 +955,7 @@
                         'Authorization': `Bearer `+this.auth.access_token,
                     };
                     const options = {
-                        url: window.baseURL+'/tenants/'+id,
+                        url: window.baseURL+'/ipblockers/'+id,
                         method: 'DELETE',
                         data: {},
                     }

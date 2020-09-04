@@ -9,9 +9,9 @@
             <div class="u-content">
 
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Cruise Types
+                    <h1 class="h2 mb-2">Cabins
                         <router-link v-if="permissions.add"
-                            :to="{ name: 'create-cruiseTypes' }" 
+                            :to="{ name: 'create-cabins' }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
@@ -31,7 +31,7 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Cruise Types</li>
+                            <li class="breadcrumb-item active" aria-current="page">Cabins</li>
                         </ol>
                     
                         <!-- Bulk Action -->
@@ -98,8 +98,8 @@
                                             :fields = "exp.json_fields"
                                             :before-generate = "startDownload"
                                             :before-finish = "finishDownload"
-                                            worksheet = "CruiseTypes"
-                                            name = "CruiseTypes.xls">Excel
+                                            worksheet = "Cabins"
+                                            name = "Cabins.xls">Excel
                                         </download-excel>
                                         <download-excel
                                             class = "dropdown-item cursor-pointer"
@@ -108,8 +108,8 @@
                                             :before-generate = "startDownload"
                                             :before-finish = "finishDownload"
                                             type = "csv"
-                                            worksheet = "CruiseTypes"
-                                            name = "CruiseTypes.xls">CSV
+                                            worksheet = "Cabins"
+                                            name = "Cabins.xls">CSV
                                         </download-excel>
                                         <a class="dropdown-item" 
                                             href="javascript:;" 
@@ -130,20 +130,20 @@
                     <header class="card-header">
                         <h2 class="h4 card-header-title">
                             <router-link class="pg-hd"
-                                :to="{ name: 'cruiseTypes' }"
+                                :to="{ name: 'cabins' }"
                                 :class="(status == '') ? 'active' : '' ">All</router-link> 
                             <span class="pg-hd no-decoration f14"> ({{statusBar.all}}) </span>&nbsp;|&nbsp; 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-cruiseTypes', params:{status: 'active'} }" 
+                                :to="{ name: 'status-cabins', params:{status: 'active'} }" 
                                 :class="(status == 'active') ? 'active' : '' ">Active</router-link>
                            <span class="pg-hd no-decoration f14"> ({{statusBar.active}}) </span>&nbsp;|&nbsp; 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-cruiseTypes', params:{status: 'inactive'} }" 
+                                :to="{ name: 'status-cabins', params:{status: 'inactive'} }" 
                                 :class="(status == 'inactive') ? 'active' : '' ">Inactive</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.inactive}}) </span>&nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-cruiseTypes', params:{status: 'trash'} }" 
+                                :to="{ name: 'status-cabins', params:{status: 'trash'} }" 
                                 :class="(status == 'trash') ? 'active' : '' ">Trash</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.trash}}) </span>
 
@@ -205,9 +205,9 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th style="width:20%">Name
+                                        <th style="width:25%">Title
                                             <span v-if="!orderLoading"
-                                                @click="onOrderBy('name')"
+                                                @click="onOrderBy('title')"
                                                 class="cursor-pointer " 
                                                 :class="(order == 'DESC') 
                                                     ? 'ti-arrow-down' 
@@ -219,7 +219,6 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">Parent</th>
                                         <th class="text-center" style="width: 20%">Author
                                             <span v-if="!authorLoading && filter_by=='author'"
                                                 @click="removeFilter()"
@@ -230,7 +229,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">No. Cruises</th>
+                                        <th class="text-center" style="width: 10%">Cruises No.</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -238,7 +237,7 @@
 
                                 <tbody v-if="dataLoading">
                                     <tr>
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <div class="spinner-grow" role="status">
                                               <span class="sr-only">Loading...</span>
                                             </div>
@@ -248,7 +247,7 @@
 
                                 <tbody v-if="!dataLoading && !rows.length">
                                     <tr>
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <span>No results found.</span>
                                         </td>
                                     </tr>
@@ -272,16 +271,12 @@
 
                                     <td class="font-weight-semi-bold">
                                         <router-link v-if="permissions.edit"
-                                            :to="{ name: 'edit-cruiseTypes', 
+                                            :to="{ name: 'edit-cabins', 
                                                 params:{id:row.encrypt_id} }" 
                                             class="default-color text-decoration-hover">
-                                            {{ row.name }} 
+                                            {{ row.title }} 
                                         </router-link>
-                                        <span v-if="!permissions.edit">{{ row.name }}</span>
-                                    </td>
-
-                                    <td class="font-weight-semi-bold text-center">
-                                        <span class=""></span>    
+                                        <span v-if="!permissions.edit">{{ row.title }}</span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
@@ -330,7 +325,7 @@
                                                         <li v-if="!row.trash">
                                                             <router-link v-if="permissions.edit"
                                                                 class="d-block link-dark"
-                                                                :to="{ name: 'edit-cruiseTypes', 
+                                                                :to="{ name: 'edit-cabins', 
                                                                 params:{id: row.encrypt_id}}">
                                                                 Edit
                                                             </router-link>
@@ -388,9 +383,8 @@
                                             </div>
                                         </th>
                                         <th>Title</th>
-                                        <th class="text-center">Parent</th>
                                         <th class="text-center">Author</th>
-                                        <th class="text-center">No. Cruises</th>
+                                        <th class="text-center">Cruises No.</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
@@ -450,9 +444,9 @@
                 exp: {
                    json_fields: {
                         'id': 'id',
-                        'parent_id': 'parent_id',
                         'slug' : 'slug',
-                        'name': 'name',
+                        'title': 'title',
+                        'body': 'body',
                         'created_at': 'created_at',
                     }, 
                     json_data: [],
@@ -594,7 +588,7 @@
                 };
                 let vm = this;
                 const options = {
-                    url: page_url || window.baseURL+'/cruiseTypes',
+                    url: page_url || window.baseURL+'/cabins',
                     method: 'GET',
                     data: {},
                     params: {
@@ -660,7 +654,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/cruiseTypes/export?id='+this.selected);
+                    this.axios.post(window.baseURL+'/cabins/export?id='+this.selected);
                 return res.data.rows;
             },
             startDownload(){
@@ -677,7 +671,6 @@
 
             // remove sessions
             removeLocalStorage() {
-                localStorage.removeItem('permissions');
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('user_image');
                 localStorage.removeItem('user_name');
@@ -726,7 +719,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/cruiseTypes/active/'+id,
+                  url: window.baseURL+'/cabins/active/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -759,7 +752,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/cruiseTypes/inactive/'+id,
+                  url: window.baseURL+'/cabins/inactive/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -803,7 +796,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/cruiseTypes/trash/'+id,
+                  url: window.baseURL+'/cabins/trash/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -848,7 +841,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/cruiseTypes/restore/'+id,
+                  url: window.baseURL+'/cabins/restore/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -893,7 +886,7 @@
                         'Authorization': `Bearer `+this.auth.access_token,
                     };
                     const options = {
-                        url: window.baseURL+'/cruiseTypes/'+id,
+                        url: window.baseURL+'/cabins/'+id,
                         method: 'DELETE',
                         data: {},
                     }

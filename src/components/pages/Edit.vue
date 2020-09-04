@@ -39,11 +39,9 @@
 
         <div v-if="pgLoading" class="row h-100">
             <div class="container text-center">
-                <p><br/></p>
-                <div class="spinner-grow" role="status">
+                <div class="spinner-grow mt-5" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
-                <p><br/></p>
             </div>
         </div>
 
@@ -138,7 +136,7 @@
                                             aria-expanded="false" 
                                             aria-controls="collapseDest" 
                                             data-toggle="collapse"
-                                            data-target="#collapseDest">Destination
+                                            data-target="#collapseDest">Page
                                             <span id="iconToggleDest" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow 
                                                     pull-right black">
@@ -176,12 +174,23 @@
                                     </div>
                                     <!-- End Slug -->
 
+                                    <!-- Sort -->
+                                    <div class="form-group">
+                                        <label for="inputText3">Sort</label>
+                                        <input class="form-control" 
+                                                id="inputText3" 
+                                                type="number" 
+                                                min="0"
+                                                v-model.number="row.sort">
+                                    </div>
+                                    <!-- End Sort -->
+
 
                                     <!-- Body -->
                                     <div class="form-group">
-                                        <label for="inputText3">Body</label>
+                                        <label for="inputEditor1">Body</label>
                                         <editor
-                                            id="inputText3"
+                                            id="inputEditor1"
                                             v-model="row.body"
                                             :api-key="editor.api_key"
                                             :init="{
@@ -235,7 +244,9 @@
                                         <div class="col-12 pt-3">
                                             <!-- Image -->
                                             <div class="form-group">
-                                                <img :src="row.preview" 
+                                                <label>Image</label>
+                                                <img v-if="row.image_preview" 
+                                                    :src="row.image_preview" 
                                                     class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
@@ -372,31 +383,31 @@
                     access_token: '',
                 },
                 row: {
-                    status: true,
-                    preview: '',
-                    image: '',
-                    image_alt: '',
-                    image_title: '',
-                    
-                    slug: '',
-                    title: '',
-                    body: '',
-
+                    // meta
                     meta_title: '',
                     meta_keywords: '',
                     meta_description: '',
+
+                    // row
+                    slug: '',
+                    title: '',
+                    sort: 0,
+                    body: '',
+
+                    // image
+                    image_preview: '',
+                    image_base64: '',
+                    image_alt: '',
+                    image_title: '',
+
+                    // status & visibility
+                    status: 1,
                 },
                 editor: {
-                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
-                    menubar: 'file edit view insert format tools table tc help',
-                    plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | removeformat | help',
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
                 },
 
                 pgLoading: true,
@@ -418,18 +429,7 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },  
-
+            
             // fetch Row
             fetchRow() {
                 this.pgLoading = true;
@@ -447,35 +447,33 @@
                     .then(res => {
                     this.pgLoading = false;
 
-                    this.row.status= res.data.row.status;
+                    // meta
+                    this.row.meta_title = (res.data.row.meta) ? res.data.row.meta.meta_title : null;
+                    this.row.meta_keywords = (res.data.row.meta) ? res.data.row.meta.meta_keywords : null;
+                    this.row.meta_description = (res.data.row.meta) ? res.data.row.meta.meta_description : null;
 
-                    this.row.preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.age_title : null;
-                        
+                    // row
                     this.row.slug = res.data.row.slug;
                     this.row.title = res.data.row.title;
+                    this.row.sort = res.data.row.sort;
                     this.row.body = res.data.row.body;
 
-                this.row.meta_title = (res.data.row.meta) ? res.data.row.meta.meta_title : null;
-                this.row.meta_keywords = (res.data.row.meta) ? res.data.row.meta.meta_keywords : null;
-                this.row.meta_description = (res.data.row.meta) ? res.data.row.meta.meta_description : null;
+                    // image
+                    this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
+                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
+
+                    // status & visiblity
+                    this.row.status = res.data.row.status;
 
                     })
                     .catch(() => {})
                     .finally(() => {});
             },
 
-            
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
 
-
-            // Add New
+            // edit Row
             editRow(){
                 this.btnLoading = true;
                 this.axios.defaults.headers.common = {
@@ -487,19 +485,24 @@
                     url: window.baseURL+'/pages/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
-                        status: this.row.status,
+                        // meta 
+                        meta_title: this.row.meta_title,
+                        meta_keywords: this.row.meta_keywords,
+                        meta_description: this.row.meta_description,
 
-                        image_url: this.row.image,
+                        // row
+                        title: this.row.title,
+                        slug: this.row.slug,
+                        sort: this.row.sort,
+                        body: this.row.body,
+
+                        // image
+                        image_base64: this.row.image_base64,
                         image_alt: this.row.image_alt,
                         image_title: this.row.image_title,
 
-                        title: this.row.title,
-                        slug: this.row.slug,
-                        body: this.row.body,
-
-                        meta_title: this.row.meta_title,
-                        meta_keywords: this.row.meta_keywords,
-                        meta_description: this.row.meta_description
+                        // status & visibility
+                        status: this.row.status,
                     }
                 }
                 this.axios(options, config)
@@ -543,13 +546,48 @@
                 this.row.slug = str.replace(/\s+/g, '-');
             },
 
+            // Upload Featured image
+            onImageChange(e){
+                const file = e.target.files[0];
+                this.row.image_preview = URL.createObjectURL(file);
+                this.createBase64Image(file);
+            },
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.image_base64 = e.target.result;
+                };
+            },
+
             // active status
             onStatus(){
                 if(this.row.status)
-                    this.row.status = false;
+                    this.row.status = 0;
                 else
-                    this.row.status = true;
+                    this.row.status = 1;
             },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+            },
+
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
+            },  
 
             // Cancel
             cancel(){

@@ -11,7 +11,7 @@
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2">Package Types
                         <router-link v-if="permissions.add"
-                            :to="{ name: 'create-packageTypes' }" 
+                            :to="{ name: 'create-packagetypes' }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
@@ -130,20 +130,20 @@
                     <header class="card-header">
                         <h2 class="h4 card-header-title">
                             <router-link class="pg-hd"
-                                :to="{ name: 'packageTypes' }"
+                                :to="{ name: 'packagetypes' }"
                                 :class="(status == '') ? 'active' : '' ">All</router-link> 
                             <span class="pg-hd no-decoration f14"> ({{statusBar.all}}) </span>&nbsp;|&nbsp; 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-packageTypes', params:{status: 'active'} }" 
+                                :to="{ name: 'status-packagetypes', params:{status: 'active'} }" 
                                 :class="(status == 'active') ? 'active' : '' ">Active</router-link>
                            <span class="pg-hd no-decoration f14"> ({{statusBar.active}}) </span>&nbsp;|&nbsp; 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-packageTypes', params:{status: 'inactive'} }" 
+                                :to="{ name: 'status-packagetypes', params:{status: 'inactive'} }" 
                                 :class="(status == 'inactive') ? 'active' : '' ">Inactive</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.inactive}}) </span>&nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-packageTypes', params:{status: 'trash'} }" 
+                                :to="{ name: 'status-packagetypes', params:{status: 'trash'} }" 
                                 :class="(status == 'trash') ? 'active' : '' ">Trash</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.trash}}) </span>
 
@@ -272,7 +272,7 @@
 
                                     <td class="font-weight-semi-bold">
                                         <router-link v-if="permissions.edit"
-                                            :to="{ name: 'edit-packageTypes', 
+                                            :to="{ name: 'edit-packagetypes', 
                                                 params:{id:row.encrypt_id} }" 
                                             class="default-color text-decoration-hover">
                                             {{ row.name }} 
@@ -281,7 +281,9 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                        <span class=""></span>    
+                                        <span class="badge badge-md badge-pill badge-danger-soft"
+                                            v-html="(row.parent) ? row.parent.name : 'No Parent' ">
+                                        </span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
@@ -299,7 +301,7 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                        0
+                                {{row.packages_no}}
                                     </td>
 
                                     <td v-html="(row.deleted_at) ? row.deleted_at : 
@@ -330,7 +332,7 @@
                                                         <li v-if="!row.trash">
                                                             <router-link v-if="permissions.edit"
                                                                 class="d-block link-dark"
-                                                                :to="{ name: 'edit-packageTypes', 
+                                                                :to="{ name: 'edit-packagetypes', 
                                                                 params:{id: row.encrypt_id}}">
                                                                 Edit
                                                             </router-link>
@@ -387,7 +389,7 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th>Title</th>
+                                        <th>Name</th>
                                         <th class="text-center">Parent</th>
                                         <th class="text-center">Author</th>
                                         <th class="text-center">No. Packages</th>

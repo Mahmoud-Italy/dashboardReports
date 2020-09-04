@@ -9,7 +9,6 @@
             <div class="u-content">
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2">Cruises
-
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
                             <div class="dropdown">
@@ -19,7 +18,6 @@
                             </div>
                         </div>
                         <!-- End Role -->
-
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -37,7 +35,7 @@
                     <!-- End Breadcrumb -->
 
 
-        <form @submit.prevent="addNew" enctype="multipart/form-data" class="h-100">
+            <form @submit.prevent="addNew" enctype="multipart/form-data" class="h-100">
 
             <!-- Content -->
             <div class="tab-content">
@@ -52,21 +50,21 @@
                         <div class="card-body">
                             <div id="accordion" class="accordion">
                                 <div id="TabMeta" class="card-header">
-                                        <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Meta')"
-                                            aria-expanded="false" 
-                                            aria-controls="collapseMeta" 
-                                            data-toggle="collapse"
-                                            data-target="#collapseMeta">Meta
-                                            <span id="iconToggleMeta" 
-                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
-                                            </span>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseMeta" 
-                                        class="collapse show" 
-                                        aria-labelledby="TabMeta" 
-                                        data-parent="#accordion">
+                                    <h2 class="h4 card-header-title" 
+                                        @click="collapseToggle('Meta')"
+                                        aria-expanded="false" 
+                                        aria-controls="collapseMeta" 
+                                        data-toggle="collapse"
+                                        data-target="#collapseMeta">Meta
+                                        <span id="iconToggleMeta" 
+                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="collapseMeta" 
+                                    class="collapse show" 
+                                    aria-labelledby="TabMeta" 
+                                    data-parent="#accordion">
 
                                     <div class="col-12 pt-3">
 
@@ -114,10 +112,10 @@
                                         </div>
                                         <!-- End Meta description -->
 
-                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                     <!-- End Card Meta -->
 
@@ -138,18 +136,18 @@
                                         </span>
                                     </h2>
                                 </div>
-                                    <div id="collapseCruise" 
-                                        class="collapse" 
-                                        aria-labelledby="TabCruise" 
-                                        data-parent="#accordion">
+                                <div id="collapseCruise" 
+                                    class="collapse" 
+                                    aria-labelledby="TabCruise" 
+                                    data-parent="#accordion">
 
                                 <div class="col-12 pt-3">
                                     
                                     <!-- Title -->
                                     <div class="form-group">
-                                        <label for="inputText1">Title</label>
+                                        <label for="inputRow1">Title</label>
                                         <input class="form-control" 
-                                                id="inputText1" 
+                                                id="inputRow1" 
                                                 type="text" 
                                                 v-model="row.title" 
                                                 @keyup="onTitleChange">
@@ -158,62 +156,63 @@
 
                                     <!-- Slug -->
                                     <div class="form-group">
-                                        <label for="inputText2">Slug</label>
+                                        <label for="inputRow2">Slug</label>
                                         <input class="form-control text-lowercase"
-                                                id="inputText2"  
+                                                id="inputRow2"  
                                                 type="text" 
                                                 v-model="row.slug" 
                                                 @keydown.space.prevent 
                                                 @paste="onSlugPaste"
-                                                @change="onSlugChange">
+                                                @change="onSlugChange(false)">
                                     </div>
                                     <!-- End Slug -->
 
-                                     <!-- Title -->
+                                    <!-- Short Title -->
                                     <div class="form-group">
-                                        <label for="inputText3">Short title</label>
+                                        <label for="inputRow3">Short title</label>
                                         <input class="form-control" 
-                                                id="inputText3" 
+                                                id="inputRow3" 
                                                 type="text" 
                                                 v-model="row.short_title">
                                     </div>
-                                    <!-- End Title -->
+                                    <!-- End Short Title -->
 
                                     
                                     <div class="col-12 row no-padding ui-ml-unset">
                                         <!-- Start Price -->
                                         <div class="col-6 no-lpadding">
                                             <div class="form-group">
-                                                <label for="inputText3">Start price</label>
+                                                <label for="inputRow4">Start price</label>
                                                 <input class="form-control" 
-                                                        id="inputText3" 
+                                                        id="inputRow4" 
                                                         type="number"
                                                         min="0"
                                                         v-model.number="row.start_price">
                                             </div>
                                         </div>
-                                        <!-- End Title -->
+                                        <!-- End Start Price -->
 
-                                        <!-- Order -->
+                                        <!-- Sort -->
                                         <div class="col-6 no-rpadding">
                                             <div class="form-group">
-                                                <label for="inputText3">Order</label>
+                                                <label for="inputRow5">Sort</label>
                                                 <input class="form-control" 
-                                                        id="inputText3" 
-                                                        type="text" 
-                                                        v-model="row.order">
+                                                        id="inputRow5" 
+                                                        type="number" 
+                                                        min="0" 
+                                                        v-model.number="row.sort">
                                             </div>
                                         </div>
-                                        <!-- End Order -->
+                                        <!-- End Sort -->
                                     </div>
 
 
                                     <!-- Inclusion -->
                                     <div class="form-group">
-                                        <label for="inputEditor6">Inclusion</label>
+                                        <label for="iEditor1">Inclusion</label>
                                         <editor
-                                            id="inputEditor6"
-                                            v-model="row.body"
+                                            id="iEditor1"
+                                            v-model="row.inclusion"
                                             :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
@@ -227,10 +226,10 @@
 
                                     <!-- Exclusion -->
                                     <div class="form-group">
-                                        <label for="inputEditor7">Exclusion</label>
+                                        <label for="iEditor2">Exclusion</label>
                                         <editor
-                                            id="inputEditor7"
-                                            v-model="row.body"
+                                            id="iEditor2"
+                                            v-model="row.exclusion"
                                             :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
@@ -245,10 +244,10 @@
 
                                     <!-- Facilites -->
                                     <div class="form-group">
-                                        <label for="inputEditor2">Cruise Facilites</label>
+                                        <label for="ieditor3">Cruise Facilites</label>
                                         <editor
-                                            id="inputEditor2"
-                                            v-model="row.body"
+                                            id="ieditor3"
+                                            v-model="row.cruise_facilites"
                                             :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
@@ -262,10 +261,10 @@
 
                                     <!-- Suite Facilites -->
                                     <div class="form-group">
-                                        <label for="inputEditor3">Guest Suite Facilites</label>
+                                        <label for="iEditor4">Guest Suite Facilites</label>
                                         <editor
-                                            id="inputEditor3"
-                                            v-model="row.body"
+                                            id="iEditor4"
+                                            v-model="row.guest_suite_facilites"
                                             :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
@@ -279,10 +278,10 @@
 
                                     <!-- Cabin Facilites -->
                                     <div class="form-group">
-                                        <label for="inputEditor4">Cabin Facilites</label>
+                                        <label for="iEditor5">Cabin Facilites</label>
                                         <editor
-                                            id="inputEditor4"
-                                            v-model="row.body"
+                                            id="iEditor5"
+                                            v-model="row.cabin_facilites"
                                             :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
@@ -296,10 +295,10 @@
 
                                     <!-- Cancellation Facilites -->
                                     <div class="form-group">
-                                        <label for="inputEditor5">Cancellation Facilites</label>
+                                        <label for="iEditor6">Cancellation Facilites</label>
                                         <editor
-                                            id="inputEditor5"
-                                            v-model="row.body"
+                                            id="iEditor6"
+                                            v-model="row.cancellation_facilites"
                                             :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
@@ -312,14 +311,11 @@
                                     <!-- End Cancellation Facilites -->
 
 
-                                    
-
-
                                     <!-- Body -->
                                     <div class="form-group">
-                                        <label for="inputEditor1">Short body</label>
+                                        <label for="iEditor7">Short body</label>
                                         <editor
-                                            id="inputEditor1"
+                                            id="iEditor7"
                                             v-model="row.short_body"
                                             :api-key="editor.api_key"
                                             :init="{
@@ -334,9 +330,9 @@
 
                                     <!-- Body -->
                                     <div class="form-group">
-                                        <label for="inputEditor22">body</label>
+                                        <label for="iEditor8">body</label>
                                         <editor
-                                            id="inputEditor22"
+                                            id="iEditor8"
                                             v-model="row.body"
                                             :api-key="editor.api_key"
                                             :init="{
@@ -367,10 +363,9 @@
                                         aria-expanded="false" 
                                         aria-controls="collapsePrices" 
                                         data-toggle="collapse"
-                                        data-target="#collapsePrices">Prices
+                                        data-target="#collapsePrices">Prices {{ row.price_key}}
                                         <span id="iconTogglePrices" 
-                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow 
-                                                pull-right black">
+                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                         </span>
                                     </h2>
                                 </div>
@@ -381,102 +376,98 @@
 
                                     <div class="col-12 pt-3">
 
-                                        <!-- For Loop -->
-                                        <div v-for="i in 10" 
-                                            :key="i" 
-                                            :class="(i != 1) ? 'hidden' : ''"
-                                            :id="'frm_'+i">
+                                            <!-- For Loop -->
+                                            <div v-for="i in row.price_key" 
+                                                :key="i" 
+                                                :class="(i == 0) ? 'hidden' : ''"
+                                                :id="'frm_'+i"
+                                                class="ui-for-div">
 
-                                             <!--  Remove -->
-                                            <div class="pull-right ui-mt-10">
-                                                <button v-if="i != 1"
-                                                    type="button" 
-                                                    class="btn btn-danger btn-circle btn-with-icon btn-sm"
-                                                    @click="removeOption(i)">
-                                                    <span class="btn-icon ti-close font-bold"></span>
-                                                 </button>
-                                            </div>
-                                            <!-- End Remove -->
+                                                 <!-- Remove -->
+                                                <div class="pull-right ui-mt-10">
+                                                    <button v-if="i != 0"
+                                                        type="button" 
+                                                        class="btn btn-danger btn-circle btn-with-icon btn-sm"
+                                                        @click="removeOption(i)">
+                                                        <span class="btn-icon ti-close font-bold"></span>
+                                                     </button>
+                                                </div>
+                                                <!-- End Remove -->
 
-                                            <!-- Price Name -->
-                                            <div class="form-group">
-                                                <label :for="'iInput'+i">Price Name</label>
-                                                <input class="form-control" 
-                                                        :id="'iInput'+i" 
-                                                        type="text" 
-                                                        v-model="row.price_names[i]">
-                                            </div>
-                                            <!-- End Price Name -->
+                                                <!-- Price Name -->
+                                                <div class="form-group">
+                                                    <label :for="'iInput'+i">Price Name {{ i }}</label>
+                                                    <input class="form-control" 
+                                                            :id="'iInput'+i" 
+                                                            type="text" 
+                                                            v-model="row.price_names[i]">
+                                                </div>
+                                                <!-- End Price Name -->
 
-                                            
-                                            <!-- Price Items -->
-                                            <div v-for="x in 10" 
-                                                :key="x" 
-                                                :class="(x != 1) ? 'hidden' : ''"
-                                                :id="'sub_'+i+'_'+x">
+                                                
+                                                <!-- Price Items -->
+                                               <div v-for="x in 10" 
+                                                    :key="x" 
+                                                    :class="(x != 0) ? 'hidden' : ''"
+                                                    :id="'sub_'+i+'_'+x">
 
-                                            <div class="row col-12 ui-ml-unset">
+                                                    <div class="row col-12 ui-ml-unset">
+                                                        <div class="form-group col-1"></div>
+                                                        <div class="form-group col-5">
+                                                            <label :for="'pvInput'+i+'_'+x">Price Value</label>
+                                                            <input class="form-control" 
+                                                                    :id="'pvInput'+i+'_'+x" 
+                                                                    type="text" 
+                                                                    v-model="row.price_item_values[i+'_'+x]">
+                                                        </div>
+                                                        <div class="form-group col-5">
+                                                            <label :for="'pcInput'+i+'_'+x">Content</label>
+                                                            <input class="form-control" 
+                                                                    :id="'pcInput'+i+'_'+x" 
+                                                                    type="text" 
+                                                                    v-model="row.price_item_body[i+'_'+x]">
+                                                        </div>
+                                                        <div class="form-group col-1">
+                                                            <button type="button" 
+                                                                v-if="x != 0"
+                                                                @click="removeSubOption(i,x)"
+                                                                class="btn btn-circle btn-with-icon ui-mt30">
+                                                                <span class="btn-icon ti-close font-bold"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End Price Items -->
+
+                                                <!-- Price add more -->
                                                 <div class="form-group col-1">
                                                     <button type="button" 
-                                                        :id="'subBtn_'+i+'_'+x"
-                                                        @click="opnSub(i,x+1)"
+                                                        @click="opnSub(i)"
                                                         class="btn btn-secondary btn-circle btn-with-icon ui-mt30 ui-ml-20">
                                                         <span class="btn-icon ti-plus font-bold"></span>
                                                     </button>
                                                 </div>
-                                                <div class="form-group col-5">
-                                                    <label :for="'pvInput'+i+'_'+x">Price Value</label>
-                                                    <input class="form-control" 
-                                                            :id="'pvInput'+i+'_'+x" 
-                                                            type="text" 
-                                                            v-model="row.price_item_values[i+'_'+x]">
-                                                </div>
-                                                <div class="form-group col-5">
-                                                    <label :for="'pcInput'+i+'_'+x">Content</label>
-                                                    <input class="form-control" 
-                                                            :id="'pcInput'+i+'_'+x" 
-                                                            type="text" 
-                                                            v-model="row.price_item_body[i+'_'+x]">
-                                                </div>
-                                                <div class="form-group col-1">
-                                                    <button type="button" 
-                                                        v-if="x != 1"
-                                                        @click="removeSubOption(i,x)"
-                                                        class="btn btn-circle btn-with-icon ui-mt30">
-                                                        <span class="btn-icon ti-close font-bold"></span>
-                                                    </button>
-                                                </div>
+                                                <!-- End Price add more -->
                                             </div>
 
-                                            </div>
-                                            <!-- End Price Items -->
-
-
-                                            <!-- Button -->
-                                            <div class="row pull-right ui-mt15" 
-                                                :id="'btn_'+i">
+                                            <!-- Add more -->
+                                            <div class="row pull-right">
                                                 <button type="button" 
                                                     class="btn btn-dark btn-circle btn-with-icon"
-                                                    @click="opnFrm(i+1)">
+                                                    @click="opnFrm()">
                                                     <span class="btn-icon ti-plus font-bold"></span>
                                                 </button>
                                             </div>
-                                            <!-- End Button -->
-
-                                            <div class="form-group">
-                                                <br/><hr><br/>
-                                            </div>
-                                        </div>
+                                            <!-- End more -->
 
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- End Card Price -->
 
-                     <!-- Card Itinerarie -->
+                    <!-- Card Itinerarie -->
                     <div class="card mt-5">
                         <div class="card-body">
                             <div id="accordion" class="accordion">
@@ -486,116 +477,90 @@
                                         aria-expanded="false" 
                                         aria-controls="collapseItineraries" 
                                         data-toggle="collapse"
-                                        data-target="#collapseItineraries">Itineraries
+                                        data-target="#collapseItineraries">Itineraries {{ row.itineraries_key}}
                                         <span id="iconToggleItineraries" 
                                             class="ti-angle-up u-sidebar-nav-menu__item-arrow 
-                                            pull-right black">
+                                                pull-right black">
                                         </span>
                                     </h2>
-                                    </div>
-                                    <div id="collapseItineraries" 
-                                        class="collapse" 
-                                        aria-labelledby="TabItineraries" 
-                                        data-parent="#accordion">
+                                </div>
+                                <div id="collapseItineraries" 
+                                    class="collapse" 
+                                    aria-labelledby="TabItineraries" 
+                                    data-parent="#accordion">
 
-                                    <div class="col-12 pt-3">
+                                <div class="col-12 pt-3">
+                                
+                                    <!-- For Loop -->
+                                    <div v-for="y in row.itineraries_key" 
+                                        :key="y" 
+                                        :class="(y == 0) ? 'hidden' : '' " 
+                                        :id="'ifrm_'+y"
+                                        class="ui-for-div">
 
-                                        <!-- For Loop -->
-                                        <div v-for="i in 10" 
-                                            :key="'i2'+i" 
-                                            :class="(i != 1) ? 'hidden' : ''"
-                                            :id="'frm2_'+i">
-
-                                             <!--  Remove -->
-                                            <div class="pull-right ui-mt-10">
-                                                <button v-if="i != 1"
-                                                    type="button" 
-                                                    class="btn btn-danger btn-circle btn-with-icon btn-sm"
-                                                    @click="removeOption2(i)">
-                                                    <span class="btn-icon ti-close font-bold"></span>
-                                                 </button>
-                                            </div>
-                                            <!-- End Remove -->
-
-                                            <!-- Itineraries Title -->
-                                            <div class="form-group">
-                                                <label :for="'iInput2'+i">Itinerarie Name</label>
-                                                <input class="form-control" 
-                                                        :id="'iInput2'+i" 
-                                                        type="text" 
-                                                        v-model="row.itinerarie_title[i]">
-                                            </div>
-                                            <!-- End Itineraries Title -->
-
-                                            
-                                            <!-- Itineraries Items -->
-                                            <div v-for="x in 10" 
-                                                :key="'t2'+x" 
-                                                :class="(x != 1) ? 'hidden' : ''"
-                                                :id="'sub2_'+i+'_'+x">
-
-                                            <div class="row col-12 ui-ml-unset">
-                                                <div class="form-group col-1">
-                                                    <button type="button" 
-                                                        :id="'subBtn2_'+i+'_'+x"
-                                                        @click="opnSub2(i,x+1)"
-                                                        class="btn btn-secondary btn-circle btn-with-icon ui-mt30 ui-ml-20">
-                                                        <span class="btn-icon ti-plus font-bold"></span>
-                                                    </button>
-                                                </div>
-                                                <div class="form-group col-4">
-                                                    <label :for="'pvInput2'+i+'_'+x">Title</label>
-                                                    <input class="form-control" 
-                                                            :id="'pvInput2'+i+'_'+x" 
-                                                            type="text" 
-                                                            v-model="row.itinerarie_item_title[i+'_'+x]">
-                                                </div>
-                                                <div class="form-group col-4">
-                                                    <label :for="'pbInput2'+i+'_'+x">Body</label>
-                                                    <input class="form-control" 
-                                                            :id="'pbInput2'+i+'_'+x" 
-                                                            type="text" 
-                                                            v-model="row.itinerarie_item_body[i+'_'+x]">
-                                                </div>
-                                                <div class="form-group col-2">
-                                                    <label :for="'poInput2'+i+'_'+x">Order</label>
-                                                    <input class="form-control" 
-                                                            :id="'poInput2'+i+'_'+x" 
-                                                            type="text" 
-                                                            v-model="row.itinerarie_item_order[i+'_'+x]">
-                                                </div>
-                                                <div class="form-group col-1">
-                                                    <button type="button" 
-                                                        v-if="x != 1"
-                                                        @click="removeSubOption2(i,x)"
-                                                        class="btn btn-circle btn-with-icon ui-mt30">
-                                                        <span class="btn-icon ti-close font-bold"></span>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            </div>
-                                            <!-- End Price Items -->
-
-
-                                            <!-- Button -->
-                                            <div class="row pull-right ui-mt15" 
-                                                :id="'btn2_'+i">
-                                                <button type="button" 
-                                                    class="btn btn-dark btn-circle btn-with-icon"
-                                                    @click="opnFrm2(i+1)">
-                                                    <span class="btn-icon ti-plus font-bold"></span>
-                                                </button>
-                                            </div>
-                                            <!-- End Button -->
-
-                                            <div class="form-group">
-                                                <br/><hr><br/>
-                                            </div>
+                                        <!-- Remove -->
+                                        <div class="pull-right ui-mt-10">
+                                            <button v-if="y != 0"
+                                                type="button" 
+                                                class="btn btn-danger btn-circle btn-with-icon btn-sm" 
+                                                @click="removeOption2(y)">
+                                                <span class="btn-icon ti-close font-bold"></span>
+                                            </button>
                                         </div>
+                                        <!-- End Remove -->
+
+                                        <!-- Title -->
+                                        <div class="form-group">
+                                            <label :for="'iTi'+y">Title</label>
+                                            <input class="form-control" 
+                                                    :id="'iTi'+y" 
+                                                    type="text" 
+                                                    v-model="row.itineraties_title[y]">
+                                        </div>
+                                        <!-- End Title -->
+
+                                        <!-- Title -->
+                                        <div class="form-group">
+                                            <label :for="'iTi2'+y">Sort</label>
+                                            <input class="form-control" 
+                                                    :id="'iTi2'+y" 
+                                                    type="text" 
+                                                    v-model="row.itineraties_sort[y]">
+                                        </div>
+                                        <!-- End Title -->
+
+                                        <!-- Body -->
+                                        <div class="form-group">
+                                            <label :for="'iTiEditor'+y">Body</label>
+                                            <editor
+                                                :id="'iTiEditor'+y"
+                                                v-model="row.itineraties_body[y]"
+                                                :api-key="editor.api_key"
+                                                :init="{
+                                                    height: 300,
+                                                    menubar: editor.menubar,
+                                                    plugins: editor.plugins,
+                                                    toolbar: editor.toolbar
+                                                }"
+                                            />
+                                        </div>
+                                        <!-- End Short Body -->
 
                                     </div>
+                                    <!-- End Loop -->
 
+                                        <!-- Add more -->
+                                        <div class="row pull-right">
+                                            <button type="button" 
+                                                class="btn btn-dark btn-circle btn-with-icon"
+                                                @click="opnFrmItineraries()">
+                                                <span class="btn-icon ti-plus font-bold"></span>
+                                            </button>
+                                        </div>
+                                        <!-- End more -->
+                                        
+                                    </div>
+                                
                                 </div>
                             </div>
                         </div>
@@ -662,21 +627,21 @@
                     <div class="card mt-5">
                         <div class="card-body">
                                 <div id="accordionNav" class="accordion">
-                                    <div id="NavRegion" class="card-header">
+                                    <div id="NavCabins" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Region')" 
+                                            @click="collapseToggle('Cabins')" 
                                             aria-expanded="false" 
-                                            aria-controls="collapseNavRegion" 
+                                            aria-controls="collapseNavCabins" 
                                             data-toggle="collapse" 
-                                            data-target="#collapseNavRegion">Cruise Cabins
-                                            <span id="iconToggleRegion" 
+                                            data-target="#collapseNavCabins">Multiple Cruise Cabins
+                                            <span id="iconToggleCabins" 
                                                     class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseNavRegion" 
+                                    <div id="collapseNavCabins" 
                                         class="collapse" 
-                                        aria-labelledby="NavRegion" 
+                                        aria-labelledby="NavCabins" 
                                         data-parent="#accordionNav">
                                         <div class="col-12 pt-3">
                                             <!-- Cabins -->
@@ -691,7 +656,7 @@
                                                     id="multiselect"
                                                     ref="multiselectRef"
                                                     autocomplete="on"
-                                                    v-model="cabinsValue" 
+                                                    v-model="row.cabinsValues" 
                                                     :options="cabinsOptions" 
                                                     :multiple="true"
                                                     :close-on-select="false" 
@@ -735,7 +700,7 @@
                                             <!-- Image -->
                                             <div class="form-group">
                                                 <label>Image</label>
-                                                <img :src="row.preview" 
+                                                <img :src="row.image_preview" 
                                                     class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
@@ -786,7 +751,7 @@
                                             <!-- Image -->
                                             <div class="form-group">
                                                 <label>Image</label>
-                                                <img :src="row.short_preview" 
+                                                <img :src="row.short_image_preview" 
                                                     class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
@@ -945,33 +910,31 @@
                     access_token: '',
                 },
                 row: {
-                    cruise_type_id: '',
-                    status: 1,
-                    view_in_home: 0,
-                    
-                    // image
-                    preview: '',
-                    image: '',
-                    image_alt: '',
-                    image_title: '',
-
-                    // short image
-                    short_preview: '',
-                    short_image: '',
-                    short_image_alt: '',
-                    short_image_title: '',
-                    
-                    // rows
-                    slug: '',
-                    title: '',
-                    body: '',
-
+                    // meta
                     meta_title: '',
                     meta_keywords: '',
                     meta_description: '',
 
+                    // row
+                    title: '',
+                    slug: '',
+                    short_title: '',
+                    start_price: '',
+                    sort: 0,
+                    inclusion: '',
+                    exclusion: '',
+                    cruise_facilites: '',
+                    guest_suite_facilites: '',
+                    cabin_facilites: '',
+                    cancellation_facilites: '',
+                    short_body: '',
+                    body: '',
+
                     // prices
                     prices: [],
+                    price_key: 0,
+                    items: [],
+                    item_key: [],
                     price_names: [],
                     price_items: [],
                     price_item_values: [],
@@ -979,29 +942,42 @@
 
                     // itienraries
                     itineraries: [],
-                    itinerarie_title: [],
-                    itinerarie_order: [],
-                    itinerarie_items: [],
-                    itinerarie_item_title: [],
-                    itinerarie_item_body: [],
-                    itinerarie_item_order: [],
+                    itineraries_key: 0,
+                    itineraries_title: [],
+                    itineraries_sort: [],
+                    itineraries_body: [],
+
+                    // navbar
+                    cruise_type_id: '',
+                    cabinsValues: [],
+                    
+                    // image
+                    image_preview: '',
+                    image_base64: '',
+                    image_alt: '',
+                    image_title: '',
+
+                    // short image
+                    short_image_preview: '',
+                    short_image_base64: '',
+                    short_image_alt: '',
+                    short_image_title: '',
+                    
+                    // status & visibility
+                    status: 1,
+                    view_in_home: 0,
                 },
                 editor: {
-                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
-                    menubar: 'file edit view insert format tools table tc help',
-                    plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | removeformat | help',
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
                 },
+                // cruise types
                 types: [],
                 typeLoading: true,
 
-                cabinsValue: [],
+                // cabins
                 cabinsOptions: [],
                 cabinLoading: true,
 
@@ -1023,18 +999,6 @@
         },
         methods: {
             
-            // toggleCollapse
-            collapseToggle(div) {
-                let el = document.querySelector("span#iconToggle"+div);
-                if(el.classList.contains('ti-angle-down')) {
-                    el.classList.remove('ti-angle-down');
-                    el.classList.add('ti-angle-up');
-                } else {
-                    el.classList.remove('ti-angle-up');
-                    el.classList.add('ti-angle-down');
-                }
-            },
-
             // Fetch Regions
             fetchCruiseTypes(){
                 this.regionLoading = true;
@@ -1055,7 +1019,8 @@
                     .then(res => {
                         this.typeLoading = false;
                         this.types = res.data.rows;
-                        this.fetchCruiseCabins();
+
+                        this.fetchCruiseCabins(); // call next func
                     })
                     .catch(() => {})
                     .finally(() => {});
@@ -1080,23 +1045,14 @@
                 this.axios(options)
                     .then(res => {
                         this.cabinLoading = false;
-                        this.cabinsOptions = res.data.rows.cabins;
+                        this.cabinsOptions = res.data.cabins;
                     })
                     .catch(() => {})
                     .finally(() => {});
             },
 
-            // Upload Featured image
-            onImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
-            onShortImageChange(e){
-                const file = e.target.files[0];
-                this.row.preview = URL.createObjectURL(file);
-                this.row.image = file;
-            },
+
+            
 
 
             // Add New
@@ -1127,59 +1083,61 @@
                 }
 
                 // itienraries
-                for( let i = 1; i < this.row.itinerarie_title.length; i++ ) {
-                        for( let x = 1; x <= 10; x++) {
-                        let item_title = this.row.itinerarie_item_title[i+'_'+x];
-                        let item_body  = this.row.itinerarie_item_body[i+'_'+x];
-                        let item_order = this.row.itinerarie_item_order[i+'_'+x];
-                        if(item_title) {
-                            this.row.itinerarie_items[x] = {
-                                'title': item_title,
-                                'body': item_body,
-                                'order': item_order
-                            }
-                        }
-                    }
+                for( let i = 1; i < this.row.itineraries_title.length; i++ ) {
                     this.row.itineraries[i] = {
-                        'title': this.row.itinerarie_title[i],
-                        'order': this.row.itinerarie_order[i],
-                        'items': this.row.itinerarie_items
+                        'title': this.row.itineraries_title[i],
+                        'sort': this.row.itineraries_sort[i],
+                        'body': this.row.itineraries_body[i]
                     }
-                    this.row.itinerarie_items = []; // clear array
                 }
-
 
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 const options = {
                     url: window.baseURL+'/cruises',
                     method: 'POST',
                     data: {
-                        cruise_type_id: this.row.cruise_type_id,
-                        status: this.row.status,
-                        view_in_home: this.row.view_in_home,
-
-                        cabins: this.cabinsValue,
-
-                        image_url: this.row.image,
-                        image_alt: this.row.image_alt,
-                        image_title: this.row.image_title,
-
-                        short_image_url: this.row.short_image,
-                        short_image_alt: this.row.short_image_alt,
-                        short_image_title: this.row.short_image_title,
-
-                        title: this.row.title,
-                        slug: this.row.slug,
-                        body: this.row.body,
-                        order: this.row.order,
-                        ///
-
+                        // meta
                         meta_title: this.row.meta_title,
                         meta_keywords: this.row.meta_keywords,
                         meta_description: this.row.meta_description,
 
+                        // row
+                        title: this.row.title,
+                        slug: this.row.slug,
+                        short_title: this.row.short_title,
+                        start_price: this.row.start_price,
+                        sort: this.row.sort,                        
+                        inclusion: this.row.inclusion,
+                        exclusion: this.row.exclusion,
+                        cruise_facilites: this.row.cruise_facilites,
+                        guest_suite_facilites: this.row.guest_suite_facilites,
+                        cabin_facilites: this.row.cabin_facilites,
+                        cancellation_facilites: this.row.cancellation_facilites,
+                        short_body: this.row.short_body,
+                        body: this.row.body,
+
+                        // price
                         prices: this.row.prices,
-                        itineraries: this.row.itineraries
+
+                        // itineraries
+                        itineraries: this.row.itineraries,
+
+                        // navbar
+                        cruise_type_id: this.row.cruise_type_id,
+                        cabins: this.row.cabinsValues,
+
+                        // images
+                        image_base: this.row.image_base64,
+                        image_alt: this.row.image_alt,
+                        image_title: this.row.image_title,
+
+                        short_image_base64: this.row.short_image_base64,
+                        short_image_alt: this.row.short_image_alt,
+                        short_image_title: this.row.short_image_title,
+
+                        // status & visibility
+                        status: this.row.status,
+                        view_in_home: this.row.view_in_home,
                     }
                 }
                 this.axios(options, config)
@@ -1190,7 +1148,7 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        this.$router.push({ name: 'cruises' })
+                        //this.$router.push({ name: 'cruises' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -1211,70 +1169,45 @@
 
 
             // items add more
-            opnFrm(i) {
-                let prev = i - 1;
-                let pvt = document.querySelector('#btn_'+prev);
-                let frm = document.querySelector('#frm_'+i);
-                pvt.classList.add('hidden');
-                frm.classList.remove('hidden');
+            opnFrm() {
+                this.row.price_key++;
+                this.row.item_key[this.row.price_key] = 0;
             },
             removeOption(i) {
-                let prev = i - 1;
-                let pvt = document.querySelector('#btn_'+prev);
-                let frm = document.querySelector('#frm_'+i);
-                frm.classList.add('hidden');
-                pvt.classList.remove('hidden');
+                document.querySelector('#frm_'+i).remove();
                 this.row.price_names[i] = '';
+                this.row.item_key[i] = '';
+                // this.row.price_key--; // makes issue
+
+                // clear all sub
+                let n = [1,2,3,4,5,6,7,8,9,10];
+                n.forEach(x => {
+                    this.row.price_item_values[i+'_'+x] = '';
+                    this.row.price_item_body[i+'_'+x] = '';
+                });
             },
-            opnSub(i,x) {
-                let prev = x - 1;
-                let pvt = document.querySelector('#subBtn_'+i+'_'+prev);
-                let frm = document.querySelector('#sub_'+i+'_'+x);
-                pvt.classList.add('hidden');
-                frm.classList.remove('hidden');
+            opnSub(i) {
+                this.row.item_key[i] += 1;
+                document.querySelector('#sub_'+i+'_'+this.row.item_key[i]).classList.remove('hidden');
             },
             removeSubOption(i,x) {
-                let prev = x - 1;
-                let pvt = document.querySelector('#subBtn_'+i+'_'+prev);
-                let frm = document.querySelector('#sub_'+i+'_'+x);
-                frm.classList.add('hidden');
-                pvt.classList.remove('hidden');
+                document.querySelector('#sub_'+i+'_'+x).classList.add('hidden');
                 this.row.price_item_values[i+'_'+x] = '';
                 this.row.price_item_body[i+'_'+x] = '';
+                this.row.item_key[i] -= 1;
             },
 
-            // item2 add more
-            opnFrm2(i) {
-                let prev = i - 1;
-                let pvt = document.querySelector('#btn2_'+prev);
-                let frm = document.querySelector('#frm2_'+i);
-                pvt.classList.add('hidden');
-                frm.classList.remove('hidden');
+            // itineraries add more
+            opnFrmItineraries() {
+                this.row.itineraries_key++;
             },
             removeOption2(i) {
-                let prev = i - 1;
-                let pvt = document.querySelector('#btn2_'+prev);
-                let frm = document.querySelector('#frm2_'+i);
-                frm.classList.add('hidden');
-                pvt.classList.remove('hidden');
-                this.row.price_names[i] = '';
+                document.querySelector('#ifrm_'+i).remove();
+                this.row.itineraries_title[i] = '';
+                this.row.itineraries_sort[i] = '';
+                this.row.itineraries_body[i] = '';
             },
-            opnSub2(i,x) {
-                let prev = x - 1;
-                let pvt = document.querySelector('#subBtn2_'+i+'_'+prev);
-                let frm = document.querySelector('#sub2_'+i+'_'+x);
-                pvt.classList.add('hidden');
-                frm.classList.remove('hidden');
-            },
-            removeSubOption2(i,x) {
-                let prev = x - 1;
-                let pvt = document.querySelector('#subBtn2_'+i+'_'+prev);
-                let frm = document.querySelector('#sub2_'+i+'_'+x);
-                frm.classList.add('hidden');
-                pvt.classList.remove('hidden');
-                this.row.price_item_values[i+'_'+x] = '';
-                this.row.price_item_body[i+'_'+x] = '';
-            },
+            
 
             // Title
             onTitleChange() {
@@ -1293,6 +1226,33 @@
                 this.row.slug = str.replace(/\s+/g, '-');
             },
 
+
+            // Upload Featured image
+            onImageChange(e){
+                const file = e.target.files[0];
+                this.row.image_preview = URL.createObjectURL(file);
+                this.createBase64Image(file);
+            },
+            createBase64Image(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.image_base64 = e.target.result;
+                };
+            },
+            onShortImageChange(e){
+                const file = e.target.files[0];
+                this.row.short_image_preview = URL.createObjectURL(file);
+                this.createBase64ShortImage(file)
+            },
+            createBase64ShortImage(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.short_image_base64 = e.target.result;
+                };
+            },
+
             // active status
             onStatus(){
                 if(this.row.status)
@@ -1305,6 +1265,18 @@
                     this.row.view_in_home = 0;
                 else
                     this.row.view_in_home = 1;
+            },
+
+            // toggleCollapse
+            collapseToggle(div) {
+                let el = document.querySelector("span#iconToggle"+div);
+                if(el.classList.contains('ti-angle-down')) {
+                    el.classList.remove('ti-angle-down');
+                    el.classList.add('ti-angle-up');
+                } else {
+                    el.classList.remove('ti-angle-up');
+                    el.classList.add('ti-angle-down');
+                }
             },
 
             // Cancel
