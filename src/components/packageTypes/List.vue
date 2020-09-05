@@ -230,7 +230,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">No. Packages</th>
+                                        <th class="text-center" style="width: 10%">Packages No.</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -301,7 +301,7 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                {{row.packages_no}}
+                                        <span> {{ row.packages_no }} </span>
                                     </td>
 
                                     <td v-html="(row.deleted_at) ? row.deleted_at : 
@@ -392,7 +392,7 @@
                                         <th>Name</th>
                                         <th class="text-center">Parent</th>
                                         <th class="text-center">Author</th>
-                                        <th class="text-center">No. Packages</th>
+                                        <th class="text-center">Packages No.</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>

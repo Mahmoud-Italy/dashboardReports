@@ -296,7 +296,7 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                        <span> {{ row.articles }} </span>
+                                        <span> {{ row.articles_no }} </span>
                                     </td>
 
                                     <td v-html="(row.deleted_at) ? row.deleted_at : 

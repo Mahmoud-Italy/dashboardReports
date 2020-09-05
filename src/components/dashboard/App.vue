@@ -418,7 +418,7 @@
                                     justify-content-between">
                                     <h2 class="h4 card-header-title">Recent Packages</h2>
                                     <span v-if="!dataLoading" class="ti-reload cursor-pointer" 
-                                        @click="fetchTrendingPackages()">
+                                        @click="fetchRecentPackages()">
                                     </span>
                                     <span v-if="dataLoading">
                                         <div class="spinner-grow spinner-grow-sm" role="status">
@@ -439,6 +439,7 @@
                                                 <tr>
                                                     <th style="width:30%">Title</th>
                                                     <th class="text-center">Destination</th>
+                                                     <th class="text-center">Views No.</th>
                                                     <th class="text-center">Date</th>
                                                 </tr>
                                             </thead>
@@ -469,12 +470,18 @@
 
                                                 <!-- Destination -->
                                                 <td class="font-weight-semi-bold text-center">
-                                                    <span class="badge badge-md badge-pill 
+                                                    <span v-if="!row.destination"></span>
+                                                    <span v-if="row.destination" 
+                                                        class="badge badge-md badge-pill 
                                                         badge-danger-soft">
-                                                        {{ row.sector }}
+                                                        {{ row.destination.title }}
                                                     </span>
                                                 </td>
                                                 <!-- End Destination -->
+
+                                                <td class="font-weight-semi-bold text-center">
+                                                    <span> 0 </span>
+                                                </td>
 
                                                 <!-- Date -->
                                                 <td v-html="(row.deleted_at) ? row.deleted_at : 
@@ -489,6 +496,7 @@
                                                 <tr>
                                                     <th>Title</th>
                                                     <th class="text-center">Destination</th>
+                                                    <th class="text-center">Views No.</th>
                                                     <th class="text-center">Date</th>
                                                 </tr>
                                             </tfoot>
@@ -507,7 +515,7 @@
                                     justify-content-between">
                                     <h2 class="h4 card-header-title">Top Destinations</h2>
                                     <span v-if="!topLoading" class="ti-reload cursor-pointer" 
-                                        @click="fetchTopDestination()">
+                                        @click="fetchTopDestinations()">
                                     </span>
                                     <span v-if="topLoading">
                                         <div class="spinner-grow spinner-grow-sm" role="status">
@@ -832,12 +840,13 @@
                     .then(res => {
                         this.pieLoading = false;
                         this.pies = res.data.rows.total;
-                        this.pieOption.labels = res.data.rows.countries;
+                        this.pieOptions.labels = res.data.rows.countries;
 
                         // Call Next Func
                         if(next) { 
-                            this.fetchRecentPackages(true); 
+                            //this.fetchRecentPackages(true); 
                         }
+                        this.fetchRecentPackages(true); 
                     })
                     .catch(() => { });
             },
@@ -863,8 +872,9 @@
 
                         // Call Next Func
                         if(next) { 
-                            this.fetchTopDestinations(); 
+                            //this.fetchTopDestinations(); 
                         }
+                        this.fetchTopDestinations(); 
                     })
                     .catch(() => {});
             },
