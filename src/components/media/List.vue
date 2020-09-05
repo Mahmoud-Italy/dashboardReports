@@ -92,7 +92,7 @@
 
                                     <td class="font-weight-semi-bold">
                                         <a :href="row.image" target="_blank">
-                                            <img :src="row.image" 
+                                            <img :src="row.image.image_url" 
                                                 style="width:92px">
                                         </a>
                                     </td>
@@ -100,7 +100,7 @@
                                     <td class="font-weight-semi-bold text-center">
                                         <a href="javascript:;" 
                                             title="Copy to clipboard"
-                                            v-clipboard:copy="row.image"
+                                            v-clipboard:copy="row.image.image_url"
                                             v-clipboard:success="onCopy"
                                             v-clipboard:error="onError">
                                             Copy to clipboard
@@ -226,7 +226,6 @@
                 },
                 row: {
                     preview: '',
-                    image: '',
                     base64Image: '',
                 },
                 //
@@ -245,7 +244,7 @@
                 this.auth.role = localStorage.getItem('role');
             }
             if(localStorage.getItem('access_token')) {
-                this.auth.accessToken = localStorage.getItem('access_token');
+                this.auth.access_token = localStorage.getItem('access_token');
             }
 
             this.fetchData('', true);
@@ -302,8 +301,6 @@
             onImageChange(e){
                 const file = e.target.files[0];
                 this.row.preview = URL.createObjectURL(file);
-                //this.row.image = file;
-
                 this.createBase64Image(file);
             },
 

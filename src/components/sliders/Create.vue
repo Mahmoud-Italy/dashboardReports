@@ -55,7 +55,7 @@
                                             aria-expanded="false" 
                                             aria-controls="collapseContent" 
                                             data-toggle="collapse"
-                                            data-target="#collapseContent">Content
+                                            data-target="#collapseContent">Slider
                                             <span id="iconToggleContent" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
@@ -174,7 +174,8 @@
                                             <!-- Image -->
                                             <div class="form-group">
                                                 <label>Image</label>
-                                                <img :src="row.preview" 
+                                                <img v-if="row.image_preview"
+                                                    :src="row.image_preview" 
                                                     class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 

@@ -187,7 +187,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th style="width: 20%">Email</th>
+                                        <th class="text-center" style="width: 20%">Email</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -317,7 +317,7 @@
                                             </div>
                                         </th>
                                         <th>Name</th>
-                                        <th>Email</th>
+                                        <th class="text-center">Email</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>

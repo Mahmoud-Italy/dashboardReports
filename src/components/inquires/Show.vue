@@ -8,7 +8,7 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Inbox</h1>
+                    <h1 class="h2 mb-2">Inquires</h1>
 
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
@@ -17,7 +17,7 @@
                                 <router-link :to="{ name: 'dashboard' }">Dashboard</router-link>
                             </li>
                             <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'inbox' }">Inbox</router-link>
+                                <router-link :to="{ name: 'inquires' }">Inquires</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Show</li>
                         </ol>
@@ -27,11 +27,9 @@
             <!-- Loading -->
             <div v-if="pgLoading" class="row h-100">
                 <div class="container text-center">
-                    <p><br/></p>
-                    <div class="spinner-grow" role="status">
+                    <div class="spinner-grow mt-5" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
-                    <p><br/></p>
                 </div>
             </div>
             <!-- End Loading -->
@@ -56,7 +54,7 @@
                                         aria-expanded="false" 
                                         aria-controls="collapseInbox" 
                                         data-toggle="collapse"
-                                        data-target="#collapseInbox">Inbox
+                                        data-target="#collapseInbox">Inquire
                                         <span id="iconToggleInbox" 
                                             class="ti-angle-up u-sidebar-nav-menu__item-arrow 
                                                 pull-right black">
@@ -92,24 +90,6 @@
                                     </div>
                                     <!-- End Slug -->
 
-
-                                    <!-- Body -->
-                                    <div class="form-group">
-                                        <label for="input3">Message</label>
-                                        <editor
-                                            id="input3"
-                                            v-model="row.body"
-                                            disabled=""
-                                            :api-key="editor.api_key"
-                                            :init="{
-                                                height: 600,
-                                                menubar: editor.menubar,
-                                                plugins: editor.plugins,
-                                                toolbar: editor.toolbar
-                                            }"
-                                        />
-                                    </div>
-                                    <!-- End Body -->
 
                                 </div>
                                 
@@ -159,7 +139,6 @@
     import Header from '../layouts/Header.vue';
     import Navigation from '../layouts/Navigation';
     import Footer from '../layouts/Footer.vue';
-    import Editor from '@tinymce/tinymce-vue';
     import iziToast from 'izitoast';
     
     export default {
@@ -168,7 +147,6 @@
             Header,
             Navigation,
             Footer,
-            Editor
         },
         data(){
             return {
@@ -181,18 +159,6 @@
                     name: '',
                     email: '',
                     body: '',
-                },
-                editor: {
-                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
-                    menubar: 'file edit view insert format tools table tc help',
-                    plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | removeformat | help',
                 },
                 pgLoading: true,
                 btnLoading: false,
@@ -218,7 +184,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/inbox/'+this.$route.params.id,
+                    url: window.baseURL+'/inquires/'+this.$route.params.id,
                     method: 'GET',
                     data: {},
                     params: {},
@@ -264,7 +230,7 @@
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'inbox' });
+                    this.$router.push({ name: 'inquires' });
                 }
             },
 

@@ -112,11 +112,11 @@
                             <div class="card p-3">
                                 <div class="card-body p-0">
                                     <ul class="list-unstyled mb-0">
-                                        <li class="mb-3">
+                                        <!-- <li class="mb-3">
                                             <router-link :to="{ name: 'edit-users', params:{id: auth.user_id} }" 
                                                     class="link-dark">Update Profile
                                             </router-link>
-                                        </li>
+                                        </li> -->
                                         <li>
                                             <a class="link-dark" href="javascript:;" @click="logout">Logout</a>
                                         </li>

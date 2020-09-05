@@ -259,7 +259,7 @@
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
                                                 <img class="u-avatar-xs rounded-circle mr-2"
-                                                    src="/assets/img/default_avatar.png">
+                                                    :src="row.user.image">
                                                 <span class="media-body">{{ row.user.name }}</span>
                                             </div>
                                         </router-link>

@@ -413,14 +413,14 @@
                             <input type="text" 
                                 id="input3"
                                 class="form-control"
-                                v-model="row.image_alt">
+                                v-model="row.icon_alt">
                         </div>
                         <div class="form-group">
                             <label for="input4">Icon title</label>
                             <input type="text" 
                                 id="input4"
                                 class="form-control"
-                                v-model="row.image_title">
+                                v-model="row.icon_title">
                         </div>
                         
                         <div class="form-group">

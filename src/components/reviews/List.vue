@@ -219,9 +219,18 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 15%">Destination</th>
+                                        <th class="text-center" style="width: 15%">Destination
+                                             <span v-if="!destLoading && filter_by == 'destination'"
+                                                @click="removeFilter()"
+                                                class="cursor-pointer ti-close">
+                                            </span>
+                                            <span v-if="destLoading">
+                                                <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                    role="status" aria-hidden="true"></span>
+                                            </span>
+                                        </th>
                                         <th class="text-center" style="width: 20%">Author
-                                            <span v-if="!authorLoading && filter_by=='author'"
+                                            <span v-if="!authorLoading && filter_by == 'author'"
                                                 @click="removeFilter()"
                                                 class="cursor-pointer ti-close">
                                             </span>
@@ -270,18 +279,25 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold">
+                                        <span v-if="!permissions.edit">{{ row.title }}</span>
                                         <router-link v-if="permissions.edit"
                                             :to="{ name: 'edit-reviews', params:{id:row.encrypt_id} }" 
                                             class="default-color text-decoration-hover">
                                             {{ row.title }} 
                                         </router-link>
-                                        <span v-if="!permissions.edit">{{ row.title }}</span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                        <span class="badge badge-md badge-pill badge-danger-soft">
-                                            {{ row.destination.title }}
-                                        </span>
+                                        <span v-if="!row.destination"> - </span>
+                                        <router-link v-if="row.destination" 
+                                            :to="{ name: 'filter-reviews', 
+                                                params:{filter_by:'destination', 
+                                                filter: row.destination.slug}}" 
+                                            class="text-decoration-hover black">
+                                            <span class="badge badge-md badge-pill badge-danger-soft">
+                                                {{ row.destination.title }}
+                                            </span>
+                                        </router-link>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
@@ -292,7 +308,7 @@
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
                                                 <img class="u-avatar-xs rounded-circle mr-2"
-                                                    src="/assets/img/default_avatar.png">
+                                                    :src="row.user.image">
                                                 <span class="media-body">{{ row.user.name }}</span>
                                             </div>
                                         </router-link>
@@ -490,6 +506,7 @@
                 bulkLoading: false,
                 exportLoading: false,
                 authorLoading: false,
+                destLoading: false,
                 showLoading: false,
                 orderLoading: false,
                 something_went_wrong: false,
@@ -569,9 +586,11 @@
 
             removeFilter(){
                 this.authorLoading = true;
+                this.destLoading = true;
                 this.filter = '';
                 this.filter_by = '';
                 this.fetchData('', true);
+                this.$router.push({ name: 'reviews' })
             },
 
             // Fetch Data
@@ -608,6 +627,7 @@
                         this.showLoading = false;
                         this.orderLoading = false;
                         this.authorLoading = false;
+                        this.destLoading = false;
 
                         this.statusBar.all = res.data.statusBar.all;
                         this.statusBar.active = res.data.statusBar.active;

@@ -65,7 +65,7 @@
                                             aria-expanded="false" 
                                             aria-controls="collapseContent" 
                                             data-toggle="collapse"
-                                            data-target="#collapseContent">Content
+                                            data-target="#collapseContent">Slider
                                             <span id="iconToggleContent" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
@@ -164,7 +164,7 @@
 
 
                         <!-- NavTwo -->
-                        <div class="card mt-5">
+                        <div class="card">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
                                     <div id="NavImage" class="card-header">
@@ -187,7 +187,8 @@
                                              <!-- Image -->
                                             <div class="form-group">
                                                 <label>Image</label>
-                                                <img :src="row.preview" 
+                                                <img v-if="row.image_preview"
+                                                    :src="row.image_preview" 
                                                     class="mb-2 custom-image">
                                                 <input type="file" 
                                                     class="form-control" 
@@ -397,7 +398,6 @@
                     this.row.link = res.data.row.link;
                     this.row.iframe = res.data.row.iframe;
                     
-
                     // image
                     this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
                     this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;

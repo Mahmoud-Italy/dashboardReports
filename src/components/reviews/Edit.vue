@@ -31,7 +31,7 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'reviews' }">Reviews</router-link>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Add New</li>
+                            <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
                     </nav>
                     <!-- End Breadcrumb -->
@@ -39,15 +39,14 @@
 
         <div v-if="pgLoading" class="row h-100">
             <div class="container text-center">
-                <p><br/></p>
-                <div class="spinner-grow" role="status">
+                <div class="spinner-grow mt-5" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
-                <p><br/></p>
             </div>
         </div>
 
         <form v-if="!pgLoading" @submit.prevent="editRow" enctype="multipart/form-data" class="h-100">
+
 
             <!-- Content -->
             <div class="tab-content">
@@ -112,7 +111,7 @@
                                         <div class="col-4 no-lpadding">
                                             <div class="form-group">
                                                 <label for="inputText2">Stars</label>
-                                                <input class="form-control text-lowercase"
+                                                <input class="form-control"
                                                         id="inputText2"  
                                                         type="text" 
                                                         v-model="row.stars">
@@ -123,11 +122,11 @@
                                         <!-- Review Numbers -->
                                         <div class="col-4">
                                             <div class="form-group">
-                                                <label for="inputText2">Review Numbers</label>
-                                                <input class="form-control text-lowercase"
+                                                <label for="inputText2">Reviews Number</label>
+                                                <input class="form-control"
                                                         id="inputText2"  
                                                         type="text" 
-                                                        v-model="row.review_numbers">
+                                                        v-model="row.reviews_number">
                                             </div>
                                         </div>
                                         <!-- End Review Numbers -->
@@ -136,7 +135,7 @@
                                         <div class="col-4 no-rpadding">
                                             <div class="form-group">
                                                 <label for="inputText2">Place</label>
-                                                <input class="form-control text-lowercase"
+                                                <input class="form-control"
                                                         id="inputText2"  
                                                         type="text" 
                                                         v-model="row.place">
@@ -193,52 +192,59 @@
                     <!-- ******* SideNavbar ******** -->
                     <div class="col-md-4 mb-5">
 
-                        <!-- NavTwo -->
+                         <!-- Nav Destination -->
                         <div class="card">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
-                                    <div id="NavDestinations" class="card-header">
-                                        <h2 class="h4 card-header-title"
-                                            @click="collapseToggle('Destinations')"  
+                                    <div id="NavDestination" class="card-header">
+                                        <h2 class="h4 card-header-title" 
+                                            @click="collapseToggle('Destination')" 
                                             aria-expanded="false" 
-                                            aria-controls="collapseNavDestinations" 
+                                            aria-controls="collapseNavDestination" 
                                             data-toggle="collapse" 
-                                            data-target="#collapseNavDestinations">Destinations
-                                            <span id="iconToggleDestinations" 
+                                            data-target="#collapseNavDestination">Destination
+                                            <span id="iconToggleDestination" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseNavDestinationse" 
+                                    <div id="collapseNavDestination" 
                                         class="collapse" 
-                                        aria-labelledby="NavDestinations" 
+                                        aria-labelledby="NavDestination" 
                                         data-parent="#accordionNav">
-                                        <div class="col-12 pt-3">
-                                            <!-- Destination -->
-                                            <div class="form-group">
-                                                <div v-if="destinationLoading" class="text-center">
-                                                    <span class="spinner-grow spinner-grow-sm mr-1" 
-                                                        role="status" aria-hidden="true">
-                                                    </span>
-                                                </div>
-                                                <select class="form-control custom-select"
-                                                        v-if="!destinationLoading" 
-                                                        v-model="row.destination_id">
-                                                        <option value="">Select Destination</option>
-                                                        <option v-for="(destination, index) in destinations" 
-                                                                :key="index"
-                                                                :value="destination.id">
-                                                                {{ destination.title }}
-                                                        </option>
-                                                </select>
+                                        
+                                    <div class="col-12 pt-3">
+                                        <!-- Destinations -->
+                                        <div class="form-group">
+                                            <div v-if="destinationLoading" class="text-center">
+                                                <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                    role="status" 
+                                                    aria-hidden="true">
+                                                </span>
                                             </div>
-                                            <!-- End Destination -->
+                                            <select class="form-control custom-select"
+                                                    v-if="!destinationLoading" 
+                                                    v-model="row.destination_id">
+                                                    <option value="">Select Destination</option>
+                                                    <optgroup v-for="(region, index) in destinations" 
+                                                            :key="index"
+                                                            :label="region.title">
+                                                        <option v-for="(destination,idx) in region.destinations"
+                                                            :key="idx"
+                                                            :value="destination.id">
+                                                            {{ destination.title }}
+                                                        </option>
+                                                    </optgroup>
+                                            </select>
+                                        </div>
+                                        <!-- End Destination -->
+                                        
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- End NavTwo -->
+                        <!-- End Nav Destination -->
 
                         <!-- NavTwo -->
                         <div class="card mt-5">
@@ -421,8 +427,8 @@
                 row: {
                     // row
                     name: '',
-                    starts: '',
-                    review_numbers: '',
+                    stars: '',
+                    reviews_number: '',
                     place: '',
                     email: '',
                     title: '',
@@ -470,10 +476,7 @@
             this.fetchRow();
         },
         methods: {
-            
-            
-
-            // fetch Row
+                
             fetchRow() {
                 this.pgLoading = true;
                 this.axios.defaults.headers.common = {
@@ -493,19 +496,19 @@
                     this.row.name = res.data.row.name;
                     this.row.email = res.data.row.email;
                     this.row.stars = res.data.row.stars;
-                    this.row.review_numbers = res.data.row.review_numbers;
+                    this.row.reviews_number = res.data.row.reviews_number;
                     this.row.place = res.data.row.place;
                     this.row.title = res.data.row.title;
                     this.row.body = res.data.row.body;
 
                     // navbar
-                    this.row.destination_id = res.data.row.destination.id;
+                    this.row.destination_id = (res.data.row.destination) ? res.data.row.destination.id : '';
 
                     // image
                     this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
                     this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
                     this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.imgage_title : null;
+                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
 
                     // status & visiblity
                     this.row.status = res.data.row.status;
@@ -559,6 +562,9 @@
                         email: this.row.email,
                         title: this.row.title,
                         body: this.row.body,
+                        stars: this.row.stars,
+                        place: this.row.place,
+                        reviews_number: this.row.reviews_number,
                         sort: this.row.sort,
 
                         // navbar

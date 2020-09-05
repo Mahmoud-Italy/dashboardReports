@@ -84,8 +84,8 @@
                                             :fields = "exp.json_fields"
                                             :before-generate = "startDownload"
                                             :before-finish = "finishDownload"
-                                            worksheet = "Tenants"
-                                            name = "Tenants.xls">Excel
+                                            worksheet = "Settings"
+                                            name = "Settings.xls">Excel
                                         </download-excel>
                                         <download-excel
                                             class = "dropdown-item cursor-pointer"
@@ -94,8 +94,8 @@
                                             :before-generate = "startDownload"
                                             :before-finish = "finishDownload"
                                             type = "csv"
-                                            worksheet = "Tenants"
-                                            name = "Tenants.xls">CSV
+                                            worksheet = "Setting"
+                                            name = "Setting.xls">CSV
                                         </download-excel>
                                         <a class="dropdown-item" href="javascript:;" v-print="'#printMe'">Print</a>
                                     </div>
@@ -181,9 +181,9 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th style="width:15%">Name
+                                        <th style="width:15%">Title
                                             <span v-if="!orderLoading"
-                                                @click="onOrderBy('name')"
+                                                @click="onOrderBy('title')"
                                                 class="cursor-pointer " 
                                                 :class="(this.order == 'DESC') 
                                                         ? 'ti-arrow-down' 
@@ -247,7 +247,7 @@
                                     <td class="font-weight-semi-bold">
                                         <span @click="editRow(row)" 
                                             class="default-color text-decoration-hover cursor-pointer">
-                                            {{ row.name }} 
+                                            {{ row.title }} 
                                         </span>
                                     </td>
 
@@ -259,7 +259,7 @@
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
                                                 <img class="u-avatar-xs rounded-circle mr-2"
-                                                    src="/assets/img/default_avatar.png">
+                                                    :src="row.user.image">
                                                 <span class="media-body">{{ row.user.name }}</span>
                                             </div>
                                         </router-link>
@@ -338,7 +338,7 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th>Name</th>
+                                        <th>Title</th>
                                         <th class="text-center">Author</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
@@ -588,6 +588,7 @@
                 this.filter = '';
                 this.filter_by = '';
                 this.fetchData('', true);
+                this.$router.push({ name: 'settings' })
             },
 
             // Fetch Data

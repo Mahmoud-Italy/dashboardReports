@@ -303,7 +303,7 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                        <span> {{ row.packages }} </span>
+                                        <span> {{ row.packages_no }} </span>
                                     </td>
 
                                     <td v-html="(row.deleted_at) ? row.deleted_at : 

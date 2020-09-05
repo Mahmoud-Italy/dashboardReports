@@ -820,7 +820,7 @@
                     // row
                     title: '',
                     slug: '',
-                    sort: '',
+                    sort: 0,
                     short_body: '',
                     body: '',
 

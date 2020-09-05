@@ -202,7 +202,7 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th style="width:30%">Title
+                                        <th style="width:25%">Title
                                             <span v-if="!orderLoading"
                                                 @click="onOrderBy('title')"
                                                 class="cursor-pointer " 
@@ -216,9 +216,27 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">Type</th>
-                                        <th class="text-center" style="width: 20%">Author</th>
-                                        <th class="text-center" style="width: 10%">No. Views</th>
+                                        <th class="text-center" style="width: 10%">Type
+                                            <span v-if="!typeLoading && filter_by == 'type'"
+                                                @click="removeFilter()"
+                                                class="cursor-pointer ti-close">
+                                            </span>
+                                            <span v-if="typeLoading">
+                                                <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                    role="status" aria-hidden="true"></span>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" style="width: 20%">Author
+                                            <span v-if="!authorLoading && filter_by == 'author'"
+                                                @click="removeFilter()"
+                                                class="cursor-pointer ti-close">
+                                            </span>
+                                            <span v-if="authorLoading">
+                                                <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                    role="status" aria-hidden="true"></span>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" style="width: 10%">Views No.</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -269,27 +287,26 @@
 
                                 
                                     <td class="font-weight-semi-bold text-center">
-                                        <router-link v-if="row.destination"
+                                        <span v-if="!row.cruiseType"> - </span>
+                                        <router-link v-if="row.cruiseType"
                                             :to="{ name: 'filter-cruises', 
-                                            params:{filter_by: 'destination', 
-                                                   filter : row.destination.title} }" 
+                                            params:{filter_by: 'type', filter : row.cruiseType.slug} }" 
                                             class="text-decoration-hover">
                                             <span class="badge badge-md badge-pill badge-danger-soft">
-                                                {{ row.destination.title }}
+                                                {{ row.cruiseType.title }}
                                             </span>
                                         </router-link>
-                                        <span v-if="!row.destination"> - </span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
                                         <span v-if="!row.user" class="text-center"> - </span>
                                         <router-link v-if="row.user" 
                                             :to="{ name: 'filter-cruises', 
-                                                params:{filter_by: 'author', 'filter':row.user.id}}" 
+                                                params:{filter_by: 'author', 'filter':row.user.encrypt_id}}" 
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
                                                 <img class="u-avatar-xs rounded-circle mr-2"
-                                                    src="/assets/img/default_avatar.png">
+                                                    :src="row.user.image">
                                                 <span class="media-body">{{ row.user.name }}</span>
                                             </div>
                                         </router-link>
@@ -387,7 +404,7 @@
                                         <th>Title</th>
                                         <th class="text-center">Type</th>
                                         <th class="text-center">Author</th>
-                                        <th class="text-center">No. Views</th>
+                                        <th class="text-center">Views No.</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
@@ -491,6 +508,8 @@
                 sortLoading: false,
                 showLoading: false,
                 orderLoading: false,
+                typeLoading: false,
+                authorLoading: false,
                 something_went_wrong: false,
                 rows: [],
                 show: 10,
@@ -566,6 +585,14 @@
                 this.fetchData('', true);
             },
 
+            removeFilter(){
+                this.authorLoading = true;
+                this.typeLoading = true;
+                this.filter = '';
+                this.filter_by = '';
+                this.$router.push({ name: 'cruises' })
+            },
+
             // Fetch Data
             fetchData(page_url, loading=false) {
                 if(loading) { this.dataLoading = true; }
@@ -599,6 +626,8 @@
                         this.bulkLoading = false;
                         this.showLoading = false;
                         this.orderLoading = false;
+                        this.typeLoading = false;
+                        this.authorLoading = false;
 
                         this.statusBar.all = res.data.statusBar.all;
                         this.statusBar.active = res.data.statusBar.active;

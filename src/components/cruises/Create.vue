@@ -242,12 +242,12 @@
                                     <!-- End Exclusion -->
 
 
-                                    <!-- Facilites -->
+                                    <!-- Facilitues -->
                                     <div class="form-group">
-                                        <label for="ieditor3">Cruise Facilites</label>
+                                        <label for="ieditor3">Cruise Facilities</label>
                                         <editor
                                             id="ieditor3"
-                                            v-model="row.cruise_facilites"
+                                            v-model="row.cruise_facilities"
                                             :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
@@ -257,14 +257,14 @@
                                             }"
                                         />
                                     </div>
-                                    <!-- End Facilites -->
+                                    <!-- End Facilities -->
 
-                                    <!-- Suite Facilites -->
+                                    <!-- Suite Facilities -->
                                     <div class="form-group">
-                                        <label for="iEditor4">Guest Suite Facilites</label>
+                                        <label for="iEditor4">Guest Suite Facilities</label>
                                         <editor
                                             id="iEditor4"
-                                            v-model="row.guest_suite_facilites"
+                                            v-model="row.guest_suite_facilities"
                                             :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
@@ -274,14 +274,14 @@
                                             }"
                                         />
                                     </div>
-                                    <!-- End Suite Facilites -->
+                                    <!-- End Suite Facilities -->
 
-                                    <!-- Cabin Facilites -->
+                                    <!-- Cabin Facilities -->
                                     <div class="form-group">
-                                        <label for="iEditor5">Cabin Facilites</label>
+                                        <label for="iEditor5">Cabin Facilities</label>
                                         <editor
                                             id="iEditor5"
-                                            v-model="row.cabin_facilites"
+                                            v-model="row.cabin_facilities"
                                             :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
@@ -291,14 +291,14 @@
                                             }"
                                         />
                                     </div>
-                                    <!-- End Cabin Facilites -->
+                                    <!-- End Cabin Facilities -->
 
-                                    <!-- Cancellation Facilites -->
+                                    <!-- Cancellation Policies -->
                                     <div class="form-group">
-                                        <label for="iEditor6">Cancellation Facilites</label>
+                                        <label for="iEditor6">Cancellation Policies</label>
                                         <editor
                                             id="iEditor6"
-                                            v-model="row.cancellation_facilites"
+                                            v-model="row.cancellation_policies"
                                             :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
@@ -308,7 +308,7 @@
                                             }"
                                         />
                                     </div>
-                                    <!-- End Cancellation Facilites -->
+                                    <!-- End Cancellation Policies -->
 
 
                                     <!-- Body -->
@@ -363,7 +363,7 @@
                                         aria-expanded="false" 
                                         aria-controls="collapsePrices" 
                                         data-toggle="collapse"
-                                        data-target="#collapsePrices">Prices {{ row.price_key}}
+                                        data-target="#collapsePrices">Prices
                                         <span id="iconTogglePrices" 
                                             class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                         </span>
@@ -396,7 +396,7 @@
 
                                                 <!-- Price Name -->
                                                 <div class="form-group">
-                                                    <label :for="'iInput'+i">Price Name {{ i }}</label>
+                                                    <label :for="'iInput'+i">Price Name</label>
                                                     <input class="form-control" 
                                                             :id="'iInput'+i" 
                                                             type="text" 
@@ -418,7 +418,7 @@
                                                             <input class="form-control" 
                                                                     :id="'pvInput'+i+'_'+x" 
                                                                     type="text" 
-                                                                    v-model="row.price_item_values[i+'_'+x]">
+                                                                    v-model="row.price_item_value[i+'_'+x]">
                                                         </div>
                                                         <div class="form-group col-5">
                                                             <label :for="'pcInput'+i+'_'+x">Content</label>
@@ -467,7 +467,7 @@
                     </div>
                     <!-- End Card Price -->
 
-                    <!-- Card Itinerarie -->
+                    <!-- Card Itineraries -->
                     <div class="card mt-5">
                         <div class="card-body">
                             <div id="accordion" class="accordion">
@@ -477,10 +477,9 @@
                                         aria-expanded="false" 
                                         aria-controls="collapseItineraries" 
                                         data-toggle="collapse"
-                                        data-target="#collapseItineraries">Itineraries {{ row.itineraries_key}}
+                                        data-target="#collapseItineraries">Itineraries
                                         <span id="iconToggleItineraries" 
-                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow 
-                                                pull-right black">
+                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                         </span>
                                     </h2>
                                 </div>
@@ -489,83 +488,114 @@
                                     aria-labelledby="TabItineraries" 
                                     data-parent="#accordion">
 
-                                <div class="col-12 pt-3">
-                                
-                                    <!-- For Loop -->
-                                    <div v-for="y in row.itineraries_key" 
-                                        :key="y" 
-                                        :class="(y == 0) ? 'hidden' : '' " 
-                                        :id="'ifrm_'+y"
-                                        class="ui-for-div">
+                                    <div class="col-12 pt-3">
 
-                                        <!-- Remove -->
-                                        <div class="pull-right ui-mt-10">
-                                            <button v-if="y != 0"
-                                                type="button" 
-                                                class="btn btn-danger btn-circle btn-with-icon btn-sm" 
-                                                @click="removeOption2(y)">
-                                                <span class="btn-icon ti-close font-bold"></span>
-                                            </button>
-                                        </div>
-                                        <!-- End Remove -->
+                                            <!-- For Loop -->
+                                            <div v-for="i in row.itinerarie_key" 
+                                                :key="i" 
+                                                :class="(i == 0) ? 'hidden' : ''"
+                                                :id="'frm2_'+i"
+                                                class="ui-for-div">
 
-                                        <!-- Title -->
-                                        <div class="form-group">
-                                            <label :for="'iTi'+y">Title</label>
-                                            <input class="form-control" 
-                                                    :id="'iTi'+y" 
-                                                    type="text" 
-                                                    v-model="row.itineraties_title[y]">
-                                        </div>
-                                        <!-- End Title -->
+                                                 <!-- Remove -->
+                                                <div class="pull-right ui-mt-10">
+                                                    <button v-if="i != 0"
+                                                        type="button" 
+                                                        class="btn btn-danger btn-circle btn-with-icon btn-sm"
+                                                        @click="removeOption2(i)">
+                                                        <span class="btn-icon ti-close font-bold"></span>
+                                                     </button>
+                                                </div>
+                                                <!-- End Remove -->
 
-                                        <!-- Title -->
-                                        <div class="form-group">
-                                            <label :for="'iTi2'+y">Sort</label>
-                                            <input class="form-control" 
-                                                    :id="'iTi2'+y" 
-                                                    type="text" 
-                                                    v-model="row.itineraties_sort[y]">
-                                        </div>
-                                        <!-- End Title -->
+                                                <!-- Itinerarie Name -->
+                                                <div class="form-group">
+                                                    <label :for="'iInput'+i">Itinerarie Name</label>
+                                                    <input class="form-control" 
+                                                            :id="'iInput'+i" 
+                                                            type="text" 
+                                                            v-model="row.itinerarie_names[i]">
+                                                </div>
+                                                <!-- End Itinerarie Name -->
 
-                                        <!-- Body -->
-                                        <div class="form-group">
-                                            <label :for="'iTiEditor'+y">Body</label>
-                                            <editor
-                                                :id="'iTiEditor'+y"
-                                                v-model="row.itineraties_body[y]"
-                                                :api-key="editor.api_key"
-                                                :init="{
-                                                    height: 300,
-                                                    menubar: editor.menubar,
-                                                    plugins: editor.plugins,
-                                                    toolbar: editor.toolbar
-                                                }"
-                                            />
-                                        </div>
-                                        <!-- End Short Body -->
+                                                
+                                                <!-- Price Items -->
+                                               <div v-for="x in 10" 
+                                                    :key="x" 
+                                                    :class="(x != 0) ? 'hidden' : ''"
+                                                    :id="'sub2_'+i+'_'+x"
+                                                    class="ui-for-div">
+
+                                                    <div class="row col-12 ui-ml-unset">
+                                                        <div class="form-group col-1"></div>
+                                                        <div class="form-group col-7">
+                                                            <label :for="'tInput'+i+'_'+x">Title</label>
+                                                            <input class="form-control" 
+                                                                    :id="'tInput'+i+'_'+x" 
+                                                                    type="text" 
+                                                                    v-model="row.itinerarie_item_title[i+'_'+x]">
+                                                        </div>
+                                                        <div class="form-group col-3">
+                                                            <label :for="'sInput'+i+'_'+x">Sort</label>
+                                                            <input class="form-control" 
+                                                                    :id="'sInput'+i+'_'+x" 
+                                                                    type="text" 
+                                                                    v-model="row.itinerarie_item_sort[i+'_'+x]">
+                                                        </div>
+                                                        <div class="form-group col-1">
+                                                            <button type="button" 
+                                                                v-if="x != 0"
+                                                                @click="removeSubOption2(i,x)"
+                                                                class="btn btn-circle btn-with-icon ui-mt30">
+                                                                <span class="btn-icon ti-close font-bold"></span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="form-group col-1"></div>
+                                                        <div class="form-group col-11">
+                                                            <label :for="'bEditor'+i+'_'+x">Body</label>
+                                                            <editor
+                                                                :id="'bEditor'+i+'_'+x"
+                                                                v-model="row.itinerarie_item_body[i+'_'+x]"
+                                                                :api-key="editor.api_key"
+                                                                :init="{
+                                                                    height: 300,
+                                                                    menubar: editor.menubar,
+                                                                    plugins: editor.plugins,
+                                                                    toolbar: editor.toolbar
+                                                                }"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End Price Items -->
+
+                                                <!-- Price add more -->
+                                                <div class="form-group col-1">
+                                                    <button type="button" 
+                                                        @click="opnSub2(i)"
+                                                        class="btn btn-secondary btn-circle btn-with-icon ui-mt30 ui-ml-20">
+                                                        <span class="btn-icon ti-plus font-bold"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- End Price add more -->
+                                            </div>
+
+                                            <!-- Add more -->
+                                            <div class="row pull-right">
+                                                <button type="button" 
+                                                    class="btn btn-dark btn-circle btn-with-icon"
+                                                    @click="opnFrm2()">
+                                                    <span class="btn-icon ti-plus font-bold"></span>
+                                                </button>
+                                            </div>
+                                            <!-- End more -->
 
                                     </div>
-                                    <!-- End Loop -->
-
-                                        <!-- Add more -->
-                                        <div class="row pull-right">
-                                            <button type="button" 
-                                                class="btn btn-dark btn-circle btn-with-icon"
-                                                @click="opnFrmItineraries()">
-                                                <span class="btn-icon ti-plus font-bold"></span>
-                                            </button>
-                                        </div>
-                                        <!-- End more -->
-                                        
-                                    </div>
-                                
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- End Card Itinerary -->
+                    <!-- End Card Itineraries -->
 
                 </div>
                 <!-- ******* End Cards ******* -->
@@ -577,8 +607,8 @@
                     <!-- Nav Cruise Type -->
                     <div class="card">
                         <div class="card-body">
-                                <div id="accordionNav" class="accordion">
-                                    <div id="NavType" class="card-header">
+                            <div id="accordionNav" class="accordion">
+                                <div id="NavType" class="card-header">
                                         <h2 class="h4 card-header-title" 
                                             @click="collapseToggle('Type')" 
                                             aria-expanded="false" 
@@ -923,29 +953,34 @@
                     sort: 0,
                     inclusion: '',
                     exclusion: '',
-                    cruise_facilites: '',
-                    guest_suite_facilites: '',
-                    cabin_facilites: '',
-                    cancellation_facilites: '',
+                    cruise_facilities: '',
+                    guest_suite_facilities: '',
+                    cabin_facilities: '',
+                    cancellation_policies: '',
                     short_body: '',
                     body: '',
 
                     // prices
-                    prices: [],
                     price_key: 0,
-                    items: [],
-                    item_key: [],
+                    prices: [],
                     price_names: [],
+                    // items
                     price_items: [],
-                    price_item_values: [],
+                    price_item_key: [],
+                    price_item_value: [],
                     price_item_body: [],
 
-                    // itienraries
+                    // itineraries
+                    itinerarie_key: 0,
                     itineraries: [],
-                    itineraries_key: 0,
-                    itineraries_title: [],
-                    itineraries_sort: [],
-                    itineraries_body: [],
+                    itinerarie_names: [],
+                    itinerarie_sort: [],
+                    // items
+                    itinerarie_items: [],
+                    itinerarie_item_key: [],
+                    itinerarie_item_title: [],
+                    itinerarie_item_sort: [],
+                    itinerarie_item_body: [],
 
                     // navbar
                     cruise_type_id: '',
@@ -1052,8 +1087,6 @@
             },
 
 
-            
-
 
             // Add New
             addNew(){
@@ -1066,7 +1099,7 @@
                 // prices
                 for( let i = 1; i < this.row.price_names.length; i++ ) {
                         for( let x = 1; x <= 10; x++) {
-                        let item_value = this.row.price_item_values[i+'_'+x];
+                        let item_value = this.row.price_item_value[i+'_'+x];
                         let item_body  = this.row.price_item_body[i+'_'+x];
                         if(item_value) {
                             this.row.price_items[x] = {
@@ -1082,13 +1115,26 @@
                     this.row.price_items = []; // clear array
                 }
 
-                // itienraries
-                for( let i = 1; i < this.row.itineraries_title.length; i++ ) {
-                    this.row.itineraries[i] = {
-                        'title': this.row.itineraries_title[i],
-                        'sort': this.row.itineraries_sort[i],
-                        'body': this.row.itineraries_body[i]
+                // itineraries
+                for( let i = 1; i < this.row.itinerarie_names.length; i++ ) {
+                        for( let x = 1; x <= 10; x++) {
+                        let item_title = this.row.itinerarie_item_title[i+'_'+x];
+                        let item_sort  = this.row.itinerarie_item_sort[i+'_'+x];
+                        let item_body  = this.row.itinerarie_item_body[i+'_'+x];
+                        if(item_title) {
+                            this.row.itinerarie_items[x] = {
+                                'item_title' : item_title,
+                                'item_sort' : item_sort,
+                                'item_body' : item_body
+                            }
+                        }
                     }
+                    this.row.itineraries[i] = {
+                        'itinerarie_name' : this.row.itinerarie_names[i],
+                        'itinerarie_sort' : this.row.itinerarie_sort[i],
+                        'items' : this.row.itinerarie_items
+                    }
+                    this.row.itinerarie_items = []; // clear array
                 }
 
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
@@ -1109,10 +1155,10 @@
                         sort: this.row.sort,                        
                         inclusion: this.row.inclusion,
                         exclusion: this.row.exclusion,
-                        cruise_facilites: this.row.cruise_facilites,
-                        guest_suite_facilites: this.row.guest_suite_facilites,
-                        cabin_facilites: this.row.cabin_facilites,
-                        cancellation_facilites: this.row.cancellation_facilites,
+                        cruise_facilities: this.row.cruise_facilities,
+                        guest_suite_facilities: this.row.guest_suite_facilities,
+                        cabin_facilities: this.row.cabin_facilities,
+                        cancellation_policies: this.row.cancellation_policies,
                         short_body: this.row.short_body,
                         body: this.row.body,
 
@@ -1127,7 +1173,7 @@
                         cabins: this.row.cabinsValues,
 
                         // images
-                        image_base: this.row.image_base64,
+                        image_base64: this.row.image_base64,
                         image_alt: this.row.image_alt,
                         image_title: this.row.image_title,
 
@@ -1148,7 +1194,7 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        //this.$router.push({ name: 'cruises' })
+                        this.$router.push({ name: 'cruises' })
                     })
                     .catch(err => {
                         // 403 Forbidden
@@ -1171,41 +1217,61 @@
             // items add more
             opnFrm() {
                 this.row.price_key++;
-                this.row.item_key[this.row.price_key] = 0;
+                this.row.price_item_key[this.row.price_key] = 0;
             },
             removeOption(i) {
                 document.querySelector('#frm_'+i).remove();
                 this.row.price_names[i] = '';
-                this.row.item_key[i] = '';
+                this.row.price_item_key[i] = '';
                 // this.row.price_key--; // makes issue
 
                 // clear all sub
                 let n = [1,2,3,4,5,6,7,8,9,10];
                 n.forEach(x => {
-                    this.row.price_item_values[i+'_'+x] = '';
+                    this.row.price_item_value[i+'_'+x] = '';
                     this.row.price_item_body[i+'_'+x] = '';
                 });
             },
             opnSub(i) {
-                this.row.item_key[i] += 1;
-                document.querySelector('#sub_'+i+'_'+this.row.item_key[i]).classList.remove('hidden');
+                this.row.price_item_key[i] += 1;
+                document.querySelector('#sub_'+i+'_'+this.row.price_item_key[i]).classList.remove('hidden');
             },
             removeSubOption(i,x) {
                 document.querySelector('#sub_'+i+'_'+x).classList.add('hidden');
-                this.row.price_item_values[i+'_'+x] = '';
+                this.row.price_item_value[i+'_'+x] = '';
                 this.row.price_item_body[i+'_'+x] = '';
-                this.row.item_key[i] -= 1;
+                this.row.price_item_key[i] -= 1;
             },
 
             // itineraries add more
-            opnFrmItineraries() {
-                this.row.itineraries_key++;
+            opnFrm2() {
+                this.row.itinerarie_key++;
+                this.row.itinerarie_item_key[this.row.itinerarie_key] = 0;
             },
             removeOption2(i) {
-                document.querySelector('#ifrm_'+i).remove();
-                this.row.itineraries_title[i] = '';
-                this.row.itineraries_sort[i] = '';
-                this.row.itineraries_body[i] = '';
+                document.querySelector('#frm2_'+i).remove();
+                this.row.itinerarie_names[i] = '';
+                this.row.itinerarie_item_key[i] = '';
+                // this.row.itinerarie_key--; // makes issue
+
+                // clear all sub
+                let n = [1,2,3,4,5,6,7,8,9,10];
+                n.forEach(x => {
+                    this.row.itinerarie_item_title[i+'_'+x] = '';
+                    this.row.itinerarie_item_sort[i+'_'+x] = '';
+                    this.row.itinerarie_item_body[i+'_'+x] = '';
+                });
+            },
+            opnSub2(i) {
+                this.row.itinerarie_item_key[i] += 1;
+                document.querySelector('#sub2_'+i+'_'+this.row.itinerarie_item_key[i]).classList.remove('hidden');
+            },
+            removeSubOption2(i,x) {
+                document.querySelector('#sub2_'+i+'_'+x).classList.add('hidden');
+                this.row.itinerarie_item_title[i+'_'+x] = '';
+                this.row.itinerarie_item_sort[i+'_'+x] = '';
+                this.row.itinerarie_item_body[i+'_'+x] = '';
+                this.row.itinerarie_item_key[i] -= 1;
             },
             
 
@@ -1265,6 +1331,15 @@
                     this.row.view_in_home = 0;
                 else
                     this.row.view_in_home = 1;
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
             },
 
             // toggleCollapse

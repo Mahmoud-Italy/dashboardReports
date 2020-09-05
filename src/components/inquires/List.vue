@@ -17,7 +17,7 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Dashboard</router-link>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Inbox</li>
+                            <li class="breadcrumb-item active" aria-current="page">Inquires</li>
                         </ol>
                     
                     <!-- Build Action button -->
@@ -74,8 +74,8 @@
                                         :fields = "exp.json_fields"
                                         :before-generate = "startDownload"
                                         :before-finish = "finishDownload"
-                                        worksheet = "Inbox"
-                                        name = "Inbox.xls">Excel
+                                        worksheet = "Inquires"
+                                        name = "Inquires.xls">Excel
                                     </download-excel>
                                     <download-excel
                                         class = "dropdown-item cursor-pointer"
@@ -84,8 +84,8 @@
                                         :before-generate = "startDownload"
                                         :before-finish = "finishDownload"
                                         type = "csv"
-                                        worksheet = "Inbox"
-                                        name = "Inbox.xls">CSV
+                                        worksheet = "Inquires"
+                                        name = "Inquires.xls">CSV
                                     </download-excel>
                                     <a class="dropdown-item" href="javascript:;" v-print="'#printMe'">Print</a>
                                 </div>
@@ -102,22 +102,22 @@
                     <header class="card-header">
                         <h2 class="h4 card-header-title">
                             <router-link class="pg-hd"
-                                :to="{ name: 'inbox' }"
+                                :to="{ name: 'inquires' }"
                                 :class="(status == '') ? 'active' : '' ">All</router-link> 
                             <span class="pg-hd no-decoration f14"> ({{statusBar.all}}) </span> &nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-inbox', params:{status: 'active'} }" 
+                                :to="{ name: 'status-inquires', params:{status: 'active'} }" 
                                 :class="(status == 'active') ? 'active' : '' ">Seen</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.active}}) </span> &nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-inbox', params:{status: 'inactive'} }" 
+                                :to="{ name: 'status-inquires', params:{status: 'inactive'} }" 
                                 :class="(status == 'inactive') ? 'active' : '' ">Unseen</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.inactive}}) </span> &nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-inbox', params:{status: 'trash'} }" 
+                                :to="{ name: 'status-inquires', params:{status: 'trash'} }" 
                                 :class="(status == 'trash') ? 'active' : '' ">Trash</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.trash}}) </span>
 
@@ -187,7 +187,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th style="width: 20%">Email</th>
+                                        <th class="text-center" style="width: 20%">Email</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -229,7 +229,7 @@
 
                                     <td class="font-weight-semi-bold">
                                         <router-link 
-                                            :to="{ name:'show-inbox',params:{id:row.encrypt_id}}" 
+                                            :to="{ name:'show-inquires',params:{id:row.encrypt_id}}" 
                                             class="default-color text-decoration-hover">
                                             {{ row.name }} 
                                         </router-link>
@@ -263,7 +263,7 @@
                                                         <li v-if="!row.trash">
                                                             <router-link 
                                                                 class="d-block link-dark"
-                                                                :to="{ name: 'show-inbox', 
+                                                                :to="{ name: 'show-inquires', 
                                                                 params:{id: row.encrypt_id}}">
                                                                 Show
                                                             </router-link>
@@ -317,7 +317,7 @@
                                             </div>
                                         </th>
                                         <th>Name</th>
-                                        <th>Email</th>
+                                        <th class="text-center">Email</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
@@ -487,7 +487,7 @@
                 };
                 let vm = this;
                 const options = {
-                    url: page_url || window.baseURL+'/inbox',
+                    url: page_url || window.baseURL+'/inquires',
                     method: 'GET',
                     data: {},
                     params: {
@@ -540,7 +540,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/inbox/export?id='+this.selected);
+                    this.axios.post(window.baseURL+'/inquires/export?id='+this.selected);
                 return res.data.rows;
             },
             startDownload(){
@@ -601,7 +601,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/inbox/active/'+id,
+                  url: window.baseURL+'/inquires/active/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -634,7 +634,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/inbox/inactive/'+id,
+                  url: window.baseURL+'/inquires/inactive/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -678,7 +678,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/inbox/trash/'+id,
+                  url: window.baseURL+'/inquires/trash/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -723,7 +723,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/inbox/restore/'+id,
+                  url: window.baseURL+'/inquires/restore/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -768,7 +768,7 @@
                         'Authorization': `Bearer `+this.auth.access_token,
                     };
                     const options = {
-                        url: window.baseURL+'/inbox/'+id,
+                        url: window.baseURL+'/inquires/'+id,
                         method: 'DELETE',
                         data: {},
                     }
