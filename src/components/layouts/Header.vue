@@ -4,10 +4,10 @@
         <!-- Header (Topbar) -->
         <header class="u-header">
             <div class="u-header-left">
-                <a class="u-header-logo" href="javascript:;">
+                <router-link :to="{ name: 'dashboard'}" class="u-header-logo">
                     <img class="u-header-logo__icon" src="/assets/svg/logo-mini.svg" alt="">
                     <img class="u-header-logo__text" src="/assets/svg/logo-text-light.svg" alt="">
-                </a>
+                </router-link>
             </div>
 
             <!-- Header Middle Section -->
@@ -84,7 +84,8 @@
                 <!-- App Apps -->
                 <div class="u-header-section">
                     <div class="u-header-dropdown dropdown pt-1">
-                        <router-link :to="{ name: 'apps' }" class="u-header-invoker d-flex align-items-center">
+                        <router-link :to="{ name: 'applications' }" 
+                            class="u-header-invoker d-flex align-items-center">
                           <span class="position-relative">
                                 <span class="ti-layout-grid2 u-header-invoker__icon"></span>
                             </span>
@@ -100,7 +101,8 @@
                            data-toggle="dropdown"
                            data-offset="0">
                             <img class="u-header-avatar img-fluid rounded-circle mr-md-3" 
-                                src="/assets/img/default_avatar.png" alt="User Profile">
+                                :src="auth.user_image" 
+                                alt="User Profile">
                             <span class="text-dark d-none d-md-inline-flex align-items-center">
                                 {{ auth.user_name }}
                                 <span class="ti-angle-down text-muted ml-4"></span>
@@ -198,6 +200,8 @@
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
+                localStorage.removeItem('tenant_id');
+                
                 this.$router.push({ name: 'login' });
             },
         },

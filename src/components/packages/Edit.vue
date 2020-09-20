@@ -8,16 +8,17 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Packages
-                        <!-- Role -->
-                        <div class="pull-rights ui-mt-15 pull-right ">
-                            <div class="dropdown">
-                                <span class="badge badge-md badge-pill badge-secondary-soft">
-                                    {{ auth.role }}
-                                </span>
-                            </div>
+                    <h1 class="h2 mb-2 text-capitalize"> {{ refs }}
+                        
+                        <!-- Tenants -->
+                        <div class="pull-right ui-mt-15">
+                            <span class="btn btn-dark btn-sm">
+                                <span class="btn-icon ti-home mr-2"></span>
+                                <span> {{ tenant_name }} </span>
+                            </span>
                         </div>
-                        <!-- End Role -->
+                        <!-- End Tenants -->
+                        
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -26,8 +27,8 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
-                            <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'packages' }">Packages</router-link>
+                            <li class="breadcrumb-item text-capitalize">
+                                <router-link :to="{ name: refs }">{{ refs }}</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
@@ -1224,7 +1225,8 @@
                                             <input type="file" 
                                                 class="form-control" 
                                                 ref="myDropify" 
-                                                v-on:change="onImageChange">
+                                                v-on:change="onImageChange"
+                                                accept="image/*">
                                         </div>
                                         <!-- End Image -->
 
@@ -1284,7 +1286,8 @@
                                             <input type="file" 
                                                 class="form-control" 
                                                 ref="myDropify" 
-                                                v-on:change="onShortImageChange">
+                                                v-on:change="onShortImageChange"
+                                                accept="image/*">
                                         </div>
                                         <!-- Image -->
 
@@ -1633,6 +1636,11 @@
                 // btn
                 pgLoading: true,
                 btnLoading: false,
+
+                // Tenants
+                tenant_id: 0,
+                tenant_name: '',
+                refs: 'packages'
             }
         },
         mounted() {},
@@ -1644,6 +1652,14 @@
             }
             if(localStorage.getItem('access_token')) {
                 this.auth.access_token = localStorage.getItem('access_token');
+            }
+
+            // Tenants
+            if(localStorage.getItem('tenant_id')) {
+                this.tenant_id = localStorage.getItem('tenant_id');
+            }
+            if(localStorage.getItem('tenant_name')) {
+                this.tenant_name = localStorage.getItem('tenant_name');
             }
 
             // call destinations func
@@ -1659,7 +1675,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/packages/'+this.$route.params.id,
+                    url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
                     method: 'GET',
                     data: {},
                     params: {},
@@ -1803,7 +1819,8 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        status: 'active',
+                        tenant_id: this.tenant_id,
+                        status: true,
                         paginate: 100,
                     },
                 }
@@ -1830,7 +1847,8 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        status: 'active',
+                        tenant_id: this.tenant_id,
+                        status: true,
                         paginate: 100,
                     },
                 }
@@ -1857,7 +1875,8 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        status: 'active',
+                        tenant_id: this.tenant_id,
+                        status: true,
                         paginate: 100,
                     },
                 }
@@ -1883,7 +1902,8 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        status: 'active',
+                        tenant_id: this.tenant_id,
+                        status: true,
                         paginate: 100,
                     },
                 }
@@ -1910,7 +1930,8 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        status: 'active',
+                        tenant_id: this.tenant_id,
+                        status: true,
                         paginate: 100,
                     },
                 }
@@ -1937,7 +1958,8 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        status: 'active',
+                        tenant_id: this.tenant_id,
+                        status: true,
                         paginate: 100,
                     },
                 }
@@ -1964,7 +1986,8 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        status: 'active',
+                        tenant_id: this.tenant_id,
+                        status: true,
                         except_id: this.$route.params.id,
                         paginate: 100,
                     },
@@ -1992,7 +2015,8 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        status: 'active',
+                        tenant_id: this.tenant_id,
+                        status: true,
                         paginate: 100,
                     },
                 }
@@ -2019,7 +2043,8 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        status: 'active',
+                        tenant_id: this.tenant_id,
+                        status: true,
                         paginate: 100,
                     },
                 }
@@ -2095,9 +2120,10 @@
 
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 const options = {
-                    url: window.baseURL+'/packages/'+this.$route.params.id,
+                    url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
+                        tenant_id: this.tenant_id,
                         // meta
                         meta_title: this.row.meta_title,
                         meta_keywords: this.row.meta_keywords,
@@ -2165,13 +2191,13 @@
                             title: 'Great job,',
                             message: 'Item Updated Successfully.',
                         });
-                        this.$router.push({ name: 'packages' })
+                        this.$router.push({ name: this.refs });
                     })
                     .catch(err => {
                         // 403 Forbidden
                         if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage()
-                            this.$router.push({ name: 'forbidden' })
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
                             iziToast.warning({
@@ -2191,6 +2217,7 @@
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
+                localStorage.removeItem('tenant_id');
             },
 
             // items add more
@@ -2364,7 +2391,7 @@
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'packages' });
+                    this.$router.push({ name: this.refs });
                 }
             },
 

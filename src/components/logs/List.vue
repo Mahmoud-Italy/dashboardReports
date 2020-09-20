@@ -4,7 +4,7 @@
 
         <!-- Main -->
         <main class="u-main">
-            <Navigation></Navigation>
+            <Navigation :tenant="tenant_id"></Navigation>
 
             <!-- Content -->
             <div class="u-content">
@@ -15,11 +15,7 @@
 
                         <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right ">
-                            <div class="dropdown">
-                                <span class="badge badge-md badge-pill badge-secondary-soft">
-                                    {{ auth.role }}
-                                </span>
-                            </div>
+                            
                         </div>
                         <!-- End Role -->
 

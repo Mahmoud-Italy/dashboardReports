@@ -19,10 +19,8 @@ export default new Router({
   { path: '/forget/password', name:'forget', component: require('../components/auth/Forget.vue').default, beforeEnter: requireUnAuth },
   { path: '/reset/password', name:'reset', component: require('../components/auth/Reset.vue').default, beforeEnter: requireAuth },
 
-  // Apps
-  { path: '/apps', name: 'apps', component: require('../components/apps/List.vue').default, beforeEnter: requireAuth },
-  { path: '/apps/create', name: 'create-apps', component: require('../components/apps/Create.vue').default, beforeEnter: requireAuth },
-  { path: '/apps/edit/:id', name: 'edit-apps', component: require('../components/apps/Edit.vue').default, beforeEnter: requireAuth },
+  // Applications
+  { path: '/applications', name: 'applications', component: require('../components/applications/List.vue').default, beforeEnter: requireAuth },
 
   // Accommodations
   { path: '/accommodations', name: 'accommodations', component: require('../components/accommodations/List.vue').default, beforeEnter: requireAuth },
@@ -76,11 +74,6 @@ export default new Router({
   { path: '/destinations/create', name: 'create-destinations', component: require('../components/destinations/Create.vue').default, beforeEnter: requireAuth },
   { path: '/destinations/edit/:id', name: 'edit-destinations', component: require('../components/destinations/Edit.vue').default, beforeEnter: requireAuth },
 
-  // Domains
-  { path: '/domains', name: 'domains', component: require('../components/domains/List.vue').default, beforeEnter: requireAuth },
-  { path: '/domains/status/:status', name: 'status-domains', component: require('../components/domains/List.vue').default, beforeEnter: requireAuth },
-  { path: '/domains/filter/:filter_by/:filter', name: 'filter-domains', component: require('../components/domains/List.vue').default, beforeEnter: requireAuth },
-
   // Faqs
   { path: '/faqs', name: 'faqs', component: require('../components/faqs/List.vue').default, beforeEnter: requireAuth },
   { path: '/faqs/status/:status', name: 'status-faqs', component: require('../components/faqs/List.vue').default, beforeEnter: requireAuth },
@@ -104,7 +97,7 @@ export default new Router({
   { path: '/inbox', name: 'inbox', component: require('../components/inbox/List.vue').default, beforeEnter: requireAuth },
   { path: '/inbox/status/:status', name: 'status-inbox', component: require('../components/inbox/List.vue').default, beforeEnter: requireAuth },
   { path: '/inbox/filter/:filter_by/:filter', name: 'filter-inbox', component: require('../components/inbox/List.vue').default, beforeEnter: requireAuth },
-  { path: '/inbox/edit/:id', name: 'edit-inbox', component: require('../components/inbox/Show.vue').default, beforeEnter: requireAuth },
+  { path: '/inbox/show/:id', name: 'show-inbox', component: require('../components/inbox/Show.vue').default, beforeEnter: requireAuth },
 
   // Inquires
   { path: '/inquires', name: 'inquires', component: require('../components/inquires/List.vue').default, beforeEnter: requireAuth },
@@ -188,7 +181,10 @@ export default new Router({
   // Tenants
   { path: '/tenants', name: 'tenants', component: require('../components/tenants/List.vue').default, beforeEnter: requireAuth },
   { path: '/tenants/status/:status', name: 'status-tenants', component: require('../components/tenants/List.vue').default, beforeEnter: requireAuth },
-
+  { path: '/tenants/filter/:filter_by/:filter', name: 'filter-tenants', component: require('../components/tenants/List.vue').default, beforeEnter: requireAuth },
+  { path: '/tenants/create', name: 'create-tenants', component: require('../components/tenants/Create.vue').default, beforeEnter: requireAuth },
+  { path: '/tenants/edit/:id', name: 'edit-tenants', component: require('../components/tenants/Edit.vue').default, beforeEnter: requireAuth },
+  
   // Updates
   { path: '/updates', name: 'updates', component: require('../components/updates/List.vue').default, beforeEnter: requireAuth },
   { path: '/updates/status/:status', name: 'status-updates', component: require('../components/updates/List.vue').default, beforeEnter: requireAuth },

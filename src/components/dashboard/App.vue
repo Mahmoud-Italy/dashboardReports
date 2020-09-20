@@ -3,15 +3,48 @@
         <Header></Header>
 
         <main class="u-main">
-            <Navigation></Navigation>
+            <Navigation :tenant="tenant_id"></Navigation>
 
             <div class="u-content">
                 <div class="u-body min-h-700">
                     <div class="row">
 
-                        <!-- Check Update -->
                         <div class="col-12 mb-3">
-                            <button type="button"
+                            <!-- Tenants -->
+                            <div class="dropdown pull-right">
+                                <button type="button" 
+                                    class="btn btn-dark btn-sm dropdown-toggle" 
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true" 
+                                    aria-expanded="false" 
+                                    :disabled="tenantLoading">
+                                    <span class="btn-icon ti-home mr-2"></span>
+                                    <span v-if="!tenantLoading" class="ui-mr5"> {{ tenant_name }}</span>
+                                    <span v-if="tenantLoading">
+                                        <span class="spinner-grow spinner-grow-sm mr-1" 
+                                            role="status" 
+                                            aria-hidden="true">
+                                        </span>Loading...
+                                    </span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a v-if="auth.role == 'root'"
+                                        class="dropdown-item dropdown-pad" 
+                                        href="javascript:;"
+                                        @click="changeTenant(0, 'All Tenants')"> All Tenants
+                                    </a>
+                                    <a class="dropdown-pad dropdown-item" 
+                                        href="javascript:;"
+                                        v-for="(tenant, index) in tenants"
+                                        :key="index"
+                                        @click="changeTenant(tenant.id, tenant.name)"> 
+                                           &nbsp; {{ tenant.name }} &nbsp;
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- End Tenants -->
+
+                            <!-- <button type="button"
                                 @click="checkUpdate" 
                                 class="pull-right btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2 btn-with-icon">
                                 <span v-if="!updateLoading" class="btn-icon ti-download mr-2"></span>
@@ -23,7 +56,7 @@
                                 <span v-html="(updateLoading) 
                                     ? ' Checking for updates...' 
                                     : ' No new updates available!' "></span>
-                            </button>
+                            </button> -->
                         </div>
                         <!-- End Check Update -->
 
@@ -460,7 +493,7 @@
                                                 <!-- Title -->
                                                 <td class="font-weight-semi-bold">
                                                 <router-link 
-                                                    :to="{ name:'edit-package',
+                                                    :to="{ name:'edit-packages',
                                                     params:{id:row.encrypt_id}}" 
                                                     class="default-color text-decoration-hover">
                                                     {{ row.title }} 
@@ -569,13 +602,6 @@
         },
         data(){
             return {
-                
-
-                
-
-              
-
-
                 auth: {
                     role: '',
                     access_token: '',
@@ -662,20 +688,93 @@
                     markers: { size: 5, align:top,  hover: {  sizeOffset: 5  }},
                 },
                 
-
                 updateLoading: false,
+
+                tenant_id: 0,
+                tenant_name: 'All Tenants',
+                tenantLoading: true,
+                tenants: [],
             }
         },
         mounted() {},
         created() {
             // AccessToken & Roles
+            if(localStorage.getItem('role')) {
+                this.auth.role = localStorage.getItem('role');
+            }
             if(localStorage.getItem('access_token')) {
                 this.auth.accessToken = localStorage.getItem('access_token');
             }
 
-            this.fetchTotalVisitors(this.visitorDays, true);
+            this.fetchTenants(); // call tenants
+            //this.fetchTotalVisitors(this.visitorDays, true);
         },
         methods: {
+
+            changeTenant(id, name) {
+                this.tenantLoading = true;
+
+                this.visitorLoading = true;
+                this.packageLoading = true;
+                this.inquireLoading = true;
+                this.userLoading = true;
+                this.chartLoading = true;
+                this.pieLoading = true;
+                this.dataLoading = true;
+                this.topLoading = true;
+
+                this.tenant_id = id;
+                this.tenant_name = name;
+                localStorage.setItem('tenant_id', id);
+                localStorage.setItem('tenant_name', name);
+                this.fetchTotalVisitors(this.visitorDays, true);
+            },
+
+            fetchTenants(){
+                this.tenantLoading = true;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const options = {
+                    url: window.baseURL+'/tenants',
+                    method: 'GET',
+                    data: {},
+                    params: {
+                        status: 'active',
+                        paginate: 100
+                    },
+                }
+                this.axios(options)
+                    .then(res => {
+                        this.tenantLoading = false;
+                        this.tenants = res.data.rows;
+
+                        if(this.auth.role != 'root') {
+                            if(!localStorage.getItem('tenant_id')) {
+                                this.tenant_id = res.data.rows[0].id;
+                                this.tenant_name = res.data.rows[0].name;
+                            }
+                        }
+
+                        this.fetchTotalVisitors(this.visitorDays, true);
+                    })
+                    .catch(err => {
+                        // 403 Forbidden
+                        if(err.response && err.response.status == 403) {
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'forbidden' });
+                        } else {
+                            this.btnLoading = false;
+                            iziToast.warning({
+                                icon: 'ti-alert',
+                                title: 'Wow-man,',
+                                message: (err.response) ? err.response.data.message : ''+err
+                            });
+                        }
+                    })
+                    .finally(() => {})
+            },
 
             // fetch TotalVisitors
             fetchTotalVisitors(days, next=false){
@@ -690,7 +789,9 @@
                     url: window.baseURL+'/explore/totalVisitors/'+this.visitorDays,
                     method: 'GET',
                     data: {},
-                    params: {}
+                    params: {
+                        tenant_id: this.tenant_id
+                    }
                 }
                 this.axios(options, config)
                     .then(res => {
@@ -698,6 +799,8 @@
                         this.visitorTotal      = res.data.total;
                         this.visitorPercentage = res.data.percentage;
                         this.visitorArrow      = res.data.arrow;
+
+                        this.tenantLoading = false;
 
                         // Call Next Func
                         if(next) { this.fetchTotalPackages(this.packageDays, true); }
@@ -719,7 +822,9 @@
                     url: window.baseURL+'/explore/totalPackages/'+this.packageDays,
                     method: 'GET',
                     data: {},
-                    params: {}
+                    params: {
+                        tenant_id: this.tenant_id
+                    }
                 }
                 this.axios(options, config)
                     .then(res => {
@@ -748,7 +853,9 @@
                     url: window.baseURL+'/explore/totalInquires/'+this.inquireDays,
                     method: 'GET',
                     data: {},
-                    params: {}
+                    params: {
+                        tenant_id: this.tenant_id
+                    }
                 }
                 this.axios(options, config)
                     .then(res => {
@@ -777,7 +884,9 @@
                     url: window.baseURL+'/explore/totalUsers/'+this.userDays,
                     method: 'GET',
                     data: {},
-                    params: {}
+                    params: {
+                        tenant_id: this.tenant_id
+                    }
                 }
                 this.axios(options, config)
                     .then(res => {
@@ -806,7 +915,9 @@
                     url: window.baseURL+'/explore/lineChart/'+this.lineType,
                     method: 'GET',
                     data: {},
-                    params: {}
+                    params: {
+                        tenant_id: this.tenant_id
+                    }
                 }
                 this.axios(options, config)
                     .then(res => {
@@ -834,7 +945,9 @@
                     url: window.baseURL+'/explore/pieChart/'+this.pieDays,
                     method: 'GET',
                     data: {},
-                    params: {}
+                    params: {
+                        tenant_id: this.tenant_id
+                    }
                 }
                 this.axios(options, config)
                     .then(res => {
@@ -844,9 +957,8 @@
 
                         // Call Next Func
                         if(next) { 
-                            //this.fetchRecentPackages(true); 
+                            this.fetchRecentPackages(true); 
                         }
-                        this.fetchRecentPackages(true); 
                     })
                     .catch(() => { });
             },
@@ -863,7 +975,9 @@
                     url: window.baseURL+'/explore/recentPackages',
                     method: 'GET',
                     data: {},
-                    params: {}
+                    params: {
+                        tenant_id: this.tenant_id
+                    }
                 }
                 this.axios(options, config)
                     .then(res => {
@@ -872,9 +986,8 @@
 
                         // Call Next Func
                         if(next) { 
-                            //this.fetchTopDestinations(); 
+                            this.fetchTopDestinations(); 
                         }
-                        this.fetchTopDestinations(); 
                     })
                     .catch(() => {});
             },
@@ -892,7 +1005,9 @@
                     url: window.baseURL+'/explore/topDestinations',
                     method: 'GET',
                     data: {},
-                    params: {}
+                    params: {
+                        tenant_id: this.tenant_id
+                    }
                 }
                 this.axios(options, config)
                     .then(res => {
@@ -915,6 +1030,7 @@
                     this.updateLoading = false;
                 },3000);
             }
+
         },
     }
 </script>

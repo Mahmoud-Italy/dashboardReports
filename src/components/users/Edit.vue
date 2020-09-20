@@ -8,17 +8,7 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Users
-
-                        <!-- Role -->
-                        <div class="pull-rights ui-mt-15 pull-right ">
-                            <div class="dropdown">
-                                <span class="badge badge-md badge-pill badge-secondary-soft">
-                                    {{ auth.role }}
-                                </span>
-                            </div>
-                        </div>
-                        <!-- End Role -->
+                    <h1 class="h2 mb-2 text-capitalize">{{ refs }}
 
                     </h1>
 
@@ -28,8 +18,8 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
-                            <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'users' }">Users</router-link>
+                            <li class="breadcrumb-item text-capitalize">
+                                <router-link :to="{ name: refs }">{{ refs }}</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
@@ -39,11 +29,9 @@
 
         <div v-if="pgLoading" class="row h-100">
             <div class="container text-center">
-                <p><br/></p>
-                <div class="spinner-grow" role="status">
+                <div class="spinner-grow mt-5" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
-                <p><br/></p>
             </div>
         </div>
 
@@ -202,7 +190,8 @@
                                                 <input type="file" 
                                                     class="form-control" 
                                                     ref="myDropify" 
-                                                    v-on:change="onImageChange">
+                                                    v-on:change="onImageChange"
+                                                    accept="image/*">
                                             </div>
                                             <!-- Image -->
                                         </div>
@@ -272,7 +261,7 @@
                                     </span>Loading...
                                 </span>
                                 <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> Update User</span>
+                                <span v-if="!btnLoading" class="text-capitalize"> Update {{ refs }}</span>
                             </button>
                         </div>
 
@@ -341,6 +330,11 @@
 
                 pgLoading: true,
                 btnLoading: false,
+
+                // Tenants
+                tenant_id: 0,
+                tenant_name: 'All Tenants',
+                refs: 'users'
             }
         },
         mounted() {},
@@ -352,6 +346,14 @@
             }
             if(localStorage.getItem('access_token')) {
                 this.auth.access_token = localStorage.getItem('access_token');
+            }
+
+             // Tenants
+            if(localStorage.getItem('tenant_id')) {
+                this.tenant_id = localStorage.getItem('tenant_id');
+            }
+            if(localStorage.getItem('tenant_name')) {
+                this.tenant_name = localStorage.getItem('tenant_name');
             }
 
             this.fetchRow();
@@ -368,7 +370,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/users/'+this.$route.params.id,
+                    url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
                     method: 'GET',
                     data: {},
                     params: {},
@@ -460,13 +462,13 @@
                             title: 'Great job,',
                             message: 'Item Updated Successfully.',
                         });
-                        this.$router.push({ name: 'users' })
+                        this.$router.push({ name: this.refs });
                     })
                     .catch(err => {
                         // 403 Forbidden
                         if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage()
-                            this.$router.push({ name: 'forbidden' })
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
                             iziToast.warning({
@@ -525,6 +527,7 @@
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
+                localStorage.removeItem('tenant_id');
             },
 
             // toggleCollapse
@@ -542,7 +545,7 @@
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'users' });
+                    this.$router.push({ name: this.refs });
                 }
             },
 

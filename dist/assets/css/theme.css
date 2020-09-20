@@ -16,6 +16,7 @@
  .ui-reload { cursor: pointer; margin-bottom: 5px; margin-top: -15px; font-size: 11px }
  .ucfirst { text-transform: capitalize; }
  .ui-ml-unset { margin-left: unset !important }
+ .ui-ml10 { margin-left: 10px !important }
  span.dropdown-item { cursor: pointer !important }
  .ui-mt10 { margin-top: 10px }
  .ui-mt15 { margin-top: 15px }
@@ -4788,6 +4789,9 @@ input[type="button"].btn-block {
   white-space: nowrap;
   background-color: transparent;
   border: 0;
+}
+.dropdown-pad {
+  padding: 0.50rem 1.5rem !important;
 }
 
 .dropdown-item:first-child {

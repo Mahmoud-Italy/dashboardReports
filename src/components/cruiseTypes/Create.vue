@@ -8,16 +8,17 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Cruise Types
-                        <!-- Role -->
-                        <div class="pull-rights ui-mt-15 pull-right ">
-                            <div class="dropdown">
-                                <span class="badge badge-md badge-pill badge-secondary-soft">
-                                    {{ auth.role }}
-                                </span>
-                            </div>
+                    <h1 class="h2 mb-2 text-capitalize">{{ refs }}
+
+                        <!-- Tenants -->
+                        <div class="pull-right ui-mt-15">
+                            <span class="btn btn-dark btn-sm">
+                                <span class="btn-icon ti-home mr-2"></span>
+                                <span> {{ tenant_name }} </span>
+                            </span>
                         </div>
-                        <!-- End Role -->
+                        <!-- End Tenants -->
+                        
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -26,8 +27,8 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
-                            <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'cruisetypes' }">Cruise Types</router-link>
+                            <li class="breadcrumb-item text-capitalize">
+                                <router-link :to="{ name: refs }">{{ refs }}</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Add New</li>
                         </ol>
@@ -327,7 +328,13 @@
                 parnets: [],
                 parentLoading: true,
 
+                pgLoading: false,
                 btnLoading: false,
+
+                // Tenants
+                tenant_id: 0,
+                tenant_name: '',
+                refs: 'cruisetypes'
             }
         },
         mounted() {},
@@ -339,6 +346,14 @@
             }
             if(localStorage.getItem('access_token')) {
                 this.auth.access_token = localStorage.getItem('access_token');
+            }
+
+            // Tenants
+            if(localStorage.getItem('tenant_id')) {
+                this.tenant_id = localStorage.getItem('tenant_id');
+            }
+            if(localStorage.getItem('tenant_name')) {
+                this.tenant_name = localStorage.getItem('tenant_name');
             }
 
             this.fetchParents();
@@ -354,11 +369,12 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/cruiseTypes',
+                    url: window.baseURL+'/'+this.refs,
                     method: 'GET',
                     data: {},
                     params: {
-                        status: 'active',
+                        tenant_id: this.tenant_id,
+                        status: true,
                         parent_id: false,
                         paginate: 100,
                     },
@@ -382,9 +398,10 @@
                 };
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 const options = {
-                    url: window.baseURL+'/cruiseTypes',
+                    url: window.baseURL+'/'+this.refs,
                     method: 'POST',
                     data: {
+                        tenant_id: this.tenant_id,
                         // row
                         title: this.row.title,
                         slug: this.row.slug,
@@ -407,13 +424,13 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        this.$router.push({ name: 'cruisetypes' })
+                        this.$router.push({ name: this.refs });
                     })
                     .catch(err => {
                         // 403 Forbidden
                         if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage()
-                            this.$router.push({ name: 'forbidden' })
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
                             iziToast.warning({
@@ -465,6 +482,16 @@
                     this.row.view_in_footer = 1;
             },
 
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+                localStorage.removeItem('tenant_id');
+            },
+
              // toggleCollapse
             collapseToggle(div) {
                 let el = document.querySelector("span#iconToggle"+div);
@@ -480,7 +507,7 @@
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'cruisetypes' });
+                    this.$router.push({ name: this.refs });
                 }
             },
 

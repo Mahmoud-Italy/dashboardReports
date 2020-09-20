@@ -9,19 +9,14 @@
             <div class="u-content">
 
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Roles
+                    <h1 class="h2 mb-2 text-capitalize">{{ refs }}
                         <router-link v-if="permissions.add"
-                            :to="{ name: 'create-roles' }" 
+                            :to="{ name: 'create-'+refs }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
 
                         <div class="pull-rights ui-mt-15 pull-right ">
-                            <div class="dropdown">
-                                <span class="badge badge-md badge-pill badge-secondary-soft">
-                                    {{ auth.role }}
-                                </span>
-                            </div>
                         </div>
                     </h1>
 
@@ -31,7 +26,9 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Roles</li>
+                            <li class="breadcrumb-item text-capitalize active" aria-current="page">
+                                {{ refs }}
+                            </li>
                         </ol>
                     
                         <!-- Bulk Action -->
@@ -98,8 +95,8 @@
                                             :fields = "exp.json_fields"
                                             :before-generate = "startDownload"
                                             :before-finish = "finishDownload"
-                                            worksheet = "Roles"
-                                            name = "Roles.xls">Excel
+                                            :worksheet = "refs"
+                                            :name = "refs+'.xls'">Excel
                                         </download-excel>
                                         <download-excel
                                             class = "dropdown-item cursor-pointer"
@@ -108,8 +105,8 @@
                                             :before-generate = "startDownload"
                                             :before-finish = "finishDownload"
                                             type = "csv"
-                                            worksheet = "Roles"
-                                            name = "Roles.xls">CSV
+                                            :worksheet = "refs"
+                                            :name = "refs+'.xls'">CSV
                                         </download-excel>
                                         <a class="dropdown-item" 
                                             href="javascript:;" 
@@ -130,20 +127,20 @@
                     <header class="card-header">
                         <h2 class="h4 card-header-title">
                             <router-link class="pg-hd"
-                                :to="{ name: 'roles' }"
+                                :to="{ name: refs }"
                                 :class="(status == '') ? 'active' : '' ">All</router-link> 
                             <span class="pg-hd no-decoration f14"> ({{statusBar.all}}) </span>&nbsp;|&nbsp; 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-roles', params:{status: 'active'} }" 
+                                :to="{ name: 'status-'+refs, params:{status: 'active'} }" 
                                 :class="(status == 'active') ? 'active' : '' ">Active</router-link>
                            <span class="pg-hd no-decoration f14"> ({{statusBar.active}}) </span>&nbsp;|&nbsp; 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-roles', params:{status: 'inactive'} }" 
+                                :to="{ name: 'status-'+refs, params:{status: 'inactive'} }" 
                                 :class="(status == 'inactive') ? 'active' : '' ">Inactive</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.inactive}}) </span>&nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-roles', params:{status: 'trash'} }" 
+                                :to="{ name: 'status-'+refs, params:{status: 'trash'} }" 
                                 :class="(status == 'trash') ? 'active' : '' ">Trash</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.trash}}) </span>
 
@@ -270,19 +267,21 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold">
-                                        <router-link v-if="permissions.edit"
+                                        <span v-if="!permissions.edit || row.id == 1">
+                                            {{ row.name }}
+                                        </span>
+                                        <router-link v-if="permissions.edit && row.id != 1"
                                             :to="{ name: 'edit-roles', params:{id:row.encrypt_id} }" 
                                             class="default-color text-decoration-hover">
                                             {{ row.name }} 
                                         </router-link>
-                                        <span v-if="!permissions.edit">{{ row.name }}</span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
                                         <span v-if="!row.user" class="text-center"> - </span>
                                         <router-link v-if="row.user" 
-                                            :to="{ name: 'filter-socials', 
-                                                params:{filter_by:'author',filter:row.user.encrypt_id}}" 
+                                            :to="{ name: 'filter-'+refs, 
+                                                params:{filter_by:'author',filter:row.user.encrypt_id}}"
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
                                                 <img class="u-avatar-xs rounded-circle mr-2"
@@ -320,11 +319,11 @@
                                             <div class="dropdown-menu dropdown-menu-right" 
                                                 style="width: 150px">
                                                 <div class="card border-0 p-3">
-                                                    <ul class="list-unstyled mb-0">
+                                                    <ul class="list-unstyled mb-0" v-if="row.id != 1">
                                                         <li v-if="!row.trash">
                                                             <router-link v-if="permissions.edit"
                                                                 class="d-block link-dark"
-                                                                :to="{ name: 'edit-roles', 
+                                                                :to="{ name: 'edit-'+refs, 
                                                                 params:{id: row.encrypt_id}}">
                                                                 Edit
                                                             </router-link>
@@ -450,12 +449,10 @@
                     }, 
                     json_data: [],
                     json_meta: [
-                        [
-                            {
-                                'key': 'charset',
-                                'value': 'utf-8'
-                            }
-                        ]
+                        [{
+                            'key': 'charset',
+                            'value': 'utf-8'
+                        }]
                     ],
                 },
                 auth: { 
@@ -486,8 +483,8 @@
                 plural: '',
 
                 dataLoading: true,
-                bulkLoading: false,
-                exportLoading: false,
+                bulkLoading: true,
+                exportLoading: true,
                 authorLoading: false,
                 showLoading: false,
                 orderLoading: false,
@@ -495,6 +492,8 @@
                 rows: [],
                 show: 10,
                 pagination: {},
+
+                refs: 'roles',
             }
         },
         mounted() {},
@@ -587,7 +586,7 @@
                 };
                 let vm = this;
                 const options = {
-                    url: page_url || window.baseURL+'/roles',
+                    url: page_url || window.baseURL+'/'+this.refs,
                     method: 'GET',
                     data: {},
                     params: {
@@ -604,6 +603,7 @@
                     .then(res => {
                         this.dataLoading = false;
                         this.bulkLoading = false;
+                        this.exportLoading = false;
                         this.showLoading = false;
                         this.orderLoading = false;
                         this.authorLoading = false;
@@ -625,8 +625,8 @@
                     .catch(err => {
                         // 403 Forbidden
                         if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage()
-                            this.$router.push({ name: 'forbidden' })
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
                             iziToast.warning({
@@ -653,7 +653,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/roles/export?id='+this.selected);
+                    this.axios.post(window.baseURL+'/'+this.refs+'/export?id='+this.selected);
                 return res.data.rows;
             },
             startDownload(){
@@ -670,12 +670,12 @@
 
             // remove sessions
             removeLocalStorage() {
-                localStorage.removeItem('permissions');
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('user_image');
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
+                localStorage.removeItem('tenant_id');
             },
         
 
@@ -719,7 +719,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/roles/active/'+id,
+                  url: window.baseURL+'/'+this.refs+'/active/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -752,7 +752,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/roles/inactive/'+id,
+                  url: window.baseURL+'/'+this.refs+'/inactive/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -796,7 +796,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/roles/trash/'+id,
+                  url: window.baseURL+'/'+this.refs+'/trash/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -841,7 +841,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/roles/restore/'+id,
+                  url: window.baseURL+'/'+this.refs+'/restore/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -886,7 +886,7 @@
                         'Authorization': `Bearer `+this.auth.access_token,
                     };
                     const options = {
-                        url: window.baseURL+'/roles/'+id,
+                        url: window.baseURL+'/'+this.refs+'/'+id,
                         method: 'DELETE',
                         data: {},
                     }

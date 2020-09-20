@@ -20,7 +20,7 @@
                                     <label for="email">Email</label>
                                     <input id="email" 
                                         class="form-control" 
-                                        type="email" 
+                                        type="text" 
                                         v-model="row.email" 
                                         placeholder="Email Address">
                                 </div>
@@ -138,7 +138,7 @@
 
                     // LocalStorage
                     localStorage.setItem('access_token', res.data.access_token);
-                    localStorage.setItem('user_image', res.data.user.image);
+                    localStorage.setItem('user_image', res.data.user.image.image_url);
                     localStorage.setItem('user_name', res.data.user.name);
                     localStorage.setItem('user_id', res.data.user.id);
                     localStorage.setItem('role', res.data.user.role);

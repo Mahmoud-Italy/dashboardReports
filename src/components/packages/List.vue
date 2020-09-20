@@ -4,25 +4,53 @@
 
         <!-- Main -->
         <main class="u-main">
-            <Navigation></Navigation>
+            <Navigation :tenant="tenant_id"></Navigation>
 
             <div class="u-content">
 
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Packages
+                    <h1 class="h2 mb-2 text-capitalize"> {{ refs }}
                         <router-link v-if="permissions.add"
-                            :to="{ name: 'create-packages' }" 
+                            :to="{ name: 'create-'+refs }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
 
-                        <div class="pull-rights ui-mt-15 pull-right ">
+                        <!-- Tenants -->
+                        <div class="pull-rights ui-mt-15 pull-right">
                             <div class="dropdown">
-                                <span class="badge badge-md badge-pill badge-secondary-soft">
-                                    {{ auth.role }}
-                                </span>
+                                <button type="button" 
+                                    class="btn btn-dark btn-sm dropdown-toggle" 
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true" 
+                                    aria-expanded="false" 
+                                    :disabled="tenantLoading">
+                                    <span class="btn-icon ti-home mr-2"></span>
+                                    <span v-if="!tenantLoading" class="ui-mr5"> {{ tenant_name }}</span>
+                                    <span v-if="tenantLoading">
+                                        <span class="spinner-grow spinner-grow-sm mr-1" 
+                                            role="status" 
+                                            aria-hidden="true">
+                                        </span>Loading...
+                                    </span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a v-if="auth.role == 'root'"
+                                        class="dropdown-item dropdown-pad" 
+                                        href="javascript:;"
+                                        @click="changeTenant(0, 'All Tenants')"> All Tenants
+                                    </a>
+                                    <a class="dropdown-pad dropdown-item" 
+                                        href="javascript:;"
+                                        v-for="(tenant, index) in tenants"
+                                        :key="index"
+                                        @click="changeTenant(tenant.id, tenant.name)"> 
+                                           &nbsp; {{ tenant.name }} &nbsp;
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                        <!-- End Tenants -->
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -31,7 +59,9 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Packages</li>
+                            <li class="breadcrumb-item text-capitalize active" aria-current="page">
+                                {{ refs }}
+                            </li>
                         </ol>
                     
                     <!-- Build Action button -->
@@ -98,8 +128,8 @@
                                         :fields = "exp.json_fields"
                                         :before-generate = "startDownload"
                                         :before-finish = "finishDownload"
-                                        worksheet = "Packages"
-                                        name = "Packages.xls">Excel
+                                        :worksheet = "refs"
+                                        :name = "refs+'.xls'">Excel
                                     </download-excel>
                                     <download-excel
                                         class = "dropdown-item cursor-pointer"
@@ -108,8 +138,8 @@
                                         :before-generate = "startDownload"
                                         :before-finish = "finishDownload"
                                         type = "csv"
-                                        worksheet = "Packages"
-                                        name = "Packages.xls">CSV
+                                        :worksheet = "refs"
+                                        :name = "refs+'.xls'">CSV
                                     </download-excel>
                                     <a class="dropdown-item" 
                                         href="javascript:;" 
@@ -127,21 +157,21 @@
                     <header class="card-header">
                         <h2 class="h4 card-header-title">
                             <router-link class="pg-hd"
-                                :to="{ name: 'packages' }"
+                                :to="{ name: refs }"
                                 :class="(status == '') ? 'active' : '' ">All</router-link> 
                             <span class="pg-hd no-decoration f14"> ({{statusBar.all}}) </span>&nbsp;|&nbsp; 
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-packages', params:{status: 'active'} }" 
+                                :to="{ name: 'status-'+refs, params:{status: 'active'} }" 
                                 :class="(status == 'active') ? 'active' : '' ">Active</router-link>
-                           <span class="pg-hd no-decoration f14"> ({{statusBar.active}}) </span>&nbsp;|&nbsp; 
-                            <router-link class="pg-hd"
-                                :to="{ name: 'status-packages', params:{status: 'inactive'} }" 
-                                :class="(status == 'inactive') ? 'active' : '' ">Inactive</router-link>
-                            <span class="pg-hd no-decoration f14"> ({{statusBar.inactive}}) </span>&nbsp;|&nbsp; 
+                           <span class="pg-hd no-decoration f14"> ({{statusBar.active}}) </span>&nbsp;|&nbsp;
 
                             <router-link class="pg-hd"
-                                :to="{ name: 'status-packages', params:{status: 'trash'} }" 
+                                :to="{ name: 'status-'+refs, params:{status: 'inactive'} }" 
+                                :class="(status == 'inactive') ? 'active' : '' ">Inactive</router-link>
+                            <span class="pg-hd no-decoration f14"> ({{statusBar.inactive}}) </span>&nbsp;|&nbsp; 
+                            <router-link class="pg-hd"
+                                :to="{ name: 'status-'+refs, params:{status: 'trash'} }" 
                                 :class="(status == 'trash') ? 'active' : '' ">Trash</router-link>
                             <span class="pg-hd no-decoration f14"> ({{statusBar.trash}}) </span>
 
@@ -278,7 +308,7 @@
 
                                     <td class="font-weight-semi-bold">
                                         <router-link v-if="permissions.edit"
-                                            :to="{ name: 'edit-packages', params:{id:row.encrypt_id} }" 
+                                            :to="{ name: 'edit-'+refs, params:{id:row.encrypt_id} }" 
                                             class="default-color text-decoration-hover">
                                             {{ row.title }} 
                                         </router-link>
@@ -289,7 +319,7 @@
                                     <td class="font-weight-semi-bold text-center">
                                         <span v-if="!row.destination"> - </span>
                                         <router-link v-if="row.destination"
-                                            :to="{ name: 'filter-packages', 
+                                            :to="{ name: 'filter-'+refs, 
                                             params:{filter_by: 'type', filter : row.destination.slug} }" 
                                             class="text-decoration-hover">
                                             <span class="badge badge-md badge-pill badge-danger-soft">
@@ -301,7 +331,7 @@
                                     <td class="font-weight-semi-bold text-center">
                                         <span v-if="!row.user" class="text-center"> - </span>
                                         <router-link v-if="row.user" 
-                                            :to="{ name: 'filter-packages', 
+                                            :to="{ name: 'filter-'+refs, 
                                                 params:{filter_by: 'author', 'filter':row.user.encrypt_id}}" 
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
@@ -344,7 +374,7 @@
                                                         <li v-if="!row.trash">
                                                             <router-link v-if="permissions.edit"
                                                                 class="d-block link-dark"
-                                                                :to="{ name: 'edit-packages', 
+                                                                :to="{ name: 'edit-'+refs, 
                                                                 params:{id: row.encrypt_id}}">
                                                                 Edit
                                                             </router-link>
@@ -467,12 +497,10 @@
                     }, 
                     json_data: [],
                     json_meta: [
-                        [
-                            {
-                                'key': 'charset',
-                                'value': 'utf-8'
-                            }
-                        ]
+                        [{
+                            'key': 'charset',
+                            'value': 'utf-8'
+                        }]
                     ],
                 },
                 auth: { 
@@ -503,8 +531,8 @@
                 plural: '',
 
                 dataLoading: true,
-                bulkLoading: false,
-                exportLoading: false,
+                bulkLoading: true,
+                exportLoading: true,
                 sortLoading: false,
                 showLoading: false,
                 orderLoading: false,
@@ -514,6 +542,14 @@
                 rows: [],
                 show: 10,
                 pagination: {},
+
+                // Tenants
+                tenant_id: 0,
+                tenant_name: 'All Tenants',
+                tenantLoading: true,
+                tenants: [],
+
+                refs: 'packages'
             }
         },
         mounted() {},
@@ -546,6 +582,14 @@
                 this.auth.access_token = localStorage.getItem('access_token');
             }
 
+            // Tenants
+            if(localStorage.getItem('tenant_id')) {
+                this.tenant_id = localStorage.getItem('tenant_id');
+            }
+            if(localStorage.getItem('tenant_name')) {
+                this.tenant_name = localStorage.getItem('tenant_name');
+            }
+
             // Status By
             if(this.$route.params.status) {
                 this.status = this.$route.params.status;
@@ -559,7 +603,7 @@
                 this.filter = this.$route.params.filter;
             }
 
-            this.fetchData('', true);
+            this.fetchTenants();
         },
         methods: {
 
@@ -590,7 +634,61 @@
                 this.typeLoading = true;
                 this.filter = '';
                 this.filter_by = '';
-                this.$router.push({ name: 'packages' })
+                this.$router.push({ name: this.refs })
+            },
+
+            changeTenant(id, name) {
+                this.tenantLoading = true;
+                this.tenant_id = id;
+                this.tenant_name = name;
+                localStorage.setItem('tenant_id', id);
+                localStorage.setItem('tenant_name', name);
+                this.fetchData('', true);
+            },
+
+            fetchTenants(){
+                this.tenantLoading = true;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                    'Authorization': `Bearer ` + this.auth.access_token,
+                };
+                const options = {
+                    url: window.baseURL+'/tenants',
+                    method: 'GET',
+                    data: {},
+                    params: {
+                        status: 'active',
+                        paginate: 100
+                    },
+                }
+                this.axios(options)
+                    .then(res => {
+                        this.tenantLoading = false;
+                        this.tenants = res.data.rows;
+
+                        if(this.auth.role != 'root') {
+                            if(!localStorage.getItem('tenant_id')) {
+                                this.tenant_id = res.data.rows[0].id;
+                                this.tenant_name = res.data.rows[0].name;
+                            }
+                        }
+                        this.fetchData('', true); // fetch data
+                    })
+                    .catch(err => {
+                        // 403 Forbidden
+                        if(err.response && err.response.status == 403) {
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'forbidden' });
+                        } else {
+                            this.btnLoading = false;
+                            iziToast.warning({
+                                icon: 'ti-alert',
+                                title: 'Wow-man,',
+                                message: (err.response) ? err.response.data.message : ''+err
+                            });
+                        }
+                    })
+                    .finally(() => {})
             },
 
             // Fetch Data
@@ -607,10 +705,11 @@
                 };
                 let vm = this;
                 const options = {
-                    url: page_url || window.baseURL+'/packages',
+                    url: page_url || window.baseURL+'/'+this.refs,
                     method: 'GET',
                     data: {},
                     params: {
+                        tenant_id: this.tenant_id,
                         status: this.status,
                         filter_by: this.filter_by,
                         filter: this.filter,
@@ -624,10 +723,12 @@
                     .then(res => {
                         this.dataLoading = false;
                         this.bulkLoading = false;
+                        this.exportLoading = false;
                         this.showLoading = false;
                         this.orderLoading = false;
                         this.typeLoading = false;
                         this.authorLoading = false;
+                        this.tenantLoading = false;
 
                         this.statusBar.all = res.data.statusBar.all;
                         this.statusBar.active = res.data.statusBar.active;
@@ -647,8 +748,8 @@
                     .catch(err => {
                         // 403 Forbidden
                         if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage()
-                            this.$router.push({ name: 'forbidden' })
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
                             iziToast.warning({
@@ -675,7 +776,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/packages/export?id='+this.selected);
+                    this.axios.post(window.baseURL+'/'+this.refs+'/export?id='+this.selected);
                 return res.data.rows;
             },
             startDownload(){
@@ -692,12 +793,12 @@
 
             // remove sessions
             removeLocalStorage() {
-                localStorage.removeItem('permissions');
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('user_image');
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
+                localStorage.removeItem('tenant_id');
             },
         
 
@@ -741,7 +842,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/packages/active/'+id,
+                  url: window.baseURL+'/'+this.refs+'/active/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -774,7 +875,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/packages/inactive/'+id,
+                  url: window.baseURL+'/'+this.refs+'/inactive/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -818,7 +919,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/packages/trash/'+id,
+                  url: window.baseURL+'/'+this.refs+'/trash/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -863,7 +964,7 @@
                   'Authorization': `Bearer `+this.auth.access_token,
               };
               const options = {
-                  url: window.baseURL+'/packages/restore/'+id,
+                  url: window.baseURL+'/'+this.refs+'/restore/'+id,
                   method: 'POST',
                   data: {},
               }
@@ -908,7 +1009,7 @@
                         'Authorization': `Bearer `+this.auth.access_token,
                     };
                     const options = {
-                        url: window.baseURL+'/packages/'+id,
+                        url: window.baseURL+'/'+this.refs+'/'+id,
                         method: 'DELETE',
                         data: {},
                     }

@@ -8,7 +8,18 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Inquires</h1>
+                    <h1 class="h2 mb-2 text-capitalize">{{ refs }}
+
+                        <!-- Tenants -->
+                        <div class="pull-right ui-mt-15">
+                            <span class="btn btn-dark btn-sm">
+                                <span class="btn-icon ti-home mr-2"></span>
+                                <span> {{ tenant_name }} </span>
+                            </span>
+                        </div>
+                        <!-- End Tenants -->
+                        
+                    </h1>
 
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
@@ -16,8 +27,8 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Dashboard</router-link>
                             </li>
-                            <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'inquires' }">Inquires</router-link>
+                            <li class="breadcrumb-item text-capitalize">
+                                <router-link :to="{ name: refs }">{{ refs }}</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Show</li>
                         </ol>
@@ -151,6 +162,7 @@
         data(){
             return {
                 auth: {
+                    role: '',
                     access_token: '',
                 },
                 row: {
@@ -162,14 +174,30 @@
                 },
                 pgLoading: true,
                 btnLoading: false,
+
+                // Tenants
+                tenant_id: 0,
+                tenant_name: '',
+                refs: 'inquires'
             }
         },
         mounted() {},
         computed: {},
         created() {
             // AccessToken & Role
+            if(localStorage.getItem('role')) {
+                this.auth.role = localStorage.getItem('role');
+            }
             if(localStorage.getItem('access_token')) {
                 this.auth.access_token = localStorage.getItem('access_token');
+            }
+
+            // Tenants
+            if(localStorage.getItem('tenant_id')) {
+                this.tenant_id = localStorage.getItem('tenant_id');
+            }
+            if(localStorage.getItem('tenant_name')) {
+                this.tenant_name = localStorage.getItem('tenant_name');
             }
 
             this.fetchRow();
@@ -184,7 +212,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/inquires/'+this.$route.params.id,
+                    url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
                     method: 'GET',
                     data: {},
                     params: {},
@@ -230,7 +258,7 @@
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'inquires' });
+                    this.$router.push({ name: this.refs });
                 }
             },
 

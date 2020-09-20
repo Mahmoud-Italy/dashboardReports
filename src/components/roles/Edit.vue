@@ -8,18 +8,8 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Roles
-
-                        <!-- Role -->
-                        <div class="pull-rights ui-mt-15 pull-right ">
-                            <div class="dropdown">
-                                <span class="badge badge-md badge-pill badge-secondary-soft">
-                                    {{ auth.role }}
-                                </span>
-                            </div>
-                        </div>
-                        <!-- End Role -->
-
+                    <h1 class="h2 mb-2 text-capitalize">{{ refs }}
+                        
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -28,8 +18,8 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Home</router-link>
                             </li>
-                            <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'roles' }">Roles</router-link>
+                            <li class="breadcrumb-item text-capitalize">
+                                <router-link :to="{ name: refs }">{{ refs }}</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Edit</li>
                         </ol>
@@ -47,123 +37,128 @@
 
         <form v-if="!pgLoading" @submit.prevent="editRow" enctype="multipart/form-data" class="h-100">
 
+            
             <!-- Content -->
             <div class="tab-content">
                 <div class="row">        
+
+                    <!-- ******* Cards ******** -->
                     <div class="col-md-8 mb-5">
 
 
-                    <!-- Card Content -->
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="accordion" class="accordion">
-                                <div id="TabContent" class="card-header">
+                        <!-- Card Role -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="accordion" class="accordion">
+                                    <div id="TabRole" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Content')"
+                                            @click="collapseToggle('Role')"
                                             aria-expanded="false" 
-                                            aria-controls="collapseContent" 
+                                            aria-controls="collapseRole" 
                                             data-toggle="collapse"
-                                            data-target="#collapseContent">Role
-                                            <span id="iconToggleContent" 
+                                            data-target="#collapseRole">Role
+                                            <span id="iconToggleRole" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapseContent" 
+                                    <div id="collapseRole" 
                                         class="collapse show" 
-                                        aria-labelledby="TabContent" 
+                                        aria-labelledby="TabRole" 
                                         data-parent="#accordion">
 
-                                    <div class="col-12 pt-3">
+                                        <div class="col-12 pt-3">
 
-                                        <!-- Name -->
-                                        <div class="form-group">
-                                            <label for="input1">Name</label>
-                                            <input class="form-control"
-                                                    id="input1"  
-                                                    type="text" 
-                                                    v-model="row.name">
+                                            <!-- Name -->
+                                            <div class="form-group">
+                                                <label for="input1">Name</label>
+                                                <input class="form-control"
+                                                        id="input1"  
+                                                        type="text" 
+                                                        v-model="row.name">
+                                            </div>
+                                            <!-- End Name -->
+
                                         </div>
-                                        <!-- End Name -->
-
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- End Card Content -->
+                        <!-- End Card Role -->
 
-                    <!-- Card Permissions -->
-                    <div class="card mt-5">
-                        <div class="card-body">
-                            <div id="accordion" class="accordion">
-                                <div id="TabPermissions" class="card-header">
+
+                        <!-- Loading -->
+                        <div class="col-12 text-center">
+                            <div v-if="tenantLoading" class="form-group">
+                                <div class="mt-5 mb-5 spinner-grow" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Loading -->
+
+                        <!-- Card Tenants -->
+                        <div class="card mt-5"
+                            v-for="(tenant, index) in tenants"
+                            :key="index">
+                            <div class="card-body">
+                                <div id="accordion" class="accordion">
+                                    <div :id="'TabTenant'+index" class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Permissions')"
+                                            @click="collapseToggle('Tenant'+index)"
                                             aria-expanded="false" 
-                                            aria-controls="collapsePermissions" 
+                                            :aria-controls="'collapseTenant'+index" 
                                             data-toggle="collapse"
-                                            data-target="#collapsePermissions">Permissions
-                                            <span id="iconTogglePermissions" 
+                                            :data-target="'#collapseTenant'+index">{{ tenant.name }}
+                                            <span :id="'iconToggleTenant'+index" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div id="collapsePermissions" 
+                                    <div :id="'collapseTenant'+index" 
                                         class="collapse" 
-                                        aria-labelledby="TabPermissions" 
+                                        :aria-labelledby="'TabTenant'+index" 
                                         data-parent="#accordion">
 
-                                    <!-- Loading -->
-                                    <div class="col-12 pt-3 text-center">
-                                        <div v-if="permissionLoading" class="form-group">
-                                            <div class="mt-5 mb-5 spinner-grow" role="status">
-                                                <span class="sr-only">Loading...</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Loading -->
-
-                                    <!-- Permissions -->
-                                    <div v-if="!permissionLoading" class="col-12 pt-3">
-                                        <div class="form-group"
-                                            v-for="(permission, index) in permissions"
-                                            :key="index">
-                                            <h4 class="mt-5 mb-3">{{ permission[0].parent }}</h4>
-                                            <div class="row col-12 text-center">
-                                                <div v-for="(item, idx) in permission.length" 
-                                                    :key="idx"
-                                                    class="custom-control custom-switch col-3">
-                                                    <input type="checkbox" 
-                                                        class="custom-control-input" 
-                                                        @change="isChecked($event, permission[idx].id)"
-                                                        :id="permission[idx].id"
-                                                        :value="permission[idx].id"
-                                                        :checked="(row.permissions_ids.indexOf(permission[idx].id) !== -1) ? true : ''">
-                                                    <label class="custom-control-label" 
-                                                        :for="permission[idx].id">
-                                                        {{ permission[idx].name }}
-                                                    </label>
+                                        <!-- Permissions -->
+                                        <div class="col-12 pt-3">
+                                            <div class="form-group"
+                                                v-for="(permission, index) in tenant.permissions"
+                                                :key="index">
+                                                <h4 class="mb-3 mt-5 ucfirst">{{ index }} </h4>
+                                                <div class="row col-12 text-center">
+                                                    <div v-for="(item, idx) in permission.length" 
+                                                        :key="idx"
+                                                        class="custom-control custom-switch col-3">
+                                                        <input type="checkbox" 
+                                                            class="custom-control-input" 
+                                                            @change="isChecked($event, permission[idx].id)"
+                                                            :id="permission[idx].id"
+                                                            :value="permission[idx].id"
+                                                            :checked="(row.permissions_ids.indexOf(permission[idx].id) !== -1) ? true : ''">
+                                                        <label class="custom-control-label" 
+                                                            :for="permission[idx].id">
+                                                            {{ permission[idx].name }}
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                         <!-- End Permissions -->
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- End Card Tenants -->
                     </div>
-                    <!-- End Card Permissions -->
-
-                </div>
-
+                    <!-- ******* End Cards ******** -->
 
 
                     <!-- ******* SideNavbar ******** -->
                     <div class="col-md-4 mb-5">
 
-                        <!-- NavOne -->
+                        <!-- NavAuthority -->
                         <div class="card">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
@@ -201,10 +196,10 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- End NavTwo -->
+                        <!-- End NavAuthority -->
 
 
-                        <!-- NavThree -->
+                        <!-- NavStatus -->
                         <div class="card mt-5">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
@@ -245,13 +240,14 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- End NavThree -->
-
-                        </div>
+                        <!-- End NavStatus -->
 
                     </div>
+                    <!-- ******* End SideNavbar ******** -->
+
                 </div>
-                <!-- End Content -->
+            </div>
+            <!-- End Content -->
 
                     
 
@@ -264,7 +260,7 @@
                                     </span>Loading...
                                 </span>
                                 <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> Update Role</span>
+                                <span v-if="!btnLoading"> Update {{ refs }}</span>
                             </button>
                         </div>
 
@@ -329,11 +325,13 @@
                     toolbar: window.editor_toolbar,
                 },
 
-                permissions: [],
-                permissionLoading: true,
+                tenants: [],
+                tenantLoading: true,
 
                 pgLoading: true,
                 btnLoading: false,
+
+                refs: 'roles',
             }
         },
         mounted() {},
@@ -350,9 +348,8 @@
             this.fetchRow();
         },
         methods: {
-            
-            
-            // fetch Row
+                
+            // fethc Row
             fetchRow() {
                 this.pgLoading = true;
                 this.axios.defaults.headers.common = {
@@ -373,42 +370,41 @@
 
                     // navbar
                     this.row.authority = res.data.row.authority;
-                    this.row.permissions_ids = res.data.permissions_ids;
+                    this.row.permissions_ids = res.data.row.permissions_ids;
 
                     // status & visiblity
                     this.row.status = res.data.row.status;
                     
-                    this.fetchPermissions(); // call next func
+                    this.fetchTenants(); // call next func
                 })
                 .catch(() => {})
                 .finally(() => {});
             },
 
-
-            // fetchPermission
-            fetchPermissions() {
-                this.permissionLoading = true;
+            // fetch Tenants
+            fetchTenants() {
+                this.tenantLoading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/permissions',
+                    url: window.baseURL+'/tenants',
                     method: 'GET',
                     data: {},
                     params: {},
                 }
                 this.axios(options)
                 .then(res => {
-                    this.permissionLoading = false;
-                    this.permissions = res.data.rows;
+                    this.tenantLoading = false;
+                    this.tenants = res.data.rows;
                 })
                 .catch(() => {})
                 .finally(() => {});
             },
 
 
-            // edtiRow
+            // edit Row
             editRow(){
                 this.btnLoading = true;
                 this.axios.defaults.headers.common = {
@@ -417,7 +413,7 @@
                 };
                 const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
                 const options = {
-                    url: window.baseURL+'/roles/'+this.$route.params.id,
+                    url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
                     method: 'PUT',
                     data: {
                         // row
@@ -439,13 +435,13 @@
                             title: 'Great job,',
                             message: 'Item Updated Successfully.',
                         });
-                        this.$router.push({ name: 'roles' })
+                        this.$router.push({ name: this.refs })
                     })
                     .catch(err => {
                         // 403 Forbidden
                         if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage()
-                            this.$router.push({ name: 'forbidden' })
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
                             iziToast.warning({
@@ -482,9 +478,10 @@
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
+                localStorage.removeItem('tenant_id');
             },
 
-            // toggleCollapse
+             // toggleCollapse
             collapseToggle(div) {
                 let el = document.querySelector("span#iconToggle"+div);
                 if(el.classList.contains('ti-angle-down')) {
@@ -499,7 +496,7 @@
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'roles' });
+                    this.$router.push({ name: this.refs });
                 }
             },
 

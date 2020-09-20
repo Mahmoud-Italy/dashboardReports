@@ -8,7 +8,18 @@
 
             <div class="u-content">
                 <div class="u-body min-h-700">
-                    <h1 class="h2 mb-2">Inbox</h1>
+                    <h1 class="h2 mb-2 text-capitalize">{{ refs }}
+
+                        <!-- Tenants -->
+                        <div class="pull-right ui-mt-15">
+                            <span class="btn btn-dark btn-sm">
+                                <span class="btn-icon ti-home mr-2"></span>
+                                <span> {{ tenant_name }} </span>
+                            </span>
+                        </div>
+                        <!-- End Tenants -->
+
+                    </h1>
 
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
@@ -16,8 +27,8 @@
                             <li class="breadcrumb-item">
                                 <router-link :to="{ name: 'dashboard' }">Dashboard</router-link>
                             </li>
-                            <li class="breadcrumb-item">
-                                <router-link :to="{ name: 'inbox' }">Inbox</router-link>
+                            <li class="breadcrumb-item text-capitalize">
+                                <router-link :to="{ name: refs }">{{ refs }}</router-link>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Show</li>
                         </ol>
@@ -27,11 +38,9 @@
             <!-- Loading -->
             <div v-if="pgLoading" class="row h-100">
                 <div class="container text-center">
-                    <p><br/></p>
-                    <div class="spinner-grow" role="status">
+                    <div class="spinner-grow mt-5" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
-                    <p><br/></p>
                 </div>
             </div>
             <!-- End Loading -->
@@ -173,6 +182,7 @@
         data(){
             return {
                 auth: {
+                    role: '',
                     access_token: '',
                 },
                 row: {
@@ -183,27 +193,38 @@
                     body: '',
                 },
                 editor: {
-                    api_key: 'xahz1dg338xnac8il0tkxph26xcaxqaewi3bd9cw9t4e6j7b',
-                    menubar: 'file edit view insert format tools table tc help',
-                    plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | removeformat | help',
+                    api_key: window.editor_apiKey,
+                    menubar: window.editor_menubar,
+                    plugins:[window.editor_plugins],
+                    toolbar: window.editor_toolbar,
                 },
+
                 pgLoading: true,
                 btnLoading: false,
+
+                // Tenants
+                tenant_id: 0,
+                tenant_name: '',
+                refs: 'inbox'
             }
         },
         mounted() {},
         computed: {},
         created() {
             // AccessToken & Role
+            if(localStorage.getItem('role')) {
+                this.auth.role = localStorage.getItem('role');
+            }
             if(localStorage.getItem('access_token')) {
                 this.auth.access_token = localStorage.getItem('access_token');
+            }
+
+            // Tenants
+            if(localStorage.getItem('tenant_id')) {
+                this.tenant_id = localStorage.getItem('tenant_id');
+            }
+            if(localStorage.getItem('tenant_name')) {
+                this.tenant_name = localStorage.getItem('tenant_name');
             }
 
             this.fetchRow();
@@ -218,7 +239,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/inbox/'+this.$route.params.id,
+                    url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
                     method: 'GET',
                     data: {},
                     params: {},
@@ -264,7 +285,7 @@
             // Cancel
             cancel(){
                 if(confirm('Are You Sure?')) {
-                    this.$router.push({ name: 'inbox' });
+                    this.$router.push({ name: this.refs });
                 }
             },
 
