@@ -37,6 +37,7 @@
                                         href="javascript:;"
                                         v-for="(tenant, index) in tenants"
                                         :key="index"
+                                        :class="(tenant.authority) ? '' : 'hidden'"
                                         @click="changeTenant(tenant.id, tenant.name)"> 
                                            &nbsp; {{ tenant.name }} &nbsp;
                                     </a>
@@ -703,7 +704,15 @@
                 this.auth.role = localStorage.getItem('role');
             }
             if(localStorage.getItem('access_token')) {
-                this.auth.accessToken = localStorage.getItem('access_token');
+                this.auth.access_token = localStorage.getItem('access_token');
+            }
+
+            // Tenants
+            if(localStorage.getItem('tenant_id')) {
+                this.tenant_id = localStorage.getItem('tenant_id');
+            }
+            if(localStorage.getItem('tenant_name')) {
+                this.tenant_name = localStorage.getItem('tenant_name');
             }
 
             this.fetchTenants(); // call tenants

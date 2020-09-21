@@ -1112,7 +1112,7 @@
                             title: 'Great job,',
                             message: 'Item Added Successfully.',
                         });
-                        this.$router.push({ name: this.refs })
+                        this.$router.push({ name: this.refs });
                     })
                     .catch(err => {
                         // 403 Forbidden

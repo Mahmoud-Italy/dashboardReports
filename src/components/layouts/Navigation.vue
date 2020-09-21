@@ -30,6 +30,7 @@
 
                         <li v-for="(nav, index) in navigation" 
                                 :key="index" 
+                                :class="(nav.authority) ? '' : 'hidden'"
                                 class="u-sidebar-nav-menu__item">
                             <router-link :to="{ name: nav.url }" 
                                 class="u-sidebar-nav-menu__link"
@@ -112,6 +113,7 @@
             if(localStorage.getItem('tenant_id')) {
                 this.tenant_id = localStorage.getItem('tenant_id');
             }
+
             this.fetchNavigation();
         },
         methods: {

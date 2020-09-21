@@ -40,10 +40,11 @@
                                         href="javascript:;"
                                         @click="changeTenant(0, 'All Tenants')"> All Tenants
                                     </a>
-                                    <a class="dropdown-pad dropdown-item" 
+                                    <a class="dropdown-pad dropdown-item"
                                         href="javascript:;"
                                         v-for="(tenant, index) in tenants"
                                         :key="index"
+                                        :class="(tenant.authority) ? '' : 'hidden'" 
                                         @click="changeTenant(tenant.id, tenant.name)"> 
                                            &nbsp; {{ tenant.name }} &nbsp;
                                     </a>
@@ -730,7 +731,13 @@
                         this.rows = res.data.rows;
                         if(res.data.paginate.total) {
                             //this.total_data = res.data.paginate.total;
-                            vm.makePagination(res.data.paginate)
+                            vm.makePagination(res.data.paginate);
+                        }
+
+                        // Exception for 403
+                        if(!res.data.permissions.view) {
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'forbidden' });
                         }
                     })
                     .catch(err => {

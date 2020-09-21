@@ -143,6 +143,11 @@
                     localStorage.setItem('user_id', res.data.user.id);
                     localStorage.setItem('role', res.data.user.role);
 
+                    if(res.data.user.role == 'root') {
+                        localStorage.setItem('tenant_id', 0);
+                        localStorage.setItem('tenant_name', 'All Tenants');
+                    }
+
                     this.$router.push({ name: 'dashboard' })
                 })
                 .catch(err => {

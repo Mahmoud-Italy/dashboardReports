@@ -56,29 +56,29 @@
                 <!-- End Header Search -->
 
                 <!-- Messages -->
-                <div class="u-header-section">
+                <!-- <div class="u-header-section">
                     <div class="u-header-dropdown dropdown pt-1">
                         <router-link :to="{ name: 'inbox' }" class="u-header-invoker d-flex align-items-center">
                             <span class="position-relative">
-                                <span class="ti-email u-header-invoker__icon"></span>
+                                <span class="ti-email u-header-invoker__icon"></span> -->
                                 <!-- <span class="u-indicator u-indicator-top-right u-indicator-xxs bg-danger"></span> -->
-                            </span>
+                      <!--       </span>
                         </router-link>
                     </div>
-                </div>
+                </div> -->
                 <!-- End Messages -->
 
                 <!-- Logs -->
-                <div class="u-header-section">
+               <!--  <div class="u-header-section">
                     <div class="u-header-dropdown dropdown pt-1">
                         <router-link :to="{ name: 'logs' }" class="u-header-invoker d-flex align-items-center">
                             <span class="position-relative">
-                                <span class="ti-brush-alt u-header-invoker__icon"></span>
+                                <span class="ti-brush-alt u-header-invoker__icon"></span> -->
                                 <!-- <span class="u-indicator u-indicator-top-right u-indicator-xxs bg-danger"></span> -->
-                            </span>
+                           <!--  </span>
                         </router-link>
                     </div>
-                </div>
+                </div> -->
                 <!-- End Logs -->
 
                 <!-- App Apps -->

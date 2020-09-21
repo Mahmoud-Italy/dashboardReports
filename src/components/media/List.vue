@@ -38,6 +38,7 @@
                                         href="javascript:;"
                                         v-for="(tenant, index) in tenants"
                                         :key="index"
+                                        :class="(tenant.authority) ? '' : 'hidden'"
                                         @click="changeTenant(tenant.id, tenant.name)"> 
                                            &nbsp; {{ tenant.name }} &nbsp;
                                     </a>

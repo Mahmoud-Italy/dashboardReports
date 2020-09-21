@@ -39,6 +39,7 @@
                                         href="javascript:;"
                                         v-for="(tenant, index) in tenants"
                                         :key="index"
+                                        :class="(tenant.authority) ? '' : 'hidden'"
                                         @click="changeTenant(tenant.id, tenant.name)"> 
                                            &nbsp; {{ tenant.name }} &nbsp;
                                     </a>
@@ -72,12 +73,12 @@
                     </div>
                     <!-- End pgLoading -->
 
-                    <!-- Apps -->
+                    <!-- Apps :class="(index > 3) ? 'pt-5' : ''"-->
                     <div v-if="!pgLoading" class="row">
-                        <div class="col-md-3 " 
+                        <div class="col-md-3 pt-5" 
                             v-for="(row, index) in rows"
                             :key="index"
-                            :class="(index > 3) ? 'pt-5' : ''">
+                            :class="(row.authority) ? '' : 'hidden'">
                             <div class="card text-center">
                                 <div class="card-header">
                                     <h4>{{ row.name }}</h4>
