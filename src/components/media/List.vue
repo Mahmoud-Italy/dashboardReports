@@ -124,7 +124,7 @@
 
                                     <td class="font-weight-semi-bold">
                                         <a :href="row.image" target="_blank">
-                                            <img :src="row.user.image.image_url" 
+                                            <img :src="row.image.image_url" 
                                                 style="width:92px">
                                         </a>
                                     </td>
@@ -320,7 +320,7 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        status: 'active',
+                        status: true,
                         paginate: 100
                     },
                 }

@@ -699,6 +699,7 @@
         },
         mounted() {},
         created() {
+
             // AccessToken & Roles
             if(localStorage.getItem('role')) {
                 this.auth.role = localStorage.getItem('role');
@@ -1038,7 +1039,17 @@
                     });
                     this.updateLoading = false;
                 },3000);
-            }
+            },
+
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+                localStorage.removeItem('tenant_id');
+            },
 
         },
     }

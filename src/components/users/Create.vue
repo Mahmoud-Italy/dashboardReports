@@ -176,8 +176,8 @@
                                             <!-- Image -->
                                             <div class="form-group">
                                                 <label>Image</label>
-                                                <img :src="row.image_preview" 
-                                                    class="mb-2 custom-image">
+                                                <p><img :src="row.image_preview" 
+                                                    class="mb-2 custom-image"></p>
                                                 <input type="file" 
                                                     class="form-control" 
                                                     ref="myDropify" 

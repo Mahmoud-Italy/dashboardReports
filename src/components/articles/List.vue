@@ -703,7 +703,6 @@
 
                         this.rows = res.data.rows;
                         if(res.data.paginate.total) {
-                            //this.total_data = res.data.paginate.total;
                             vm.makePagination(res.data.paginate)
                         }
 

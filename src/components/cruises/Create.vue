@@ -1059,7 +1059,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/cruiseTypes',
+                    url: window.baseURL+'/cruisetypes',
                     method: 'GET',
                     data: {},
                     params: {

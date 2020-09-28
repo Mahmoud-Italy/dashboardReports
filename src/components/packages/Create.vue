@@ -1721,7 +1721,7 @@
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/packageTypes',
+                    url: window.baseURL+'/packagetypes',
                     method: 'GET',
                     data: {},
                     params: {
