@@ -418,7 +418,10 @@
                                                 <!-- Price Items -->
                                                <div v-for="x in 10" 
                                                     :key="x" 
-                                                    :class="(x > prices_items_length[i-1]) ? 'hidden' : ''"
+                                                    :class="((prices_items_length[i-1])
+                                                             ? x > prices_items_length[i-1]
+                                                             : x > 1 )
+                                                            ? 'hidden' : ''"
                                                     :id="'sub_'+i+'_'+x">
 
                                                     <div class="row col-12 ui-ml-unset">
@@ -532,7 +535,10 @@
                                                 <!-- Price Items -->
                                                <div v-for="x in 10" 
                                                     :key="x" 
-                                                    :class="(x > itineraries_items_length[i-1]) ? 'hidden' : ''"
+                                                    :class="((itineraries_items_length[i-1])
+                                                             ? x > itineraries_items_length[i-1]
+                                                             : x > 1 )
+                                                            ? 'hidden' : ''"
                                                     :id="'sub2_'+i+'_'+x"
                                                     class="ui-for-div">
 
@@ -1364,6 +1370,7 @@
             opnFrm() {
                 this.row.price_key++;
                 this.row.price_item_key[this.row.price_key] = 0;
+                //this.prices_items_length[this.row.price_key - 1] = 0;
             },
             removeOption(i) {
                 document.querySelector('#frm_'+i).remove();
