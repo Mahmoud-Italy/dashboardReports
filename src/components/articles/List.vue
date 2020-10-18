@@ -298,7 +298,8 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                        <router-link :to="{ name: 'filter-'+refs, 
+                                        <span v-if="!row.writer"> - </span>
+                                        <router-link v-if="row.writer" :to="{ name: 'filter-'+refs, 
                                             params:{filter_by: 'writer', 'filter':row.writer.title} }" 
                                             class="text-decoration-hover">
                                             <span class="badge badge-md badge-pill badge-danger-soft">
