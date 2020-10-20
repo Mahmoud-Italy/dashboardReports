@@ -299,6 +299,7 @@
 
                                 
                                     <td class="font-weight-semi-bold text-center">
+                                        <span v-if="!row.destination"> - </span>
                                         <router-link v-if="row.destination"
                                             :to="{ name: 'filter-'+refs, 
                                             params:{filter_by: 'destination', 
@@ -308,7 +309,6 @@
                                                 {{ row.destination.title }}
                                             </span>
                                         </router-link>
-                                        <span v-if="!row.destination"> - </span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">

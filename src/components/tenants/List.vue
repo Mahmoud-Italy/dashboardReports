@@ -276,7 +276,8 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                        <span>{{ row.domains.domain }}</span>
+                                        <span v-if="row.domains"></span>
+                                        <span v-if="!row.domains">{{ row.domains.domain }}</span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">

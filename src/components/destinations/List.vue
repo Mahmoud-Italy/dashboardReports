@@ -322,14 +322,17 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
-                                        <router-link :to="{ name: 'filter-'+refs, 
-                                                params: { filter_by:'region', 
-                                                    filter: row.region.slug } }" 
-                                            class="text-decoration-hover black">
-                                            <span class="badge badge-md badge-pill badge-danger-soft">
-                                                {{ row.region.title }}
-                                            </span>
-                                        </router-link>
+                                        <span v-if="!row.region"> - </span>
+                                        <span v-if="row.region">
+                                            <router-link :to="{ name: 'filter-'+refs, 
+                                                    params: { filter_by:'region', 
+                                                        filter: row.region.slug } }" 
+                                                class="text-decoration-hover black">
+                                                <span class="badge badge-md badge-pill badge-danger-soft">
+                                                    {{ row.region.title }}
+                                                </span>
+                                            </router-link>
+                                        </span>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
