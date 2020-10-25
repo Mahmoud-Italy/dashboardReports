@@ -507,7 +507,7 @@
                     data: {},
                     params: {
                         tenant_id: this.tenant_id,
-                        status: true,
+                        status: 'active',
                         paginate: 100
                     },
                 }
@@ -523,75 +523,89 @@
 
             // editRow
             editRow(){
-                this.btnLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
 
-                // Multi dimension array
-                for( let i = 1; i < this.row.price_names.length; i++ ) {
-                        for( let x = 1; x <= 10; x++) {
-                        let item_value = this.row.price_item_values[i+'_'+x];
-                        let item_body  = this.row.price_item_body[i+'_'+x];
-                        if(item_value) {
-                            this.row.items[x] = {
-                                'item_value' : item_value,
-                                'item_body'  : item_body
+                if(this.tenant_id == 0) {
+                    
+                    iziToast.warning({
+                        icon: 'ti-alert',
+                        title: 'Wow-man,',
+                        message: 'No tenany selected.'
+                    });
+
+                } else {
+
+                    this.btnLoading = true;
+                    this.axios.defaults.headers.common = {
+                        'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                        'Authorization': `Bearer ` + this.auth.access_token,
+                    };
+
+                    // Multi dimension array
+                    for( let i = 1; i < this.row.price_names.length; i++ ) {
+                            for( let x = 1; x <= 10; x++) {
+                            let item_value = this.row.price_item_values[i+'_'+x];
+                            let item_body  = this.row.price_item_body[i+'_'+x];
+                            if(item_value) {
+                                this.row.items[x] = {
+                                    'item_value' : item_value,
+                                    'item_body'  : item_body
+                                }
                             }
                         }
-                    }
-                    this.row.prices[i] = {
-                        'price_name' : this.row.price_names[i],
-                        'items'      : this.row.items
-                    }
-                    this.row.items = []; // clear array
-                }
-                
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-                const options = {
-                    url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
-                    method: 'PUT',
-                    data: {
-                        tenant_id: this.tenant_id,
-                        // row
-                        name: this.row.name,
-
-                        // price & items
-                        prices: this.row.prices,
-
-                        // hotels
-                        hotels: this.row.hotelsValues,
-
-                        // status & visibility
-                        status: this.row.status,
-                    }
-                }
-                this.axios(options, config)
-                    .then(() => {
-                        this.btnLoading = false;
-                        iziToast.success({
-                            icon: 'ti-check',
-                            title: 'Great job,',
-                            message: 'Item Updated Successfully.',
-                        });
-                        this.$router.push({ name: this.refs })
-                    })
-                    .catch(err => {
-                        // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage();
-                            this.$router.push({ name: 'forbidden' });
-                        } else {
-                            this.btnLoading = false;
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow-man,',
-                                message: (err.response) ? err.response.data.message : ''+err
-                            });
+                        this.row.prices[i] = {
+                            'price_name' : this.row.price_names[i],
+                            'items'      : this.row.items
                         }
-                    })
-                    .finally(() => {})
+                        this.row.items = []; // clear array
+                    }
+                    
+                    const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                    const options = {
+                        url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
+                        method: 'PUT',
+                        data: {
+                            tenant_id: this.tenant_id,
+                            // row
+                            name: this.row.name,
+
+                            // price & items
+                            prices: this.row.prices,
+
+                            // hotels
+                            hotels: this.row.hotelsValues,
+
+                            // status & visibility
+                            status: this.row.status,
+                        }
+                    }
+                    this.axios(options, config)
+                        .then(() => {
+                            this.btnLoading = false;
+                            iziToast.success({
+                                icon: 'ti-check',
+                                title: 'Great job,',
+                                message: 'Item Updated Successfully.',
+                            });
+                            this.$router.push({ name: this.refs })
+                        })
+                        .catch(err => {
+                            // 403 Forbidden
+                            if(err.response && err.response.status == 401) {
+                                this.removeLocalStorage();
+                                this.$router.push({ name: 'login' });
+                            } else if(err.response && err.response.status == 403) {
+                                this.$router.push({ name: 'forbidden' });
+                            } else {
+                                this.btnLoading = false;
+                                iziToast.warning({
+                                    icon: 'ti-alert',
+                                    title: 'Wow-man,',
+                                    message: (err.response) ? err.response.data.message : ''+err
+                                });
+                            }
+                        })
+                        .finally(() => {})
+                }
             },
 
             // add more

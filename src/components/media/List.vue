@@ -320,7 +320,7 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        status: true,
+                        status: 'active',
                         paginate: 100
                     },
                 }
@@ -339,8 +339,10 @@
                     })
                     .catch(err => {
                         // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
+                        if(err.response && err.response.status == 401) {
                             this.removeLocalStorage();
+                            this.$router.push({ name: 'login' });
+                        } else if(err.response && err.response.status == 403) {
                             this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
@@ -421,41 +423,51 @@
 
             // Add Or Update Category
             addNew(){
-                this.btnLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
-                const config = { headers: { 'Content-Type': 'application/json' }};  
-                const options = {
-                    url: window.baseURL+'/'+this.refs,
-                    method: 'POST',
-                    data: {
-                        tenant_id: this.tenant_id,
-                        file: this.row.base64Image
-                    }
-                }
-                this.axios(options, config)
-                    .then(res => {
-                        this.btnLoading = false;
-                        this.row.preview = '';
-                        this.row.base64Image = '';
-                        this.fetchData('', true);
-
-                        iziToast.success({
-                            icon: 'ti-check',
-                            title: 'Great job,',
-                            message: 'File Uploaded Successfully',
-                        });
-                })
-                .catch(err => {
-                    this.btnLoading = false;
-                    iziToast.error({
-                        icon: 'ti-na',
-                        title: 'Wow-wow,',
-                        message: (err.response) ? err.response.data.message : ''+err
+                if(this.tenant_id == 0) {
+                    
+                    iziToast.warning({
+                        icon: 'ti-alert',
+                        title: 'Wow-man,',
+                        message: 'No tenany selected.'
                     });
-                });
+
+                } else {
+                    this.btnLoading = true;
+                    this.axios.defaults.headers.common = {
+                        'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                        'Authorization': `Bearer ` + this.auth.access_token,
+                    };
+                    const config = { headers: { 'Content-Type': 'application/json' }};  
+                    const options = {
+                        url: window.baseURL+'/'+this.refs,
+                        method: 'POST',
+                        data: {
+                            tenant_id: this.tenant_id,
+                            file: this.row.base64Image
+                        }
+                    }
+                    this.axios(options, config)
+                        .then(res => {
+                            this.btnLoading = false;
+                            this.row.preview = '';
+                            this.row.base64Image = '';
+                            this.fetchData('', true);
+
+                            iziToast.success({
+                                icon: 'ti-check',
+                                title: 'Great job,',
+                                message: 'File Uploaded Successfully',
+                            });
+                    })
+                    .catch(err => {
+                        this.btnLoading = false;
+                        iziToast.error({
+                            icon: 'ti-na',
+                            title: 'Wow-wow,',
+                            message: (err.response) ? err.response.data.message : ''+err
+                        });
+                    });
+                }
             },
 
 

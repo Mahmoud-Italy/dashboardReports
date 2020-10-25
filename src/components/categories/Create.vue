@@ -584,7 +584,7 @@
                     data: {},
                     params: {
                         tenant_id: this.tenant_id,
-                        status: true,
+                        status: 'active',
                         paginate: 100,
                     },
                 }
@@ -600,71 +600,83 @@
 
             // Add New
             addNew(){
-                this.btnLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-                const options = {
-                    url: window.baseURL+'/'+this.refs,
-                    method: 'POST',
-                    data: {
-                        tenant_id: this.tenant_id,
-                        // meta
-                        meta_title: this.row.meta_title,
-                        meta_keywords: this.row.meta_keywords,
-                        meta_description: this.row.meta_description,
+                if(this.tenant_id == 0) {
+                    
+                    iziToast.warning({
+                        icon: 'ti-alert',
+                        title: 'Wow-man,',
+                        message: 'No tenany selected.'
+                    });
 
-                        // row
-                        title: this.row.title,
-                        slug: this.row.slug,
-                        sort: this.row.sort,
-                        color: this.row.color,
-                        body: this.row.body,
+                } else {
+                    this.btnLoading = true;
+                    this.axios.defaults.headers.common = {
+                        'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                        'Authorization': `Bearer ` + this.auth.access_token,
+                    };
+                    const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                    const options = {
+                        url: window.baseURL+'/'+this.refs,
+                        method: 'POST',
+                        data: {
+                            tenant_id: this.tenant_id,
+                            // meta
+                            meta_title: this.row.meta_title,
+                            meta_keywords: this.row.meta_keywords,
+                            meta_description: this.row.meta_description,
 
-                        // navbar
-                        destination_id: this.row.destination_id,
-                        parent_id: this.row.parent_id,
+                            // row
+                            title: this.row.title,
+                            slug: this.row.slug,
+                            sort: this.row.sort,
+                            color: this.row.color,
+                            body: this.row.body,
 
-                        // image & icon
-                        image_base64: this.row.image_base64,
-                        image_alt: this.row.image_alt,
-                        image_title: this.row.image_title,
+                            // navbar
+                            destination_id: this.row.destination_id,
+                            parent_id: this.row.parent_id,
 
-                        icon_base64: this.row.icon_base64,
-                        icon_alt: this.row.icon_alt,
-                        icon_title: this.row.icon_title,
+                            // image & icon
+                            image_base64: this.row.image_base64,
+                            image_alt: this.row.image_alt,
+                            image_title: this.row.image_title,
 
-                        // status & visibility
-                        status: this.row.status,
-                    }
-                }
-                this.axios(options, config)
-                    .then(() => {
-                        this.btnLoading = false;
-                        iziToast.success({
-                            icon: 'ti-check',
-                            title: 'Great job,',
-                            message: 'Item Added Successfully.',
-                        });
-                        this.$router.push({ name: this.refs });
-                    })
-                    .catch(err => {
-                        // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage();
-                            this.$router.push({ name: 'forbidden' });
-                        } else {
-                            this.btnLoading = false;
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow-man,',
-                                message: err.response.data.message
-                            });
+                            icon_base64: this.row.icon_base64,
+                            icon_alt: this.row.icon_alt,
+                            icon_title: this.row.icon_title,
+
+                            // status & visibility
+                            status: this.row.status,
                         }
-                    })
-                    .finally(() => {})
+                    }
+                    this.axios(options, config)
+                        .then(() => {
+                            this.btnLoading = false;
+                            iziToast.success({
+                                icon: 'ti-check',
+                                title: 'Great job,',
+                                message: 'Item Added Successfully.',
+                            });
+                            this.$router.push({ name: this.refs });
+                        })
+                        .catch(err => {
+                            // 403 Forbidden
+                            if(err.response && err.response.status == 401) {
+                                this.removeLocalStorage();
+                                this.$router.push({ name: 'login' });
+                            } else if(err.response && err.response.status == 403) {
+                                this.$router.push({ name: 'forbidden' });
+                            } else {
+                                this.btnLoading = false;
+                                iziToast.warning({
+                                    icon: 'ti-alert',
+                                    title: 'Wow-man,',
+                                    message: err.response.data.message
+                                });
+                            }
+                        })
+                        .finally(() => {})
+                }
             },
 
             // Title

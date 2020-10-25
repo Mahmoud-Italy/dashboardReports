@@ -10,7 +10,7 @@
 
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize">{{ refs }}
-                        <router-link v-if="permissions.add"
+                        <router-link v-if="permissions.add && tenant_id != 0"
                             :to="{ name: 'create-'+refs }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
@@ -665,8 +665,10 @@
                     })
                     .catch(err => {
                         // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
+                        if(err.response && err.response.status == 401) {
                             this.removeLocalStorage();
+                            this.$router.push({ name: 'login' });
+                        } else if(err.response && err.response.status == 403) {
                             this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
@@ -716,6 +718,7 @@
                         this.showLoading = false;
                         this.orderLoading = false;
                         this.authorLoading = false;
+                        this.tenantLoading = false;
 
                         this.statusBar.all = res.data.statusBar.all;
                         this.statusBar.active = res.data.statusBar.active;
@@ -733,14 +736,15 @@
 
                         // Exception for 403
                         if(!res.data.permissions.view) {
-                            this.removeLocalStorage();
                             this.$router.push({ name: 'forbidden' });
                         }
                     })
                     .catch(err => {
                         // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
+                        if(err.response && err.response.status == 401) {
                             this.removeLocalStorage();
+                            this.$router.push({ name: 'login' });
+                        } else if(err.response && err.response.status == 403) {
                             this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;

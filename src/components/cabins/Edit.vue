@@ -540,68 +540,80 @@
 
             // Edit row
             editRow(){
-                this.btnLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
-                // items
-                for( let i = 1; i <= this.row.icons_key; i++ ) {
-                    this.row.icons[i] = {
-                        'icon_base64' : this.row.icons_image_base64[i],
-                        'icon_alt' : this.row.icons_image_alt[i],
-                        'icon_title' : this.row.icons_image_title[i]
-                    }
-                }
-                const options = {
-                    url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
-                    method: 'PUT',
-                    data: {
-                        tenant_id: this.tenant_id,
-                        // row
-                        title: this.row.title,
-                        slug: this.row.slug,
-                        sort: this.row.sort,
-                        price: this.row.price,
-                        body: this.row.body,
+                if(this.tenant_id == 0) {
+                    
+                    iziToast.warning({
+                        icon: 'ti-alert',
+                        title: 'Wow-man,',
+                        message: 'No tenany selected.'
+                    });
 
-                        // icons
-                        icons: this.row.icons,
-
-                        // image
-                        image_base64: this.row.image_base64,
-                        image_alt: this.row.image_alt,
-                        image_title: this.row.image_title,
-
-                        // status & visibility
-                        status: this.row.status,
-                    }
-                }
-                this.axios(options)
-                    .then(() => {
-                        this.btnLoading = false;
-                        iziToast.success({
-                            icon: 'ti-check',
-                            title: 'Great job,',
-                            message: 'Item Updated Successfully.',
-                        });
-                        this.$router.push({ name: this.refs });
-                    })
-                    .catch(err => {
-                        // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage();
-                            this.$router.push({ name: 'forbidden' });
-                        } else {
-                            this.btnLoading = false;
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow-man,',
-                                message: (err.response) ? err.response.data.message : ''+err
-                            });
+                } else {
+                    this.btnLoading = true;
+                    this.axios.defaults.headers.common = {
+                        'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                        'Authorization': `Bearer ` + this.auth.access_token,
+                    };
+                    // items
+                    for( let i = 1; i <= this.row.icons_key; i++ ) {
+                        this.row.icons[i] = {
+                            'icon_base64' : this.row.icons_image_base64[i],
+                            'icon_alt' : this.row.icons_image_alt[i],
+                            'icon_title' : this.row.icons_image_title[i]
                         }
-                    })
-                    .finally(() => {})
+                    }
+                    const options = {
+                        url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
+                        method: 'PUT',
+                        data: {
+                            tenant_id: this.tenant_id,
+                            // row
+                            title: this.row.title,
+                            slug: this.row.slug,
+                            sort: this.row.sort,
+                            price: this.row.price,
+                            body: this.row.body,
+
+                            // icons
+                            icons: this.row.icons,
+
+                            // image
+                            image_base64: this.row.image_base64,
+                            image_alt: this.row.image_alt,
+                            image_title: this.row.image_title,
+
+                            // status & visibility
+                            status: this.row.status,
+                        }
+                    }
+                    this.axios(options)
+                        .then(() => {
+                            this.btnLoading = false;
+                            iziToast.success({
+                                icon: 'ti-check',
+                                title: 'Great job,',
+                                message: 'Item Updated Successfully.',
+                            });
+                            this.$router.push({ name: this.refs });
+                        })
+                        .catch(err => {
+                            // 403 Forbidden
+                            if(err.response && err.response.status == 401) {
+                                this.removeLocalStorage();
+                                this.$router.push({ name: 'login' });
+                            } else if(err.response && err.response.status == 403) {
+                                this.$router.push({ name: 'forbidden' });
+                            } else {
+                                this.btnLoading = false;
+                                iziToast.warning({
+                                    icon: 'ti-alert',
+                                    title: 'Wow-man,',
+                                    message: (err.response) ? err.response.data.message : ''+err
+                                });
+                            }
+                        })
+                        .finally(() => {})
+                }
             },
 
             // Title

@@ -674,8 +674,10 @@
                     })
                     .catch(err => {
                         // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
+                        if(err.response && err.response.status == 401) {
                             this.removeLocalStorage();
+                            this.$router.push({ name: 'login' });
+                        } else if(err.response && err.response.status == 403) {
                             this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
@@ -745,14 +747,15 @@
 
                         // Exception for 403
                         if(!res.data.permissions.view) {
-                            this.removeLocalStorage();
                             this.$router.push({ name: 'forbidden' });
                         }
                     })
                     .catch(err => {
                         // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
+                        if(err.response && err.response.status == 401) {
                             this.removeLocalStorage();
+                            this.$router.push({ name: 'login' });
+                        } else if(err.response && err.response.status == 403) {
                             this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
@@ -818,59 +821,71 @@
 
             // createOrUpdate
             createOrUpdate() {
-                this.btnLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
-                let type = 'POST';
-                let path = this.refs;
-                let msg  = 'Added';
-                if(this.edit) {
-                    type = 'PUT';
-                    path = this.refs+'/'+this.row.encrypt_id;
-                    msg  = 'Updated';
-                }
-                const options = {
-                    url: window.baseURL+'/'+path,
-                    method: type,
-                    data: {
-                        tenant_id: this.tenant_id,
-                        title: this.row.title,
-                        body1: this.row.body1
-                    }
-                }
-                this.axios(options)
-                .then(() => {
-                    this.btnLoading = false;
-                    this.fetchData();
-
-                        // Clear rows
-                    this.row.encrypt_id = '';
-                    this.row.title = '';
-                    this.row.body1 = '';
-
-                    iziToast.success({
-                        icon: 'ti-check',
-                        title: 'Great job,',
-                        message: 'Item '+msg+' Successfully',
+                if(this.tenant_id == 0) {
+                    
+                    iziToast.warning({
+                        icon: 'ti-alert',
+                        title: 'Wow-man,',
+                        message: 'No tenany selected.'
                     });
-                })
-                .catch(err => {
-                    // 403 Forbidden
-                    if(err.response && err.response.status == 403) {
-                        this.removeLocalStorage();
-                        this.$router.push({ name: 'forbidden' });
-                    } else {
-                        this.btnLoading = false;
-                        iziToast.warning({
-                            icon: 'ti-alert',
-                            title: 'Wow-man,',
-                            message: (err.response) ? err.response.data.message : ''+err
-                        });
+
+                } else {
+                    this.btnLoading = true;
+                    this.axios.defaults.headers.common = {
+                        'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                        'Authorization': `Bearer ` + this.auth.access_token,
+                    };
+                    let type = 'POST';
+                    let path = this.refs;
+                    let msg  = 'Added';
+                    if(this.edit) {
+                        type = 'PUT';
+                        path = this.refs+'/'+this.row.encrypt_id;
+                        msg  = 'Updated';
                     }
-                })
-                .finally(() => {});
+                    const options = {
+                        url: window.baseURL+'/'+path,
+                        method: type,
+                        data: {
+                            tenant_id: this.tenant_id,
+                            title: this.row.title,
+                            body1: this.row.body1
+                        }
+                    }
+                    this.axios(options)
+                    .then(() => {
+                        this.btnLoading = false;
+                        this.fetchData();
+
+                            // Clear rows
+                        this.row.encrypt_id = '';
+                        this.row.title = '';
+                        this.row.body1 = '';
+
+                        iziToast.success({
+                            icon: 'ti-check',
+                            title: 'Great job,',
+                            message: 'Item '+msg+' Successfully',
+                        });
+                    })
+                    .catch(err => {
+                        // 403 Forbidden
+                        if(err.response && err.response.status == 401) {
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'login' });
+                        } else if(err.response && err.response.status == 403) {
+                            this.$router.push({ name: 'forbidden' });
+                        } else {
+                            this.btnLoading = false;
+                            iziToast.warning({
+                                icon: 'ti-alert',
+                                title: 'Wow-man,',
+                                message: (err.response) ? err.response.data.message : ''+err
+                            });
+                        }
+                    })
+                    .finally(() => {});
+                }
             },
         
 

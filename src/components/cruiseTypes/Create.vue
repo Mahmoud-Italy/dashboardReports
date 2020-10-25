@@ -155,7 +155,7 @@
                                                     <option v-for="(parent, index) in parents" 
                                                             :key="index"
                                                             :value="parent.id">
-                                                            {{ parent.name }}
+                                                            {{ parent.title }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -374,8 +374,8 @@
                     data: {},
                     params: {
                         tenant_id: this.tenant_id,
-                        status: true,
-                        parent_id: false,
+                        status: 'active',
+                        parent_id: '',
                         paginate: 100,
                     },
                 }
@@ -391,6 +391,15 @@
           
             // Add New
             addNew(){
+                if(this.tenant_id == 0) {
+                    
+                    iziToast.warning({
+                        icon: 'ti-alert',
+                        title: 'Wow-man,',
+                        message: 'No tenany selected.'
+                    });
+
+                } else {
                 this.btnLoading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
@@ -428,8 +437,10 @@
                     })
                     .catch(err => {
                         // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
+                        if(err.response && err.response.status == 401) {
                             this.removeLocalStorage();
+                            this.$router.push({ name: 'login' });
+                        } else if(err.response && err.response.status == 403) {
                             this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
@@ -441,6 +452,7 @@
                         }
                     })
                     .finally(() => {})
+                }
             },
 
             // Title

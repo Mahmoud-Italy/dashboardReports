@@ -1196,7 +1196,7 @@
                     data: {},
                     params: {
                         tenant_id: this.tenant_id,
-                        status: true,
+                        status: 'active',
                         paginate: 100,
                     },
                 }
@@ -1224,7 +1224,7 @@
                     data: {},
                     params: {
                         tenant_id: this.tenant_id,
-                        status: true,
+                        status: 'active',
                         paginate: 100,
                     },
                 }
@@ -1241,128 +1241,140 @@
 
             // edit Row
             editRow(){
-                this.btnLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
+                if(this.tenant_id == 0) {
+                    
+                    iziToast.warning({
+                        icon: 'ti-alert',
+                        title: 'Wow-man,',
+                        message: 'No tenany selected.'
+                    });
 
-                // prices
-                for( let i = 1; i < this.row.price_names.length; i++ ) {
-                        for( let x = 1; x <= 10; x++) {
-                        let item_value = this.row.price_item_value[i+'_'+x];
-                        let item_body  = this.row.price_item_body[i+'_'+x];
-                        if(item_value) {
-                            this.row.price_items[x] = {
-                                'item_value' : item_value,
-                                'item_body'  : item_body
+                } else {
+                    this.btnLoading = true;
+                    this.axios.defaults.headers.common = {
+                        'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                        'Authorization': `Bearer ` + this.auth.access_token,
+                    };
+
+                    // prices
+                    for( let i = 1; i < this.row.price_names.length; i++ ) {
+                            for( let x = 1; x <= 10; x++) {
+                            let item_value = this.row.price_item_value[i+'_'+x];
+                            let item_body  = this.row.price_item_body[i+'_'+x];
+                            if(item_value) {
+                                this.row.price_items[x] = {
+                                    'item_value' : item_value,
+                                    'item_body'  : item_body
+                                }
                             }
                         }
+                        this.row.prices[i] = {
+                            'price_name' : this.row.price_names[i],
+                            'items'      : this.row.price_items
+                        }
+                        this.row.price_items = []; // clear array
                     }
-                    this.row.prices[i] = {
-                        'price_name' : this.row.price_names[i],
-                        'items'      : this.row.price_items
-                    }
-                    this.row.price_items = []; // clear array
-                }
 
-                // itineraries
-                for( let i = 1; i < this.row.itinerarie_names.length; i++ ) {
-                        for( let x = 1; x <= 10; x++) {
-                        let item_title = this.row.itinerarie_item_title[i+'_'+x];
-                        let item_sort  = this.row.itinerarie_item_sort[i+'_'+x];
-                        let item_body  = this.row.itinerarie_item_body[i+'_'+x];
-                        if(item_title) {
-                            this.row.itinerarie_items[x] = {
-                                'item_title' : item_title,
-                                'item_sort' : item_sort,
-                                'item_body' : item_body
+                    // itineraries
+                    for( let i = 1; i < this.row.itinerarie_names.length; i++ ) {
+                            for( let x = 1; x <= 10; x++) {
+                            let item_title = this.row.itinerarie_item_title[i+'_'+x];
+                            let item_sort  = this.row.itinerarie_item_sort[i+'_'+x];
+                            let item_body  = this.row.itinerarie_item_body[i+'_'+x];
+                            if(item_title) {
+                                this.row.itinerarie_items[x] = {
+                                    'item_title' : item_title,
+                                    'item_sort' : item_sort,
+                                    'item_body' : item_body
+                                }
                             }
                         }
+                        this.row.itineraries[i] = {
+                            'itinerarie_name' : this.row.itinerarie_names[i],
+                            'itinerarie_sort' : this.row.itinerarie_sort[i],
+                            'items' : this.row.itinerarie_items
+                        }
+                        this.row.itinerarie_items = []; // clear array
                     }
-                    this.row.itineraries[i] = {
-                        'itinerarie_name' : this.row.itinerarie_names[i],
-                        'itinerarie_sort' : this.row.itinerarie_sort[i],
-                        'items' : this.row.itinerarie_items
+
+                    const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                    const options = {
+                        url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
+                        method: 'PUT',
+                        data: {
+                            tenant_id: this.tenant_id,
+                            // meta
+                            meta_title: this.row.meta_title,
+                            meta_keywords: this.row.meta_keywords,
+                            meta_description: this.row.meta_description,
+
+                            // row
+                            title: this.row.title,
+                            slug: this.row.slug,
+                            short_title: this.row.short_title,
+                            start_price: this.row.start_price,
+                            sort: this.row.sort,                        
+                            inclusion: this.row.inclusion,
+                            exclusion: this.row.exclusion,
+                            cruise_facilities: this.row.cruise_facilities,
+                            guest_suite_facilities: this.row.guest_suite_facilities,
+                            cabin_facilities: this.row.cabin_facilities,
+                            cancellation_policies: this.row.cancellation_policies,
+                            short_body: this.row.short_body,
+                            body: this.row.body,
+
+                            // price
+                            prices: this.row.prices,
+
+                            // itineraries
+                            itineraries: this.row.itineraries,
+
+                            // navbar
+                            cruise_type_id: this.row.cruise_type_id,
+                            cabins: this.row.cabinsValues,
+
+                            // images
+                            image_base64: this.row.image_base64,
+                            image_alt: this.row.image_alt,
+                            image_title: this.row.image_title,
+
+                            short_image_base64: this.row.short_image_base64,
+                            short_image_alt: this.row.short_image_alt,
+                            short_image_title: this.row.short_image_title,
+
+                            // status & visibility
+                            status: this.row.status,
+                            view_in_home: this.row.view_in_home,
+                        }
                     }
-                    this.row.itinerarie_items = []; // clear array
-                }
-
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-                const options = {
-                    url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
-                    method: 'PUT',
-                    data: {
-                        tenant_id: this.tenant_id,
-                        // meta
-                        meta_title: this.row.meta_title,
-                        meta_keywords: this.row.meta_keywords,
-                        meta_description: this.row.meta_description,
-
-                        // row
-                        title: this.row.title,
-                        slug: this.row.slug,
-                        short_title: this.row.short_title,
-                        start_price: this.row.start_price,
-                        sort: this.row.sort,                        
-                        inclusion: this.row.inclusion,
-                        exclusion: this.row.exclusion,
-                        cruise_facilities: this.row.cruise_facilities,
-                        guest_suite_facilities: this.row.guest_suite_facilities,
-                        cabin_facilities: this.row.cabin_facilities,
-                        cancellation_policies: this.row.cancellation_policies,
-                        short_body: this.row.short_body,
-                        body: this.row.body,
-
-                        // price
-                        prices: this.row.prices,
-
-                        // itineraries
-                        itineraries: this.row.itineraries,
-
-                        // navbar
-                        cruise_type_id: this.row.cruise_type_id,
-                        cabins: this.row.cabinsValues,
-
-                        // images
-                        image_base64: this.row.image_base64,
-                        image_alt: this.row.image_alt,
-                        image_title: this.row.image_title,
-
-                        short_image_base64: this.row.short_image_base64,
-                        short_image_alt: this.row.short_image_alt,
-                        short_image_title: this.row.short_image_title,
-
-                        // status & visibility
-                        status: this.row.status,
-                        view_in_home: this.row.view_in_home,
-                    }
-                }
-                this.axios(options, config)
-                    .then(() => {
-                        this.btnLoading = false;
-                        iziToast.success({
-                            icon: 'ti-check',
-                            title: 'Great job,',
-                            message: 'Item Updated Successfully.',
-                        });
-                        this.$router.push({ name: this.refs });
-                    })
-                    .catch(err => {
-                        // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage();
-                            this.$router.push({ name: 'forbidden' });
-                        } else {
+                    this.axios(options, config)
+                        .then(() => {
                             this.btnLoading = false;
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow-man,',
-                                message: err.response.data.message
+                            iziToast.success({
+                                icon: 'ti-check',
+                                title: 'Great job,',
+                                message: 'Item Updated Successfully.',
                             });
-                        }
-                    })
-                    .finally(() => {})
+                            this.$router.push({ name: this.refs });
+                        })
+                        .catch(err => {
+                            // 403 Forbidden
+                            if(err.response && err.response.status == 401) {
+                                this.removeLocalStorage();
+                                this.$router.push({ name: 'login' });
+                            } else if(err.response && err.response.status == 403) {
+                                this.$router.push({ name: 'forbidden' });
+                            } else {
+                                this.btnLoading = false;
+                                iziToast.warning({
+                                    icon: 'ti-alert',
+                                    title: 'Wow-man,',
+                                    message: err.response.data.message
+                                });
+                            }
+                        })
+                        .finally(() => {})
+                }
             },
 
 

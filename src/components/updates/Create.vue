@@ -342,56 +342,68 @@
 
             // Add New
             addNew(){
-                this.btnLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-                const options = {
-                    url: window.baseURL+'/'+this.refs,
-                    method: 'POST',
-                    data: {
-                        tenant_id: this.tenant_id,
-                        // row
-                        title: this.row.title,
-                        body: this.row.body,
-                        sort: this.row.sort,
+                if(this.tenant_id == 0) {
+                    
+                    iziToast.warning({
+                        icon: 'ti-alert',
+                        title: 'Wow-man,',
+                        message: 'No tenany selected.'
+                    });
 
-                        // image
-                        image_base64: this.row.image_base64,
-                        image_alt: this.row.image_alt,
-                        image_title: this.row.image_title,
+                } else {
+                    this.btnLoading = true;
+                    this.axios.defaults.headers.common = {
+                        'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                        'Authorization': `Bearer ` + this.auth.access_token,
+                    };
+                    const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                    const options = {
+                        url: window.baseURL+'/'+this.refs,
+                        method: 'POST',
+                        data: {
+                            tenant_id: this.tenant_id,
+                            // row
+                            title: this.row.title,
+                            body: this.row.body,
+                            sort: this.row.sort,
 
-                        // status & visibility
-                        status: this.row.status,
-                    }
-                }
-                this.axios(options, config)
-                    .then(() => {
-                        this.btnLoading = false;
-                        iziToast.success({
-                            icon: 'ti-check',
-                            title: 'Great job,',
-                            message: 'Item Added Successfully.',
-                        });
-                        this.$router.push({ name: this.refs });
-                    })
-                    .catch(err => {
-                        // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage();
-                            this.$router.push({ name: 'forbidden' });
-                        } else {
-                            this.btnLoading = false;
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow-man,',
-                                message: err.response.data.message
-                            });
+                            // image
+                            image_base64: this.row.image_base64,
+                            image_alt: this.row.image_alt,
+                            image_title: this.row.image_title,
+
+                            // status & visibility
+                            status: this.row.status,
                         }
-                    })
-                    .finally(() => {})
+                    }
+                    this.axios(options, config)
+                        .then(() => {
+                            this.btnLoading = false;
+                            iziToast.success({
+                                icon: 'ti-check',
+                                title: 'Great job,',
+                                message: 'Item Added Successfully.',
+                            });
+                            this.$router.push({ name: this.refs });
+                        })
+                        .catch(err => {
+                            // 403 Forbidden
+                            if(err.response && err.response.status == 401) {
+                                this.removeLocalStorage();
+                                this.$router.push({ name: 'login' });
+                            } else if(err.response && err.response.status == 403) {
+                                this.$router.push({ name: 'forbidden' });
+                            } else {
+                                this.btnLoading = false;
+                                iziToast.warning({
+                                    icon: 'ti-alert',
+                                    title: 'Wow-man,',
+                                    message: err.response.data.message
+                                });
+                            }
+                        })
+                        .finally(() => {})
+                }
             },
 
             // Upload Featured image

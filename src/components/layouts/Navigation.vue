@@ -143,7 +143,7 @@
                         tenant_id: this.tenant_id,
                         status: this.status,
                         search: this.search,
-                        paginate: 10,
+                        paginate: 100,
                     },
                 }
                 this.axios(options)
@@ -151,16 +151,16 @@
                         this.pgLoading = false;
                         this.navigation = res.data.rows;
                     })
-                    .catch((err) => { console.log('err'+err);})
-                    .finally(() => {})
+                    .catch(() => { })
+                    .finally(() => { })
             },
 
         },
 
         beforeRouteEnter (to, from, next) { 
-          next(vm => { 
+          next(() => { 
             //next();
-            console.log('here'+vm);
+            //console.log('here'+vm);
           }) 
         },
     }

@@ -418,8 +418,8 @@
                     data: {},
                     params: {
                         tenant_id: this.tenant_id,
-                        status: true,
-                        parent_id: false,
+                        status: 'active',
+                        parent_id: '',
                         paginate: 100,
                     },
                 }
@@ -435,56 +435,68 @@
           
             // edit New
             editRow(){
-                this.btnLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
-                const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
-                const options = {
-                    url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
-                    method: 'PUT',
-                    data: {
-                        tenant_id: this.tenant_id,
-                        // row
-                        title: this.row.title,
-                        slug: this.row.slug,
-                        sort: this.row.sort,
+                if(this.tenant_id == 0) {
+                    
+                    iziToast.warning({
+                        icon: 'ti-alert',
+                        title: 'Wow-man,',
+                        message: 'No tenany selected.'
+                    });
 
-                        // navbar
-                         parent_id: this.row.parent_id,
+                } else {
+                    this.btnLoading = true;
+                    this.axios.defaults.headers.common = {
+                        'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                        'Authorization': `Bearer ` + this.auth.access_token,
+                    };
+                    const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
+                    const options = {
+                        url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
+                        method: 'PUT',
+                        data: {
+                            tenant_id: this.tenant_id,
+                            // row
+                            title: this.row.title,
+                            slug: this.row.slug,
+                            sort: this.row.sort,
 
-                        // status & visibility
-                        status: this.row.status,
-                        view_in_header: this.row.view_in_header,
-                        view_in_footer: this.row.view_in_footer,
-                    }
-                }
-                this.axios(options, config)
-                    .then(() => {
-                        this.btnLoading = false;
-                        iziToast.success({
-                            icon: 'ti-check',
-                            title: 'Great job,',
-                            message: 'Item Updated Successfully.',
-                        });
-                        this.$router.push({ name: this.refs });
-                    })
-                    .catch(err => {
-                        // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
-                            this.removeLocalStorage();
-                            this.$router.push({ name: 'forbidden' });
-                        } else {
-                            this.btnLoading = false;
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow-man,',
-                                message: (err.response) ? err.response.data.message : ''+err
-                            });
+                            // navbar
+                             parent_id: this.row.parent_id,
+
+                            // status & visibility
+                            status: this.row.status,
+                            view_in_header: this.row.view_in_header,
+                            view_in_footer: this.row.view_in_footer,
                         }
-                    })
-                    .finally(() => {})
+                    }
+                    this.axios(options, config)
+                        .then(() => {
+                            this.btnLoading = false;
+                            iziToast.success({
+                                icon: 'ti-check',
+                                title: 'Great job,',
+                                message: 'Item Updated Successfully.',
+                            });
+                            this.$router.push({ name: this.refs });
+                        })
+                        .catch(err => {
+                            // 403 Forbidden
+                            if(err.response && err.response.status == 401) {
+                                this.removeLocalStorage();
+                                this.$router.push({ name: 'login' });
+                            } else if(err.response && err.response.status == 403) {
+                                this.$router.push({ name: 'forbidden' });
+                            } else {
+                                this.btnLoading = false;
+                                iziToast.warning({
+                                    icon: 'ti-alert',
+                                    title: 'Wow-man,',
+                                    message: (err.response) ? err.response.data.message : ''+err
+                                });
+                            }
+                        })
+                        .finally(() => {})
+                }
             },
 
             // Title

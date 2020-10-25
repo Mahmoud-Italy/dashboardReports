@@ -624,14 +624,15 @@
 
                         // Exception for 403
                         if(!res.data.permissions.view) {
-                            this.removeLocalStorage();
                             this.$router.push({ name: 'forbidden' });
                         }
                     })
                     .catch(err => {
                         // 403 Forbidden
-                        if(err.response && err.response.status == 403) {
+                        if(err.response && err.response.status == 401) {
                             this.removeLocalStorage();
+                            this.$router.push({ name: 'login' });
+                        } else if(err.response && err.response.status == 403) {
                             this.$router.push({ name: 'forbidden' });
                         } else {
                             this.btnLoading = false;
