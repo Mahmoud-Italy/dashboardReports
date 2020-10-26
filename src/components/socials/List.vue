@@ -115,7 +115,7 @@
                                             :before-generate = "startDownload"
                                             :before-finish = "finishDownload"
                                             :worksheet = "refs"
-                                            :name = "resf+'.xls'">Excel
+                                            :name = "refs+'.xls'">Excel
                                         </download-excel>
                                         <download-excel
                                             class = "dropdown-item cursor-pointer"
@@ -848,6 +848,7 @@
                         url: window.baseURL+'/'+path,
                         method: type,
                         data: {
+                            tenant_id: this.tenant_id,
                             provider: this.row.provider,
                             provider_url: this.row.provider_url
                         }
