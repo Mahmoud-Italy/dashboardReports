@@ -48,23 +48,25 @@
                                         </span>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a v-if="status == 'inactive' || status == ''"
+                                        <a v-if="(permissions.edit) && (status == 'inactive' || status == '')"
                                             @click="multiActive()"
                                             class="dropdown-item" href="javascript:;">Active
                                         </a>
-                                        <a v-if="status == 'active' || status == ''"
+                                        <a v-if="(permissions.edit) && (status == 'active' || status == '')"
                                             @click="multiInactive()"
                                             class="dropdown-item" href="javascript:;">Inactive
                                         </a>
-                                        <a v-if="status != 'trash' && permissions.delete"
+
+                                        <a v-if="permissions.delete && status != 'trash'"
                                             @click="multiMoveToTrash()"
                                             class="dropdown-item" href="javascript:;">Move to Trash
                                         </a>
-                                        <a v-if="status == 'trash' && permissions.delete"
+
+                                        <a v-if="permissions.delete && status == 'trash'"
                                             @click="multiRestoreFromTrash()"
                                             class="dropdown-item" href="javascript:;">Restore
                                         </a>
-                                        <a v-if="status == 'trash' && permissions.delete"
+                                        <a v-if="permissions.delete && status == 'trash'"
                                             @click="multiDeletePermanently()"
                                             class="dropdown-item" href="javascript:;">Delete Permanently
                                         </a>
@@ -189,7 +191,7 @@
                     <!-- Body -->
                     <div class="card-body pt-0">
                         <div class="table-responsive">
-                            <table class="table table-hover mb-0">
+                            <table id="printMe" class="table table-hover mb-0">
                                 <thead>
                                     <tr>
                                         <th style="width: 5%">
@@ -321,15 +323,15 @@
                                                 style="width: 150px">
                                                 <div class="card border-0 p-3">
                                                     <ul class="list-unstyled mb-0">
-                                                        <li v-if="!row.trash">
-                                                            <router-link v-if="permissions.edit"
+                                                        <li v-if="permissions.edit && !row.trash">
+                                                            <router-link
                                                                 class="d-block link-dark"
                                                                 :to="{ name: 'edit-'+refs, 
                                                                 params:{id: row.encrypt_id}}">
                                                                 Edit
                                                             </router-link>
                                                         </li>
-                                                        <li v-if="!row.trash">
+                                                        <li v-if="permissions.edit && !row.trash">
                                                             <a @click="row.loading = true; 
                                                                 inactivate(row.id)"
                                                                 v-html="(row.status) ? 'Inactive' : ''"
@@ -337,7 +339,7 @@
                                                                 href="javascript:;">
                                                             </a>
                                                         </li>
-                                                        <li v-if="!row.trash && permissions.delete">
+                                                        <li v-if="permissions.delete && !row.trash">
                                                             <a @click="row.loading = true; 
                                                                 activate(row.id)"
                                                                 v-html="(!row.status) ? 'Active' : ''"
@@ -346,18 +348,18 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a v-if="row.trash == 0 && permissions.delete" 
+                                                            <a v-if="permissions.delete && row.trash == 0" 
                                                                 @click="row.loading = true; 
                                                                 moveToTrash(row.id)"
                                                                 class="d-block link-dark" href="javascript:;">Move to Trash
                                                             </a>
-                                                            <a v-if="row.trash == 1 && permissions.delete" 
+                                                            <a v-if="permissions.delete && row.trash == 1" 
                                                                 @click="row.loading = true; 
                                                                 restoreFromTrash(row.id)"
                                                                 class="d-block link-dark" 
                                                                 href="javascript:;">Restore
                                                             </a>
-                                                            <a v-if="row.trash == 1 && permissions.delete" 
+                                                            <a v-if="permissions.delete && row.trash == 1" 
                                                                 @click="row.loading = true; 
                                                                 deletePermanently(row.id)"
                                                                 class="d-block link-dark" 
@@ -443,9 +445,8 @@
                 exp: {
                    json_fields: {
                         'id': 'id',
-                        'title': 'title',
-                        'body' : 'body',
-                        'created_at': 'created_at',
+                        'name': 'name',
+                        'timestamp': 'timestamp',
                     }, 
                     json_data: [],
                     json_meta: [

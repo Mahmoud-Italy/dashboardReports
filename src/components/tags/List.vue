@@ -61,53 +61,64 @@
                         </ol>
                         <!-- End Breadcrumb -->
 
-                        <!-- Build Action button -->
-                        <div class="pull-rights ui-mt-50 pull-right ">
+                        <!-- Bulk Action -->
+                        <div class="pull-rights ui-mt-50 pull-right">
                             <div class="dropdown display-flex-inline">
                                 <div class="dropdown ui-mr5">
-                                    <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false" :disabled="bulkLoading">
+                                    <button type="button" 
+                                        class="btn btn-danger btn-sm dropdown-toggle" 
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true" 
+                                        aria-expanded="false" 
+                                        :disabled="bulkLoading">
                                         <span v-if="!bulkLoading">Bulk Actions</span>
                                         <span v-if="bulkLoading">
                                             <span class="spinner-grow spinner-grow-sm mr-1" 
-                                            role="status" aria-hidden="true"></span>Loading...
+                                                role="status" aria-hidden="true"></span>Loading...
                                         </span>
                                     </button>
-                                <div class="dropdown-menu">
-                                    <a v-if="status == 'inactive' || status == ''"
-                                        @click="multiActive()"
-                                        class="dropdown-item" href="javascript:;">Active
-                                    </a>
-                                    <a v-if="status == 'active' || status == ''"
-                                        @click="multiInactive()"
-                                        class="dropdown-item" href="javascript:;">Inactive
-                                    </a>
-                                    <a v-if="status != 'trash'"
-                                        @click="multiMoveToTrash()"
-                                        class="dropdown-item" href="javascript:;">Move to Trash
-                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a v-if="(permissions.edit) && (status == 'inactive' || status == '')"
+                                            @click="multiActive()"
+                                            class="dropdown-item" href="javascript:;">Active
+                                        </a>
+                                        <a v-if="(permissions.edit) && (status == 'active' || status == '')"
+                                            @click="multiInactive()"
+                                            class="dropdown-item" href="javascript:;">Inactive
+                                        </a>
 
-                                    <a v-if="status == 'trash'"
-                                        @click="multiRestoreFromTrash()"
-                                        class="dropdown-item" href="javascript:;">Restore
-                                    </a>
-                                    <a v-if="status == 'trash'"
-                                        @click="multiDeletePermanently()"
-                                        class="dropdown-item" href="javascript:;">Delete Permanently
-                                    </a>
+                                        <a v-if="permissions.delete && status != 'trash'"
+                                            @click="multiMoveToTrash()"
+                                            class="dropdown-item" href="javascript:;">Move to Trash
+                                        </a>
+
+                                        <a v-if="permissions.delete && status == 'trash'"
+                                            @click="multiRestoreFromTrash()"
+                                            class="dropdown-item" href="javascript:;">Restore
+                                        </a>
+                                        <a v-if="permissions.delete && status == 'trash'"
+                                            @click="multiDeletePermanently()"
+                                            class="dropdown-item" href="javascript:;">Delete Permanently
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
 
                                 <div class="dropdown">
-                                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuButton"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
-                                        :disabled="exportLoading"><span v-if="!exportLoading">Export</span>
+                                    <button type="button" 
+                                        class="btn btn-secondary btn-sm dropdown-toggle" 
+                                        id="dropdownMenuButton"
+                                        data-toggle="dropdown" 
+                                        aria-haspopup="true" 
+                                        aria-expanded="false" 
+                                        :disabled="exportLoading">
+                                        <span v-if="!exportLoading">Export</span>
                                         <span v-if="exportLoading">
                                             <span class="spinner-grow spinner-grow-sm mr-1" 
                                             role="status" aria-hidden="true"></span>Loading...
                                         </span>
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div class="dropdown-menu" 
+                                        aria-labelledby="dropdownMenuButton">
                                         <download-excel
                                             class = "dropdown-item cursor-pointer"
                                             :fetch = "fetchExport"
@@ -127,7 +138,10 @@
                                             :worksheet = "refs"
                                             :name = "refs+'.xls'">CSV
                                         </download-excel>
-                                        <a class="dropdown-item" href="javascript:;" v-print="'#printMe'">Print</a>
+                                        <a class="dropdown-item" 
+                                            href="javascript:;" 
+                                            v-print="'#printMe'">Print
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -202,7 +216,7 @@
                     <!-- Crad Body -->
                     <div class="card-body pt-0">
                         <div class="table-responsive">
-                            <table class="table table-hover mb-0">
+                            <table id="printMe" class="table table-hover mb-0">
                                 <thead>
                                     <tr>
                                         <th style="width: 5%">
@@ -312,44 +326,51 @@
                                                     role="status" aria-hidden="true">
                                                 </span>
                                             </a>
-                                            <div class="dropdown-menu dropdown-menu-right" style="width: 150px">
+                                            <div class="dropdown-menu dropdown-menu-right" 
+                                                style="width: 150px">
                                                 <div class="card border-0 p-3">
                                                     <ul class="list-unstyled mb-0">
-                                                        <li v-if="!row.trash">
-                                                            <a class="d-block link-dark" 
-                                                                href="javascript:;" 
-                                                                @click="editRow(row)">Edit
-                                                            </a>
+                                                        <li v-if="permissions.edit && !row.trash">
+                                                            <router-link
+                                                                class="d-block link-dark"
+                                                                :to="{ name: 'edit-'+refs, 
+                                                                params:{id: row.encrypt_id}}">
+                                                                Edit
+                                                            </router-link>
                                                         </li>
-                                                        <li v-if="!row.trash">
+                                                        <li v-if="permissions.edit && !row.trash">
                                                             <a @click="row.loading = true; 
                                                                 inactivate(row.id)"
                                                                 v-html="(row.status) ? 'Inactive' : ''"
-                                                                class="d-block link-dark" href="javascript:;">
+                                                                class="d-block link-dark" 
+                                                                href="javascript:;">
                                                             </a>
                                                         </li>
-                                                        <li v-if="!row.trash">
+                                                        <li v-if="permissions.delete && !row.trash">
                                                             <a @click="row.loading = true; 
                                                                 activate(row.id)"
                                                                 v-html="(!row.status) ? 'Active' : ''"
-                                                                class="d-block link-dark" href="javascript:;">
+                                                                class="d-block link-dark" 
+                                                                href="javascript:;">
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a v-if="row.trash == 0" 
+                                                            <a v-if="permissions.delete && row.trash == 0" 
                                                                 @click="row.loading = true; 
                                                                 moveToTrash(row.id)"
                                                                 class="d-block link-dark" href="javascript:;">Move to Trash
                                                             </a>
-                                                            <a v-if="row.trash == 1" 
+                                                            <a v-if="permissions.delete && row.trash == 1" 
                                                                 @click="row.loading = true; 
                                                                 restoreFromTrash(row.id)"
-                                                                class="d-block link-dark" href="javascript:;">Restore
+                                                                class="d-block link-dark" 
+                                                                href="javascript:;">Restore
                                                             </a>
-                                                            <a v-if="row.trash == 1" 
+                                                            <a v-if="permissions.delete && row.trash == 1" 
                                                                 @click="row.loading = true; 
                                                                 deletePermanently(row.id)"
-                                                                class="d-block link-dark" href="javascript:;">Delete Permanently
+                                                                class="d-block link-dark" 
+                                                                href="javascript:;">Delete Permanently
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -476,7 +497,7 @@
                    json_fields: {
                         'id': 'id',
                         'name': 'name',
-                        'created_at': 'created_at',
+                        'timestamp': 'timestamp',
                     }, 
                     json_data: [],
                     json_meta: [
@@ -772,7 +793,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/'+this.refs+'/export?id='+this.selected);
+                    this.axios.post(window.baseURL+'/'+this.refs+'/export?id='+this.selected+'&tenant_id='+this.tenant_id);
                 return res.data.rows;
             },
             startDownload(){

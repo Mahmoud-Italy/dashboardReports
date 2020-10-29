@@ -185,7 +185,7 @@
             return {
                 auth: {
                     role: '',
-                    accessToken: '',
+                    access_token: '',
                 },
                 btn1Loading: false,
                 btn2Loading: false,
@@ -197,8 +197,8 @@
         mounted() {},
         created() {
             // AccessToken & Roles
-            if(localStorage.getItem('accessToken')) {
-                this.auth.accessToken = localStorage.getItem('accessToken');
+            if(localStorage.getItem('access_token')) {
+                this.auth.access_token = localStorage.getItem('access_token');
             }
             if(localStorage.getItem('role')) {
                 this.auth.role = localStorage.getItem('role');
@@ -212,6 +212,7 @@
                 this.btn1Loading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest',
+                    'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
                     url: window.baseURL+'/caches/cache-clear',
@@ -245,6 +246,7 @@
                 this.btn2Loading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest',
+                    'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
                     url: window.baseURL+'/caches/config-clear',
@@ -277,6 +279,7 @@
                 this.btn3Loading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest',
+                    'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
                     url: window.baseURL+'/caches/view-clear',
@@ -309,6 +312,7 @@
                 this.btn4Loading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest',
+                    'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
                     url: window.baseURL+'/caches/route-cache',
@@ -342,6 +346,7 @@
                 this.btn5Loading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest',
+                    'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
                     url: window.baseURL+'/caches/route-clear',
