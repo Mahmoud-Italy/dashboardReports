@@ -237,7 +237,7 @@
                                                 <label class="custom-control-label" for="expBox0"></label>
                                             </div>
                                         </th>
-                                        <th style="width:30%">Title
+                                        <th style="width:25%">Title
                                             <span v-if="!orderLoading"
                                                 @click="onOrderBy('title')"
                                                 class="cursor-pointer " 
@@ -271,7 +271,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">Packages No.</th>
+                                        <th class="text-center" style="width: 15%">Packages No.</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>

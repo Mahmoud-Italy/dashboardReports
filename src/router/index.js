@@ -162,6 +162,8 @@ export default new Router({
   { path: '/settings', name: 'settings', component: require('../components/settings/List.vue').default, beforeEnter: requireAuth },
   { path: '/settings/status/:status', name: 'status-settings', component: require('../components/settings/List.vue').default, beforeEnter: requireAuth },
   { path: '/settings/filter/:filter_by/:filter', name: 'filter-settings', component: require('../components/settings/List.vue').default, beforeEnter: requireAuth },
+  { path: '/settings/create', name: 'create-settings', component: require('../components/settings/Create.vue').default, beforeEnter: requireAuth },
+  { path: '/settings/edit/:id', name: 'edit-settings', component: require('../components/settings/Edit.vue').default, beforeEnter: requireAuth },
 
   // Sliders
   { path: '/sliders', name: 'sliders', component: require('../components/sliders/List.vue').default, beforeEnter: requireAuth },

@@ -1277,6 +1277,46 @@
                     </div>
                     <!-- End Nav Short Image -->
 
+                    <!-- Nav Upload PDF -->
+                    <div class="card mt-5">
+                        <div class="card-body">
+                            <div id="accordionNav" class="accordion">
+                                <div id="NavUploadPDF" class="card-header">
+                                    <h2 class="h4 card-header-title"
+                                        @click="collapseToggle('UploadPDF')"  
+                                        aria-expanded="false" 
+                                        aria-controls="collapseNavUploadPDF" 
+                                        data-toggle="collapse" 
+                                        data-target="#collapseNavUploadPDF">Upload PDF
+                                        <span id="iconToggleUploadPDF" 
+                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow black pull-right">
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div id="collapseNavUploadPDF" 
+                                        class="collapse" 
+                                        aria-labelledby="NavUploadPDF" 
+                                        data-parent="#accordionNav">
+                                    
+                                    <div class="col-12 pt-3">
+                                        
+                                        <!-- Image -->
+                                        <div class="form-group">
+                                            <input type="file" 
+                                                class="form-control" 
+                                                ref="myDropify" 
+                                                v-on:change="onPDFChange"
+                                                accept="application/pdf">
+                                        </div>
+                                        <!-- Image -->
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Nav Upload PDF -->
+
                     <!-- Nav Status -->
                     <div class="card mt-5">
                         <div class="card-body">
@@ -1535,6 +1575,10 @@
                     short_image_base64: '',
                     short_image_alt: '',
                     short_image_title: '',
+
+                    // upload pdf
+                    pdf_preview: '',
+                    pdf_base64: '',
 
                     // status & visibility
                     status: 1,
@@ -1987,6 +2031,9 @@
                             short_image_alt: this.row.short_image_alt,
                             short_image_title: this.row.short_image_title,
 
+                            // upload pdf
+                            pdf_base64: this.row.pdf_base64,
+
                             // status & visibility
                             status: this.row.status,
                             view_in_home: this.row.view_in_home,
@@ -2142,6 +2189,18 @@
                 reader.readAsDataURL(fileObject);
                 reader.onload = e =>{
                     this.row.short_image_base64 = e.target.result;
+                };
+            },
+            onPDFChange(e){
+                const file = e.target.files[0];
+                this.row.pdf_preview = URL.createObjectURL(file);
+                this.createBase64PDF(file);
+            },
+            createBase64PDF(fileObject){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.pdf_base64 = e.target.result;
                 };
             },
 

@@ -9,6 +9,11 @@
             <div class="u-content">
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize"> {{ refs }}
+                        <router-link v-if="permissions.add && tenant_id != 0"
+                            :to="{ name: 'create-'+refs }" 
+                            class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
+                            <span>Add New</span>
+                        </router-link>
                         
                         <!-- Tenants -->
                         <div class="pull-rights ui-mt-15 pull-right">
@@ -152,7 +157,7 @@
 
             <!-- Content  -->
             <div class="row">
-                <div class="col-md-8 mb-5">
+                <div class="col-md-12 mb-5">
                     <div class="card">
                      <header class="card-header">
                         <h2 class="h4 card-header-title">
@@ -289,10 +294,12 @@
                                     </td>
 
                                     <td class="font-weight-semi-bold">
-                                        <span @click="editRow(row)" 
+                                        <span v-if="!permissions.edit">{{ row.title }}</span>
+                                        <router-link v-if="permissions.edit"
+                                            :to="{ name: 'edit-'+refs, params:{id:row.encrypt_id} }" 
                                             class="default-color text-decoration-hover cursor-pointer">
                                             {{ row.title }} 
-                                        </span>
+                                        </router-link>
                                     </td>
 
                                     <td class="font-weight-semi-bold text-center">
@@ -421,58 +428,6 @@
                 </div>
             </div>
 
-
-
-            <div class="col-md-4 mb-5">
-                <div class="card">
-                    <header class="card-header">
-                        <h2 class="h4 card-header-title" 
-                            v-html="(btn_status == 'Update' ? 'Edit Row' : 'Add New')"></h2>
-                    </header>
-
-                <form @submit.prevent="createOrUpdate" enctype="multipart/form-data">
-                    <div class="card-body pt-0">
-                        
-                        <!-- Title -->
-                        <div class="form-group">
-                            <label for="input1">Title</label>
-                            <input class="form-control"
-                                id="input1"  
-                                type="text" 
-                                v-model="row.title"
-                                required="">
-                        </div>
-                        <!-- End Title -->
-
-                        <!-- Body 1 -->
-                        <div class="form-group">
-                            <label for="input2">Body</label>
-                            <textarea class="form-control"
-                                id="input2"  
-                                rows="5" 
-                                v-model="row.body1">
-                            </textarea>
-                        </div>
-                        <!-- End Body1 -->
-                        
-                        
-                        <div class="form-group">
-                            <button class="btn btn-primary" :disabled="btnLoading">
-                                <span v-if="btnLoading">
-                                    <span class="spinner-grow spinner-grow-sm mr-1" 
-                                        role="status" aria-hidden="true">
-                                    </span>Loading...
-                                </span>
-                                <span v-if="!btnLoading" class="ti-check-box"></span>
-                                <span v-if="!btnLoading"> {{ btn_status }} Setting</span>
-                            </button>
-                        </div>
-
-                    </div>
-                </form>
-
-                </div>
-            </div>
 
             </div>
         </div>

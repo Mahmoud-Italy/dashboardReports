@@ -455,8 +455,8 @@
                     // image
                     this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
                     this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
+                    this.row.image_alt = (res.data.row.image) ? res.data.row.image.image_alt : null;
+                    this.row.image_title = (res.data.row.image) ? res.data.row.image.image_title : null;
 
                     // status & visibility
                     this.row.status = res.data.row.status;
