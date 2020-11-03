@@ -764,6 +764,8 @@
                             if(!localStorage.getItem('tenant_id')) {
                                 this.tenant_id = res.data.rows[0].id;
                                 this.tenant_name = res.data.rows[0].name;
+                                localStorage.setItem('tenant_id', res.data.rows[0].id);
+                                localStorage.setItem('tenant_name', res.data.rows[0].name);
                             }
                         }
 

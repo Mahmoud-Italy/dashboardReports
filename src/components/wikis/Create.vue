@@ -469,7 +469,7 @@
                                                 :preserve-search="true" 
                                                 :taggable="false"
                                                 placeholder="Type to search packages"
-                                                :preselect-first="true">
+                                                :preselect-first="false">
                                             </multiselect>
                                         </div>
                                         <!-- End Packages -->
@@ -772,6 +772,7 @@
                     method: 'GET',
                     data: {},
                     params: {
+                        tenant_id: this.tenant_id,
                         status: 'active',
                         paginate: 100,
                     },
@@ -798,6 +799,7 @@
                     method: 'GET',
                     data: {},
                     params: {
+                        tenant_id: this.tenant_id,
                         status: 'active',
                         paginate: 100,
                     },
