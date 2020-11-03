@@ -363,7 +363,7 @@
                     <!-- End Card Cruise -->
 
                     <!-- Card Price -->
-                    <div class="card mt-5">
+                    <div class="card mt-5" style="display: none">
                         <div class="card-body">
                             <div id="accordion" class="accordion">
                                 <div id="TabPrices" class="card-header">
@@ -519,7 +519,7 @@
 
                                                 <!-- Itinerarie Name -->
                                                 <div class="form-group">
-                                                    <label :for="'iInput'+i">Itinerarie Name</label>
+                                                    <label :for="'iInput'+i">Name</label>
                                                     <input class="form-control" 
                                                             :id="'iInput'+i" 
                                                             type="text" 
@@ -527,66 +527,34 @@
                                                 </div>
                                                 <!-- End Itinerarie Name -->
 
+                                                <!-- Itinerarie Sort -->
+                                                <div class="form-group">
+                                                    <label :for="'iSort'+i">Sort</label>
+                                                    <input class="form-control" 
+                                                            :id="'iSort'+i" 
+                                                            min="0"
+                                                            type="number" 
+                                                            v-model="row.itinerarie_sort[i]">
+                                                </div>
+                                                <!-- End Itinerarie Sort -->
+
+                                                <!-- Itinerarie Body -->
+                                                <div class="form-group">
+                                                    <label :for="'iEditor'+i">Body</label>
+                                                    <editor
+                                                        :id="'iEditor'+i"
+                                                        v-model="row.itinerarie_body[i]"
+                                                        :api-key="editor.api_key"
+                                                        :init="{
+                                                            height: 300,
+                                                            menubar: editor.menubar,
+                                                            plugins: editor.plugins,
+                                                            toolbar: editor.toolbar
+                                                        }"
+                                                    />
+                                                </div>
+                                                <!-- End Itinerarie Body -->
                                                 
-                                                <!-- Price Items -->
-                                               <div v-for="x in 10" 
-                                                    :key="x" 
-                                                    :class="(x != 0) ? 'hidden' : ''"
-                                                    :id="'sub2_'+i+'_'+x"
-                                                    class="ui-for-div">
-
-                                                    <div class="row col-12 ui-ml-unset">
-                                                        <div class="form-group col-1"></div>
-                                                        <div class="form-group col-7">
-                                                            <label :for="'tInput'+i+'_'+x">Title</label>
-                                                            <input class="form-control" 
-                                                                    :id="'tInput'+i+'_'+x" 
-                                                                    type="text" 
-                                                                    v-model="row.itinerarie_item_title[i+'_'+x]">
-                                                        </div>
-                                                        <div class="form-group col-3">
-                                                            <label :for="'sInput'+i+'_'+x">Sort</label>
-                                                            <input class="form-control" 
-                                                                    :id="'sInput'+i+'_'+x" 
-                                                                    type="text" 
-                                                                    v-model="row.itinerarie_item_sort[i+'_'+x]">
-                                                        </div>
-                                                        <div class="form-group col-1">
-                                                            <button type="button" 
-                                                                v-if="x != 0"
-                                                                @click="removeSubOption2(i,x)"
-                                                                class="btn btn-circle btn-with-icon ui-mt30">
-                                                                <span class="btn-icon ti-close font-bold"></span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="form-group col-1"></div>
-                                                        <div class="form-group col-11">
-                                                            <label :for="'bEditor'+i+'_'+x">Body</label>
-                                                            <editor
-                                                                :id="'bEditor'+i+'_'+x"
-                                                                v-model="row.itinerarie_item_body[i+'_'+x]"
-                                                                :api-key="editor.api_key"
-                                                                :init="{
-                                                                    height: 300,
-                                                                    menubar: editor.menubar,
-                                                                    plugins: editor.plugins,
-                                                                    toolbar: editor.toolbar
-                                                                }"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- End Price Items -->
-
-                                                <!-- Price add more -->
-                                                <div class="form-group col-1">
-                                                    <button type="button" 
-                                                        @click="opnSub2(i)"
-                                                        class="btn btn-secondary btn-circle btn-with-icon ui-mt30 ui-ml-20">
-                                                        <span class="btn-icon ti-plus font-bold"></span>
-                                                    </button>
-                                                </div>
-                                                <!-- End Price add more -->
                                             </div>
 
                                             <!-- Add more -->
@@ -1519,13 +1487,8 @@
                     itineraries: [],
                     itinerarie_names: [],
                     itinerarie_sort: [],
-                    // items
-                    itinerarie_items: [],
-                    itinerarie_item_key: [],
-                    itinerarie_item_title: [],
-                    itinerarie_item_sort: [],
-                    itinerarie_item_body: [],
-
+                    itinerarie_body: [],
+                    
                     // galleries
                     galleries: [],
                     gallery_key: 0,
@@ -1930,44 +1893,31 @@
                     };
 
                     // prices
-                    for( let i = 1; i < this.row.price_names.length; i++ ) {
-                            for( let x = 1; x <= 10; x++) {
-                            let item_value = this.row.price_item_value[i+'_'+x];
-                            let item_body  = this.row.price_item_body[i+'_'+x];
-                            if(item_value) {
-                                this.row.price_items[x] = {
-                                    'item_value' : item_value,
-                                    'item_body'  : item_body
-                                }
-                            }
-                        }
-                        this.row.prices[i] = {
-                            'price_name' : this.row.price_names[i],
-                            'items'      : this.row.price_items
-                        }
-                        this.row.price_items = []; // clear array
-                    }
+                    // for( let i = 1; i < this.row.price_names.length; i++ ) {
+                    //         for( let x = 1; x <= 10; x++) {
+                    //         let item_value = this.row.price_item_value[i+'_'+x];
+                    //         let item_body  = this.row.price_item_body[i+'_'+x];
+                    //         if(item_value) {
+                    //             this.row.price_items[x] = {
+                    //                 'item_value' : item_value,
+                    //                 'item_body'  : item_body
+                    //             }
+                    //         }
+                    //     }
+                    //     this.row.prices[i] = {
+                    //         'price_name' : this.row.price_names[i],
+                    //         'items'      : this.row.price_items
+                    //     }
+                    //     this.row.price_items = []; // clear array
+                    // }
 
                     // itineraries
                     for( let i = 1; i < this.row.itinerarie_names.length; i++ ) {
-                            for( let x = 1; x <= 10; x++) {
-                            let item_title = this.row.itinerarie_item_title[i+'_'+x];
-                            let item_sort  = this.row.itinerarie_item_sort[i+'_'+x];
-                            let item_body  = this.row.itinerarie_item_body[i+'_'+x];
-                            if(item_title) {
-                                this.row.itinerarie_items[x] = {
-                                    'item_title' : item_title,
-                                    'item_sort' : item_sort,
-                                    'item_body' : item_body
-                                }
-                            }
-                        }
                         this.row.itineraries[i] = {
                             'itinerarie_name' : this.row.itinerarie_names[i],
                             'itinerarie_sort' : this.row.itinerarie_sort[i],
-                            'items' : this.row.itinerarie_items
+                            'itinerarie_body' : this.row.itinerarie_body[i]
                         }
-                        this.row.itinerarie_items = []; // clear array
                     }
 
                     // galleries
@@ -2121,28 +2071,10 @@
             removeOption2(i) {
                 document.querySelector('#frm2_'+i).remove();
                 this.row.itinerarie_names[i] = '';
-                this.row.itinerarie_item_key[i] = '';
-                // this.row.itinerarie_key--; // makes issue
-
-                // clear all sub
-                let n = [1,2,3,4,5,6,7,8,9,10];
-                n.forEach(x => {
-                    this.row.itinerarie_item_title[i+'_'+x] = '';
-                    this.row.itinerarie_item_sort[i+'_'+x] = '';
-                    this.row.itinerarie_item_body[i+'_'+x] = '';
-                });
+                this.row.itinerarie_sort[i] = '';
+                this.row.itinerarie_body[i] = '';
             },
-            opnSub2(i) {
-                this.row.itinerarie_item_key[i] += 1;
-                document.querySelector('#sub2_'+i+'_'+this.row.itinerarie_item_key[i]).classList.remove('hidden');
-            },
-            removeSubOption2(i,x) {
-                document.querySelector('#sub2_'+i+'_'+x).classList.add('hidden');
-                this.row.itinerarie_item_title[i+'_'+x] = '';
-                this.row.itinerarie_item_sort[i+'_'+x] = '';
-                this.row.itinerarie_item_body[i+'_'+x] = '';
-                this.row.itinerarie_item_key[i] -= 1;
-            },
+            
 
             // items3 add more
             opnFrm3() {

@@ -216,16 +216,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 20%">Author
-                                            <span v-if="!authorLoading && filter_by=='author'"
-                                                @click="removeFilter()"
-                                                class="cursor-pointer ti-close">
-                                            </span>
-                                            <span v-if="authorLoading">
-                                                <span class="spinner-grow spinner-grow-sm mr-1" 
-                                                    role="status" aria-hidden="true"></span>
-                                            </span>
-                                        </th>
+                                        <!--5 -->
                                         <th class="text-center" style="width: 15%">Users No.</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
@@ -234,7 +225,7 @@
 
                                 <tbody v-if="dataLoading">
                                     <tr>
-                                        <td colspan="6" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <div class="spinner-grow" role="status">
                                               <span class="sr-only">Loading...</span>
                                             </div>
@@ -244,7 +235,7 @@
 
                                 <tbody v-if="!dataLoading && !rows.length">
                                     <tr>
-                                        <td colspan="6" class="text-center">
+                                        <td colspan="5" class="text-center">
                                             <span>No results found.</span>
                                         </td>
                                     </tr>
@@ -277,7 +268,7 @@
                                         </router-link>
                                     </td>
 
-                                    <td class="font-weight-semi-bold text-center">
+                                    <!-- <td class="font-weight-semi-bold text-center">
                                         <span v-if="!row.user" class="text-center"> - </span>
                                         <router-link v-if="row.user" 
                                             :to="{ name: 'filter-'+refs, 
@@ -289,7 +280,7 @@
                                                 <span class="media-body">{{ row.user.name }}</span>
                                             </div>
                                         </router-link>
-                                    </td>
+                                    </td> -->
 
                                     <td class="font-weight-semi-bold text-center">
                                         {{ row.users_no }}
@@ -381,7 +372,7 @@
                                             </div>
                                         </th>
                                         <th>Name</th>
-                                        <th class="text-center">Author</th>
+                                        <!-- <th class="text-center">Author</th> -->
                                         <th class="text-center">Users No.</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>

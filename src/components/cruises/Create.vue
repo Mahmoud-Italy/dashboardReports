@@ -540,7 +540,8 @@
                                                             <label :for="'sInput'+i+'_'+x">Sort</label>
                                                             <input class="form-control" 
                                                                     :id="'sInput'+i+'_'+x" 
-                                                                    type="text" 
+                                                                    min="0"
+                                                                    type="number" 
                                                                     v-model="row.itinerarie_item_sort[i+'_'+x]">
                                                         </div>
                                                         <div class="form-group col-1">

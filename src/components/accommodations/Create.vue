@@ -130,7 +130,7 @@
 
                                                 <!-- Price Name -->
                                                 <div class="form-group">
-                                                    <label :for="'iInput'+i">Price Name {{ i }}</label>
+                                                    <label :for="'iInput'+i">Price Name</label>
                                                     <input class="form-control" 
                                                             :id="'iInput'+i" 
                                                             type="text" 
