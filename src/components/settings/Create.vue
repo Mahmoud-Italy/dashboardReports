@@ -81,22 +81,90 @@
                                     </div>
                                     <!-- End Title -->
 
-                                    <!-- Body -->
+                                    <!-- Body1 -->
                                     <div class="form-group">
-                                        <label for="inputText3">Body</label>
+                                        <label for="inputText1">Body1</label>
                                         <editor
-                                            id="inputText3"
+                                            id="inputText1"
                                             v-model="row.body1"
                                             :api-key="editor.api_key"
                                             :init="{
-                                                height: 600,
+                                                height: 300,
                                                 menubar: editor.menubar,
                                                 plugins: editor.plugins,
                                                 toolbar: editor.toolbar
                                             }"
                                         />
                                     </div>
-                                    <!-- End Body -->
+                                    <!-- End Body1 -->
+
+                                    <!-- Body2 -->
+                                    <div class="form-group">
+                                        <label for="inputText2">Body2</label>
+                                        <editor
+                                            id="inputText2"
+                                            v-model="row.body2"
+                                            :api-key="editor.api_key"
+                                            :init="{
+                                                height: 300,
+                                                menubar: editor.menubar,
+                                                plugins: editor.plugins,
+                                                toolbar: editor.toolbar
+                                            }"
+                                        />
+                                    </div>
+                                    <!-- End Body2 -->
+
+                                    <!-- Body3 -->
+                                    <div class="form-group">
+                                        <label for="inputText3">Body3</label>
+                                        <editor
+                                            id="inputText3"
+                                            v-model="row.body3"
+                                            :api-key="editor.api_key"
+                                            :init="{
+                                                height: 300,
+                                                menubar: editor.menubar,
+                                                plugins: editor.plugins,
+                                                toolbar: editor.toolbar
+                                            }"
+                                        />
+                                    </div>
+                                    <!-- End Body3 -->
+
+                                    <!-- Body4 -->
+                                    <div class="form-group">
+                                        <label for="inputText4">Body4</label>
+                                        <editor
+                                            id="inputText4"
+                                            v-model="row.body4"
+                                            :api-key="editor.api_key"
+                                            :init="{
+                                                height: 300,
+                                                menubar: editor.menubar,
+                                                plugins: editor.plugins,
+                                                toolbar: editor.toolbar
+                                            }"
+                                        />
+                                    </div>
+                                    <!-- End Body4 -->
+
+                                    <!-- Body5 -->
+                                    <div class="form-group">
+                                        <label for="inputText5">Body5</label>
+                                        <editor
+                                            id="inputText5"
+                                            v-model="row.body5"
+                                            :api-key="editor.api_key"
+                                            :init="{
+                                                height: 300,
+                                                menubar: editor.menubar,
+                                                plugins: editor.plugins,
+                                                toolbar: editor.toolbar
+                                            }"
+                                        />
+                                    </div>
+                                    <!-- End Body5 -->
 
                                 </div>
                                 
@@ -283,6 +351,10 @@
                     // row
                     title: '',
                     body1: '',
+                    body2: '',
+                    body3: '',
+                    body4: '',
+                    body5: '',
                     
                     // image
                     image_preview: '',
@@ -357,6 +429,10 @@
                             // row
                             title: this.row.title,
                             body1: this.row.body1,
+                            body2: this.row.body2,
+                            body3: this.row.body3,
+                            body4: this.row.body4,
+                            body5: this.row.body5,
                             
                             // image
                             image_base64: this.row.image_base64,
