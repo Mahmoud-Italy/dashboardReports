@@ -519,7 +519,7 @@
 
                                                 <!-- Itinerarie Name -->
                                                 <div class="form-group">
-                                                    <label :for="'iInput'+i">Name</label>
+                                                    <label :for="'iInput'+i">Itinerarie Name</label>
                                                     <input class="form-control" 
                                                             :id="'iInput'+i" 
                                                             type="text" 
@@ -821,11 +821,15 @@
                                                 v-if="!packageTypesLoading" 
                                                 v-model="row.package_type_id">
                                                 <option value="">Select Package Type</option>
-                                                <option v-for="(type, index) in packageTypes" 
+                                                <optgroup v-for="(type, index) in packageTypes" 
                                                         :key="index"
-                                                        :value="type.id">
-                                                        {{ type.name }}
-                                                </option>
+                                                        :label="type.name">
+                                                    <option v-for="(ty, idx) in type.childs" 
+                                                        :key="idx"
+                                                        :value="ty.id">
+                                                        {{ ty.name }}
+                                                    </option>
+                                                </optgroup>
                                             </select>
                                         </div>
                                     </div>
@@ -1734,6 +1738,7 @@
                     params: {
                         tenant_id: this.tenant_id,
                         status: 'active',
+                        parent_id: 'null',
                         paginate: 100,
                     },
                 }

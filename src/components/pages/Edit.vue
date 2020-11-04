@@ -68,7 +68,7 @@
                                         </h2>
                                     </div>
                                     <div id="collapseMeta" 
-                                        class="collapse show" 
+                                        class="collapse" 
                                         aria-labelledby="TabMeta" 
                                         data-parent="#accordion">
 
@@ -143,12 +143,22 @@
                                         </h2>
                                     </div>
                                     <div id="collapseDest" 
-                                        class="collapse" 
+                                        class="collapse show" 
                                         aria-labelledby="TabDest" 
                                         data-parent="#accordion">
 
                                 <div class="col-12 pt-3">
-                                    
+                                        
+                                    <!-- Page Title -->
+                                    <div class="form-group">
+                                        <label for="inputText0">Page Title</label>
+                                        <input class="form-control" 
+                                                id="inputText0" 
+                                                type="text" 
+                                                v-model="row.page_title">
+                                    </div>
+                                    <!-- End Page Title -->
+
                                     <!-- Title -->
                                     <div class="form-group">
                                         <label for="inputText1">Title</label>
@@ -221,7 +231,7 @@
                     <div class="col-md-4 mb-5">
 
                         <!-- NavTwo -->
-                        <div class="card5">
+                        <div class="card">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
                                     <div id="NavImage" class="card-header">
@@ -244,9 +254,11 @@
                                             <!-- Image -->
                                             <div class="form-group">
                                                 <label>Image</label>
-                                                <img v-if="row.image_preview" 
+                                                <p>
+                                                    <img v-if="row.image_preview" 
                                                     :src="row.image_preview" 
                                                     class="mb-2 custom-image">
+                                                </p>
                                                 <input type="file" 
                                                     class="form-control" 
                                                     ref="myDropify" 
@@ -389,10 +401,11 @@
                     meta_description: '',
 
                     // row
+                    page_title: '',
                     slug: '',
                     title: '',
-                    sort: 0,
                     body: '',
+                    sort: 0,
 
                     // image
                     image_preview: '',
@@ -466,10 +479,11 @@
                     this.row.meta_description = (res.data.row.meta) ? res.data.row.meta.meta_description : null;
 
                     // row
+                    this.row.page_title = res.data.row.page_title;
                     this.row.slug = res.data.row.slug;
                     this.row.title = res.data.row.title;
-                    this.row.sort = res.data.row.sort;
                     this.row.body = res.data.row.body;
+                    this.row.sort = res.data.row.sort;
 
                     // image
                     this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
@@ -514,10 +528,11 @@
                             meta_description: this.row.meta_description,
 
                             // row
-                            title: this.row.title,
+                            page_title: this.row.page_title,
                             slug: this.row.slug,
-                            sort: this.row.sort,
+                            title: this.row.title,
                             body: this.row.body,
+                            sort: this.row.sort,
 
                             // image
                             image_base64: this.row.image_base64,

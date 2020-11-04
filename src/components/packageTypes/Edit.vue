@@ -408,7 +408,7 @@
                     params: {
                         tenant_id: this.tenant_id,
                         status: 'active',
-                        parent_id: false,
+                        parent_id: 'null',
                         paginate: 100,
                     },
                 }

@@ -519,67 +519,33 @@
                                                 </div>
                                                 <!-- End Itinerarie Name -->
 
-                                                
-                                                <!-- Price Items -->
-                                               <div v-for="x in 10" 
-                                                    :key="x" 
-                                                    :class="(x != 0) ? 'hidden' : ''"
-                                                    :id="'sub2_'+i+'_'+x"
-                                                    class="ui-for-div">
-
-                                                    <div class="row col-12 ui-ml-unset">
-                                                        <div class="form-group col-1"></div>
-                                                        <div class="form-group col-7">
-                                                            <label :for="'tInput'+i+'_'+x">Title</label>
-                                                            <input class="form-control" 
-                                                                    :id="'tInput'+i+'_'+x" 
-                                                                    type="text" 
-                                                                    v-model="row.itinerarie_item_title[i+'_'+x]">
-                                                        </div>
-                                                        <div class="form-group col-3">
-                                                            <label :for="'sInput'+i+'_'+x">Sort</label>
-                                                            <input class="form-control" 
-                                                                    :id="'sInput'+i+'_'+x" 
-                                                                    min="0"
-                                                                    type="number" 
-                                                                    v-model="row.itinerarie_item_sort[i+'_'+x]">
-                                                        </div>
-                                                        <div class="form-group col-1">
-                                                            <button type="button" 
-                                                                v-if="x != 0"
-                                                                @click="removeSubOption2(i,x)"
-                                                                class="btn btn-circle btn-with-icon ui-mt30">
-                                                                <span class="btn-icon ti-close font-bold"></span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="form-group col-1"></div>
-                                                        <div class="form-group col-11">
-                                                            <label :for="'bEditor'+i+'_'+x">Body</label>
-                                                            <editor
-                                                                :id="'bEditor'+i+'_'+x"
-                                                                v-model="row.itinerarie_item_body[i+'_'+x]"
-                                                                :api-key="editor.api_key"
-                                                                :init="{
-                                                                    height: 300,
-                                                                    menubar: editor.menubar,
-                                                                    plugins: editor.plugins,
-                                                                    toolbar: editor.toolbar
-                                                                }"
-                                                            />
-                                                        </div>
-                                                    </div>
+                                                <!-- Itinerarie Sort -->
+                                                <div class="form-group">
+                                                    <label :for="'iInput2'+i">Sort</label>
+                                                    <input class="form-control" 
+                                                            :id="'iInput2'+i" 
+                                                            type="number" 
+                                                            v-model="row.itinerarie_sort[i]">
                                                 </div>
-                                                <!-- End Price Items -->
+                                                <!-- End Itinerarie Sort -->
 
-                                                <!-- Price add more -->
-                                                <div class="form-group col-1">
-                                                    <button type="button" 
-                                                        @click="opnSub2(i)"
-                                                        class="btn btn-secondary btn-circle btn-with-icon ui-mt30 ui-ml-20">
-                                                        <span class="btn-icon ti-plus font-bold"></span>
-                                                    </button>
+                                                <!-- Itinerarie Sort -->
+                                                <div class="form-group">
+                                                    <label :for="'bEditor'+i">Body</label>
+                                                    <editor
+                                                        :id="'bEditor'+i"
+                                                        v-model="row.itinerarie_body[i]"
+                                                        :api-key="editor.api_key"
+                                                        :init="{
+                                                            height: 300,
+                                                            menubar: editor.menubar,
+                                                            plugins: editor.plugins,
+                                                            toolbar: editor.toolbar
+                                                        }"
+                                                    />
                                                 </div>
-                                                <!-- End Price add more -->
+                                                <!-- End Itinerarie Sort -->
+
                                             </div>
 
                                             <!-- Add more -->
@@ -598,6 +564,105 @@
                         </div>
                     </div>
                     <!-- End Card Itineraries -->
+
+                    <!-- Card Galeries -->
+                    <div class="card mt-5">
+                        <div class="card-body">
+                            <div id="accordion" class="accordion">
+                                <div id="TabGalleries" class="card-header">
+                                    <h2 class="h4 card-header-title" 
+                                        @click="collapseToggle('Galleries')"
+                                        aria-expanded="false" 
+                                        aria-controls="collapseGalleries" 
+                                        data-toggle="collapse"
+                                        data-target="#collapseGalleries">Galleries
+                                        <span id="iconToggleGalleries" 
+                                            class="ti-angle-up u-sidebar-nav-menu__item-arrow 
+                                            pull-right black">
+                                        </span>
+                                    </h2>
+                                    </div>
+                                    <div id="collapseGalleries" 
+                                        class="collapse" 
+                                        aria-labelledby="TabIGalleries" 
+                                        data-parent="#accordion">
+
+                                    <div class="col-12 pt-3">
+
+                                        <!-- For Loop -->
+                                        <div v-for="i in row.gallery_key" 
+                                            :key="'i3'+i" 
+                                            :class="(i == 0) ? 'hidden' : ''"
+                                            :id="'frm3_'+i"
+                                            class="ui-for-div">
+
+                                             <!--  Remove -->
+                                            <div class="pull-right ui-mt-10">
+                                                <button v-if="i != 0"
+                                                    type="button" 
+                                                    class="btn btn-danger btn-circle btn-with-icon btn-sm"
+                                                    @click="removeOption3(i)">
+                                                    <span class="btn-icon ti-close font-bold"></span>
+                                                 </button>
+                                            </div>
+                                            <!-- End Remove -->
+
+                                            <!-- Itineraries Title -->
+                                            <div class="form-group">
+                                                <label :for="'gImageText'+i">Image</label>
+                                               <p>
+                                                    <img v-if="(row.gallery_image_preview[i])" 
+                                                        :src="row.gallery_image_preview[i]" 
+                                                        class="custom-image">
+                                                </p>
+                                                <input class="form-control" 
+                                                        :id="'gImageText'+i" 
+                                                        type="file"
+                                                        v-on:change="onGalleryImageChange($event, i)">
+                                            </div>
+                                            <!-- End Itineraries Title -->
+
+                                            <div class="col-12 row no-padding ui-ml-unset">
+                                                <div class="col-6 no-lpadding">
+                                                    <div class="form-group">
+                                                        <label :for="'gAltText'+i">Image Alt</label>
+                                                        <input class="form-control" 
+                                                                :id="'gAltText'+i" 
+                                                                type="text"
+                                                                v-model="row.gallery_image_alt[i]">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-6 no-rpadding">
+                                                    <div class="form-group">
+                                                        <label :for="'gTitleText'+i">Image Title</label>
+                                                        <input class="form-control" 
+                                                                :id="'gTitleText'+i"
+                                                                type="text"
+                                                                v-model="row.gallery_image_title[i]">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End loop -->
+
+                                        </div>
+
+                                            <!-- Add more -->
+                                            <div class="row pull-right">
+                                                <button type="button" 
+                                                    class="btn btn-dark btn-circle btn-with-icon"
+                                                    @click="opnFrm3()">
+                                                    <span class="btn-icon ti-plus font-bold"></span>
+                                                </button>
+                                            </div>
+                                            <!-- End more -->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Card Galleries -->
 
                 </div>
                 <!-- ******* End Cards ******* -->
@@ -979,12 +1044,15 @@
                     itineraries: [],
                     itinerarie_names: [],
                     itinerarie_sort: [],
-                    // items
-                    itinerarie_items: [],
-                    itinerarie_item_key: [],
-                    itinerarie_item_title: [],
-                    itinerarie_item_sort: [],
-                    itinerarie_item_body: [],
+                    itinerarie_body: [],
+
+                    // galleries
+                    galleries: [],
+                    gallery_key: 0,
+                    gallery_image_preview: [],
+                    gallery_image_base64: [],
+                    gallery_image_alt: [],
+                    gallery_image_title: [],
 
                     // navbar
                     cruise_type_id: '',
@@ -1146,24 +1214,20 @@
 
                     // itineraries
                     for( let i = 1; i < this.row.itinerarie_names.length; i++ ) {
-                            for( let x = 1; x <= 10; x++) {
-                            let item_title = this.row.itinerarie_item_title[i+'_'+x];
-                            let item_sort  = this.row.itinerarie_item_sort[i+'_'+x];
-                            let item_body  = this.row.itinerarie_item_body[i+'_'+x];
-                            if(item_title) {
-                                this.row.itinerarie_items[x] = {
-                                    'item_title' : item_title,
-                                    'item_sort' : item_sort,
-                                    'item_body' : item_body
-                                }
-                            }
-                        }
                         this.row.itineraries[i] = {
                             'itinerarie_name' : this.row.itinerarie_names[i],
                             'itinerarie_sort' : this.row.itinerarie_sort[i],
-                            'items' : this.row.itinerarie_items
+                            'itinerarie_body' : this.row.itinerarie_body[i]
                         }
-                        this.row.itinerarie_items = []; // clear array
+                    }
+
+                    // galleries
+                    for( let i = 1; i < this.row.gallery_image_base64.length; i++ ) {
+                        this.row.galleries[i] = {
+                            'gallery_image_base64' : this.row.gallery_image_base64[i],
+                            'gallery_image_alt' : this.row.gallery_image_alt[i],
+                            'gallery_image_title' : this.row.gallery_image_title[i]
+                        }
                     }
 
                     const config = { headers: { 'Content-Type': 'multipart/form-data' }};  
@@ -1197,6 +1261,9 @@
 
                             // itineraries
                             itineraries: this.row.itineraries,
+
+                            // galleries
+                            galleries: this.row.galleries,
 
                             // navbar
                             cruise_type_id: this.row.cruise_type_id,
@@ -1284,27 +1351,20 @@
             removeOption2(i) {
                 document.querySelector('#frm2_'+i).remove();
                 this.row.itinerarie_names[i] = '';
-                this.row.itinerarie_item_key[i] = '';
-                // this.row.itinerarie_key--; // makes issue
+                this.row.itinerarie_sort[i] = '';
+                this.row.itinerarie_body[i] = '';
+            },
 
-                // clear all sub
-                let n = [1,2,3,4,5,6,7,8,9,10];
-                n.forEach(x => {
-                    this.row.itinerarie_item_title[i+'_'+x] = '';
-                    this.row.itinerarie_item_sort[i+'_'+x] = '';
-                    this.row.itinerarie_item_body[i+'_'+x] = '';
-                });
+            // items3 add more
+            opnFrm3() {
+                this.row.gallery_key++;
             },
-            opnSub2(i) {
-                this.row.itinerarie_item_key[i] += 1;
-                document.querySelector('#sub2_'+i+'_'+this.row.itinerarie_item_key[i]).classList.remove('hidden');
-            },
-            removeSubOption2(i,x) {
-                document.querySelector('#sub2_'+i+'_'+x).classList.add('hidden');
-                this.row.itinerarie_item_title[i+'_'+x] = '';
-                this.row.itinerarie_item_sort[i+'_'+x] = '';
-                this.row.itinerarie_item_body[i+'_'+x] = '';
-                this.row.itinerarie_item_key[i] -= 1;
+            removeOption3(i) {
+                document.querySelector('#frm3_'+i).remove();
+                this.row.gallery_image_preview[i] = '';
+                this.row.gallery_image_base64[i] = '';
+                this.row.gallery_image_alt[i] = '';
+                this.row.gallery_image_title[i] = '';
             },
             
 
@@ -1325,6 +1385,19 @@
                 this.row.slug = str.replace(/\s+/g, '-');
             },
 
+            // Upload images
+            onGalleryImageChange(e, i){
+                const file = e.target.files[0];
+                this.row.gallery_image_preview[i] = URL.createObjectURL(file);
+                this.createBase64Gallery(file, i);
+            },
+            createBase64Gallery(fileObject, i){
+                const reader = new FileReader();
+                reader.readAsDataURL(fileObject);
+                reader.onload = e =>{
+                    this.row.gallery_image_base64[i] = e.target.result;
+                };
+            },
 
             // Upload Featured image
             onImageChange(e){

@@ -442,13 +442,26 @@
                                 type="text" 
                                 v-model="row.title">
                         </div>
-                        <div class="form-group">
-                            <label for="input2">Sort</label>
-                            <input class="form-control"
-                                id="input2"  
-                                type="number" 
-                                min="0"
-                                v-model.number="row.sort">
+                        <div class="col-12 row" style="padding: 0">
+                            <div class="col-8">
+                                <div class="form-group">
+                                    <label for="input0">Below Icon</label>
+                                    <input class="form-control"
+                                        id="input0"  
+                                        type="text" 
+                                        v-model="row.below_icon">
+                                </div>
+                            </div>
+                            <div class="col-4" style="padding: 0">
+                                <div class="form-group">
+                                    <label for="input2">Sort</label>
+                                    <input class="form-control"
+                                        id="input2"  
+                                        type="number" 
+                                        min="0"
+                                        v-model.number="row.sort">
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Icon</label>
@@ -461,19 +474,25 @@
                                 v-on:change="onImageChange"
                                 accept="image/*">
                         </div>
-                        <div class="form-group">
-                            <label for="input3">Icon alt</label>
-                            <input type="text" 
-                                id="input3"
-                                class="form-control"
-                                v-model="row.icon_alt">
-                        </div>
-                        <div class="form-group">
-                            <label for="input4">Icon title</label>
-                            <input type="text" 
-                                id="input4"
-                                class="form-control"
-                                v-model="row.icon_title">
+                        <div class="col-12 row" style="padding: 0">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="input3">Icon alt</label>
+                                    <input type="text" 
+                                        id="input3"
+                                        class="form-control"
+                                        v-model="row.icon_alt">
+                                </div>
+                            </div>
+                            <div class="col-6" style="padding: 0">
+                                <div class="form-group">
+                                    <label for="input4">Icon title</label>
+                                    <input type="text" 
+                                        id="input4"
+                                        class="form-control"
+                                        v-model="row.icon_title">
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="form-group">
@@ -546,6 +565,7 @@
                     preview: '',
                     icon_base64: '',
                     title: '',
+                    below_icon: '',
                     sort: 0,
                     icon_alt: '',
                     icon_title: '',
@@ -861,6 +881,7 @@
 
                 this.row.encrypt_id = row.encrypt_id;
                 this.row.title = row.title;
+                this.row.below_icon = row.below_icon;
                 this.row.sort = row.sort;
                 this.row.preview = row.icon.image_url;
                 this.row.icon_base64 = row.icon.image_url;
@@ -900,6 +921,7 @@
                         data: {
                             tenant_id: this.tenant_id,
                             title: this.row.title,
+                            below_icon: this.row.below_icon,
                             sort: this.row.sort,
                             icon_base64: this.row.icon_base64,
                             icon_alt: this.row.icon_alt,
@@ -914,6 +936,7 @@
                         // Clear rows
                         this.row.encrypt_id = '';
                         this.row.title = '';
+                        this.row.below_icon = '';
                         this.row.sort = '';
                         this.row.preview = '';
                         this.row.icon_base64 = '';

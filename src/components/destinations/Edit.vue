@@ -435,7 +435,7 @@
 
                     // image
                     preview: '',
-                    image: '',
+                    image_base64: '',
                     image_alt: '',
                     image_title: '',
 
@@ -591,7 +591,7 @@
                             region_id: this.row.region_id,
 
                             // image
-                            image_url: this.row.image,
+                            image_base64: this.row.image_base64,
                             image_alt: this.row.image_alt,
                             image_title: this.row.image_title,
 

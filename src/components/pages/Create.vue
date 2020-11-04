@@ -143,6 +143,16 @@
 
                                 <div class="col-12 pt-3">
                                     
+                                    <!-- Page Title -->
+                                    <div class="form-group">
+                                        <label for="inputText0">Page Title</label>
+                                        <input class="form-control" 
+                                                id="inputText0" 
+                                                type="text" 
+                                                v-model="row.page_title">
+                                    </div>
+                                    <!-- End Page Title -->
+
                                     <!-- Title -->
                                     <div class="form-group">
                                         <label for="inputText1">Title</label>
@@ -383,10 +393,11 @@
                     meta_description: '',
 
                     // row
+                    page_title: '',
                     slug: '',
                     title: '',
-                    sort: 0,
                     body: '',
+                    sort: 0,
 
                     // image
                     image_preview: '',
@@ -462,10 +473,11 @@
                             meta_description: this.row.meta_description,
 
                             // row
+                            page_title: this.row.page_title,
                             title: this.row.title,
                             slug: this.row.slug,
-                            sort: this.row.sort,
                             body: this.row.body,
+                            sort: this.row.sort,
 
                             // image
                             image_base64: this.row.image_base64,
