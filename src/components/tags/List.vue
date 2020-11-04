@@ -856,6 +856,7 @@
                         url: window.baseURL+'/'+path,
                         method: type,
                         data: {
+                            tenant_id: this.tenant_id,
                             name: this.row.name
                         }
                     }

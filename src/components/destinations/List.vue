@@ -326,7 +326,7 @@
                                         <span v-if="row.region">
                                             <router-link :to="{ name: 'filter-'+refs, 
                                                     params: { filter_by:'region', 
-                                                        filter: row.region.slug } }" 
+                                                        filter: row.region.encrypt_id } }" 
                                                 class="text-decoration-hover black">
                                                 <span class="badge badge-md badge-pill badge-danger-soft">
                                                     {{ row.region.title }}
