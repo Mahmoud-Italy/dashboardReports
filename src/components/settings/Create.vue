@@ -68,6 +68,17 @@
 
                                 <div class="col-12 pt-3">
                                     
+                                    <!-- Slug -->
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label for="input0">Slug</label>
+                                            <input class="form-control text-lowercase" 
+                                                    id="input0" 
+                                                    type="text" 
+                                                    v-model="row.slug">
+                                        </div>
+                                    </div>
+                                    <!-- End Slug -->
 
                                     <!-- Title -->
                                     <div class="form-group">
@@ -349,6 +360,7 @@
                 },
                 row: {
                     // row
+                    slug: '',
                     title: '',
                     body1: '',
                     body2: '',
@@ -427,6 +439,7 @@
                         data: {
                             tenant_id: this.tenant_id,
                             // row
+                            slug: this.row.slug,
                             title: this.row.title,
                             body1: this.row.body1,
                             body2: this.row.body2,
