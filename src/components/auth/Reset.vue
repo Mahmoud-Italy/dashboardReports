@@ -1,80 +1,149 @@
 <template>
-  <div class="">
-    
-    <div class="layout" style="background: url('/assets/images/bg/login.png')">
-        <div class="container">
-            <div class="row full-height align-items-center">
-                <div class="col-md-5 mx-auto">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="p-15">
+    <div class="">
+        
+        <!-- Main -->
+        <main class="d-flex flex-column u-hero u-hero--end mnh-100vh" 
+            style="background-image: url(/assets/img-temp/bg/bg-1.png)">
 
-                                <div class="m-b-30 text-center">
-                                  <router-link :to="{ name: 'login' }">
-                                    <img class="img-responsive inline-block" 
-                                          src="/assets/images/logo/dc-logo.png" 
-                                          style="width: 150px" 
-                                          alt="dc">
-                                  </router-link>
+            <div class="container py-7 my-auto">
+                <div class="d-flex align-items-center justify-content-center">
+
+                    <!-- Card -->
+                    <div class="card my-7" style="width: 460px; max-width: 100%;">
+                        <div class="card-body p-4 p-lg-7">
+                            <h2 class="text-center mb-4">Reset your password</h2>
+
+                            <!-- Frogot Form -->
+                            <form @submit.prevent="rest">
+                                <!-- Token -->
+                                <div class="form-group">
+                                    <label for="token">Token</label>
+                                    <input id="token" 
+                                        class="form-control" 
+                                        type="text" 
+                                        v-model="token" 
+                                        placeholder="">
                                 </div>
-                                    
-                                <form @submit.prevent="reset">
-                                    <div class="form-group">
-                                        <label class="control-label">New Password</label>
-                                        <input type="password" 
-                                                class="form-control" 
-                                                v-model="row.password"
-                                                autocomplete="off"
-                                                required="">
-                                    </div>
+                                <!-- End Token -->
 
-                                    <div class="form-group">
-                                        <label class="control-label">Confirm New Password</label>
-                                        <input type="password" 
-                                                class="form-control" 
-                                                v-model="row.confirm_password"
-                                                autocomplete="off"
-                                                required="">
-                                    </div>
+                                <!-- New Password -->
+                                <div class="form-group">
+                                    <label for="new_password">New Password</label>
+                                    <input id="new_password" 
+                                        class="form-control" 
+                                        type="password" 
+                                        autocomplete="off" 
+                                        v-model="new_password" 
+                                        placeholder="">
+                                </div>
+                                <!-- End New Password -->
 
-                                    <div class="m-t-30 text-left">
-                                        <button class="btn btn-dark login-size f16">
-                                            <span v-if="btnLoading">
-                                                <div class="loader loader-xs loader-center"></div>
-                                            </span>
-                                            <span v-if="!btnLoading">Submit</span>
-                                        </button>
-                                    </div>
-                                
-                                </form>
+                                <!-- Confirm New Password -->
+                                <div class="form-group">
+                                    <label for="new_password">Confirm New Password</label>
+                                    <input id="new_password" 
+                                        class="form-control" 
+                                        type="password" 
+                                        autocomplete="off" 
+                                        v-model="new_password_confirmation" 
+                                        placeholder="">
+                                </div>
+                                <!-- End Confirm New Password -->
 
-                            </div>
+
+                                <div class="my-4">
+                                    <button type="submit" 
+                                        class="btn btn-block btn-wide btn-primary text-uppercase" 
+                                        :disabled="btnLoading">
+                                        <span v-if="btnLoading">
+                                            <span class="spinner-grow spinner-grow-sm mr-1"
+                                                role="status" aria-hidden="true"></span>Loading...
+                                        </span>
+                                        <span v-if="!btnLoading">Reset Password</span>
+                                    </button>
+                                </div>
+
+                            </form>
+                            <!-- End Forgot Form -->
                         </div>
                     </div>
+                    <!-- End Card -->
+
                 </div>
             </div>
-        </div>
-    </div>
 
-  </div>
+            <Footer></Footer>
+        </main>
+        <!-- End Main -->
+
+    </div>
 </template>
 
 <script>
-export default {
-  name: 'forget',
-  data () {
-    return {
-      row: {
-        password: '',
-        confirm_password: ''
-      },
+    import Footer from '../layouts/Footer.vue';
+    import iziToast from 'izitoast';
 
-      btnLoading: false,
+    export default {
+        name: 'Forget',
+        components: {
+            Footer
+        },
+        data(){
+            return {
+                token: '',
+                new_password: '',
+                new_password_confirmation: '',
+
+                email: '',
+                btnLoading: false,
+            }
+        },
+        mounted() {},
+        created() {
+            if(localStorage.getItem('forget_email')) {
+                this.email = localStorage.getItem('forget_email');
+            }
+        },
+        methods: {
+            //
+            reset(){
+                this.btnLoading = true;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                };
+                const options = {
+                  url: window.baseURL + "/auth/password/reset",
+                  method: "POST",
+                  data: {
+                    token: this.token,
+                    email: this.email,
+                    new_password: this.new_password,
+                    new_password_confirmation: this.new_password_confirmation,
+                  },
+                };
+                this.$axios(options)
+                .then(() => {
+                    this.btnLoading = false;
+
+                    iziToast.success({
+                        icon: 'ti-check',
+                        title: 'Great job,',
+                        message: 'Password Updated Successfully.',
+                    });
+
+                    localStorage.removeItem("forget_email");
+                    this.$router.push({ name: "login" });
+                })
+                .catch((err) => {
+                    this.btnLoading = false;
+                    iziToast.error({
+                        icon: 'ti-na',
+                        title: 'Wow-wow,',
+                        message: (err.response) ? err.response.data.error : ''+err
+                    });
+                });
+            },
+
+        },
     }
-  }
-}
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>

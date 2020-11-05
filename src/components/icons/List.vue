@@ -331,12 +331,11 @@
                                                 <div class="card border-0 p-3">
                                                     <ul class="list-unstyled mb-0">
                                                         <li v-if="permissions.edit && !row.trash">
-                                                            <router-link
-                                                                class="d-block link-dark"
-                                                                :to="{ name: 'edit-'+refs, 
-                                                                params:{id: row.encrypt_id}}">
+                                                            <a href="javascript:;"
+                                                                @click="editRow(row)" 
+                                                                class="d-block link-dark">
                                                                 Edit
-                                                            </router-link>
+                                                            </a>
                                                         </li>
                                                         <li v-if="permissions.edit && !row.trash">
                                                             <a @click="row.loading = true; 

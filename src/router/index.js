@@ -17,7 +17,7 @@ export default new Router({
   // Auth
   { path: '/login', name: 'login', component: require('../components/auth/Login.vue').default, beforeEnter: requireUnAuth },
   { path: '/forget/password', name:'forget', component: require('../components/auth/Forget.vue').default, beforeEnter: requireUnAuth },
-  { path: '/reset/password', name:'reset', component: require('../components/auth/Reset.vue').default, beforeEnter: requireAuth },
+  { path: '/reset/password', name:'reset', component: require('../components/auth/Reset.vue').default, beforeEnter: requireUnAuth },
 
   // Applications
   { path: '/applications', name: 'applications', component: require('../components/applications/List.vue').default, beforeEnter: requireAuth },

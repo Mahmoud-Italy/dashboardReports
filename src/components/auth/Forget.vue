@@ -18,13 +18,18 @@
                                 <!-- Email -->
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input id="email" class="form-control" type="email" placeholder="Enter your email">
+                                    <input id="email" 
+                                        class="form-control" 
+                                        type="email" 
+                                        v-model="email" 
+                                        placeholder="Enter your email">
                                 </div>
                                 <!-- End Email -->
 
                                 <div class="my-4">
-                                    <button type="submit" class="btn btn-block btn-wide btn-primary text-uppercase" 
-                                    :disabled="btnLoading">
+                                    <button type="submit" 
+                                        class="btn btn-block btn-wide btn-primary text-uppercase" 
+                                        :disabled="btnLoading">
                                         <span v-if="btnLoading">
                                             <span class="spinner-grow spinner-grow-sm mr-1"
                                                 role="status" aria-hidden="true"></span>Loading...
@@ -55,7 +60,7 @@
 
 <script>
     import Footer from '../layouts/Footer.vue';
-    //import iziToast from 'izitoast';
+    import iziToast from 'izitoast';
 
     export default {
         name: 'Forget',
@@ -65,8 +70,6 @@
         data(){
             return {
                 email: '',
-                password: '',
-
                 btnLoading: false,
             }
         },
@@ -74,7 +77,38 @@
         methods: {
             //
             forget(){
-                //
+                this.btnLoading = true;
+                this.axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
+                };
+                const options = {
+                  url: window.baseURL + "/auth/password/forget/email",
+                  method: "POST",
+                  data: {
+                    email: this.email,
+                  },
+                };
+                this.$axios(options)
+                .then(() => {
+                    this.btnLoading = false;
+
+                    iziToast.success({
+                        icon: 'ti-check',
+                        title: 'Great job,',
+                        message: 'Email Sent Successfully.',
+                    });
+
+                    localStorage.setItem("forget_email", this.email);
+                    this.$router.push({ name: "reset" });
+                })
+                .catch((err) => {
+                    this.btnLoading = false;
+                    iziToast.error({
+                        icon: 'ti-na',
+                        title: 'Wow-wow,',
+                        message: (err.response) ? err.response.data.message : ''+err
+                    });
+                });
             },
 
         },
