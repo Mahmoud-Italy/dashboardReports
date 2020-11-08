@@ -839,6 +839,10 @@
                 this.row.encrypt_id = row.encrypt_id;
                 this.row.provider = row.provider;
                 this.row.provider_url = row.provider_url;
+
+                // tenant
+                this.tenant_id = row.tenant_id;
+                this.tenant_name = row.tenant_name;
             },
 
             // createOrUpdate

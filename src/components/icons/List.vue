@@ -886,6 +886,10 @@
                 this.row.icon_base64 = row.icon.image_url;
                 this.row.icon_alt = row.icon.image_alt;
                 this.row.icon_title = row.icon.image_title;
+
+                // tenant
+                this.tenant_id = row.tenant_id;
+                this.tenant_name = row.tenant_name;
             },
 
             // createOrUpdate

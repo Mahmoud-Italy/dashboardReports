@@ -220,6 +220,11 @@
                 this.axios(options)
                     .then(res => {
                     this.pgLoading = false;
+
+                    // tenant
+                    this.tenant_id = res.data.row.tenant_id;
+                    this.tenant_name = res.data.row.tenant_name;
+                    
                     //this.row.preview = res.data.row.image;
                     this.row.name = res.data.row.name;
                     this.row.email = res.data.row.email;

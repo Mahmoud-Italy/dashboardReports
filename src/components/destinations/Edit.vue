@@ -500,6 +500,11 @@
                 this.axios(options)
                     .then(res => {
                 this.pgLoading = false;
+
+                // tenant
+                this.tenant_id = res.data.row.tenant_id;
+                this.tenant_name = res.data.row.tenant_name;
+
                 // meta
                 this.row.meta_title = (res.data.row.meta) ? res.data.row.meta.meta_title : null;
                 this.row.meta_keywords = (res.data.row.meta) ? res.data.row.meta.meta_keywords : null;

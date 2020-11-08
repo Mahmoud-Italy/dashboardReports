@@ -10,7 +10,7 @@
 
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize">{{ refs }}
-                        <router-link v-if="permissions.add && tenant_id != 0"
+                        <router-link v-if="permissions.add"
                             :to="{ name: 'create-'+refs }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
@@ -646,7 +646,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/'+this.refs+'/export?id='+this.selected+'&tenant_id='+this.tenant_id);
+                    this.axios.post(window.baseURL+'/'+this.refs+'/export?id='+this.selected);
                 return res.data.rows;
             },
             startDownload(){

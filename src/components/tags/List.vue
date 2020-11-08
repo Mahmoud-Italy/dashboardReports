@@ -826,6 +826,10 @@
 
                 this.row.encrypt_id = row.encrypt_id;
                 this.row.name = row.name;
+
+                // tenant
+                this.tenant_id = row.tenant_id;
+                this.tenant_name = row.tenant_name;
             },
 
             // createOrUpdate

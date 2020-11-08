@@ -823,6 +823,10 @@
 
                 this.row.encrypt_id = row.encrypt_id;
                 this.row.ip_address = row.ip_address;
+
+                // tenant
+                this.tenant_id = row.tenant_id;
+                this.tenant_name = row.tenant_name;
             },
 
             // createOrUpdate

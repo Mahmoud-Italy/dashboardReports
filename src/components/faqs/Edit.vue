@@ -443,6 +443,11 @@
                 this.axios(options)
                     .then(res => {
                     this.pgLoading = false;
+                    
+                    // tenant
+                    this.tenant_id = res.data.row.tenant_id;
+                    this.tenant_name = res.data.row.tenant_name;
+
                     // row
                     this.row.title = res.data.row.title;
                     this.row.sort = res.data.row.sort;

@@ -375,6 +375,10 @@
                     .then(res => {
                     this.pgLoading = false;
 
+                    // tenant
+                    this.tenant_id = res.data.row.tenant_id;
+                    this.tenant_name = res.data.row.tenant_name;
+                    
                     // row
                     this.row.slug = res.data.row.slug;
                     this.row.name = res.data.row.name;
