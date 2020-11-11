@@ -324,7 +324,7 @@
                                         <router-link v-if="row.destination"
                                             :to="{ name: 'filter-'+refs, 
                                             params:{filter_by: 'destination',
-                                                    filter : row.destination.encrypt_id} }" 
+                                                    filter : row.destination.slug} }" 
                                             class="text-decoration-hover">
                                             <span class="badge badge-md badge-pill badge-danger-soft">
                                                 {{ row.destination.title }}

@@ -248,8 +248,26 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">Writer</th>
-                                        <th class="text-center" style="width: 20%">Author</th>
+                                        <th class="text-center" style="width: 10%">Writer
+                                            <span v-if="!writerLoading && filter_by == 'writer'"
+                                                @click="removeFilter()"
+                                                class="cursor-pointer ti-close">
+                                            </span>
+                                            <span v-if="writerLoading">
+                                                <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                    role="status" aria-hidden="true"></span>
+                                            </span>
+                                        </th>
+                                        <th class="text-center" style="width: 20%">Author
+                                            <span v-if="!authorLoading && filter_by == 'author'"
+                                                @click="removeFilter()"
+                                                class="cursor-pointer ti-close">
+                                            </span>
+                                            <span v-if="authorLoading">
+                                                <span class="spinner-grow spinner-grow-sm mr-1" 
+                                                    role="status" aria-hidden="true"></span>
+                                            </span>
+                                        </th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -301,7 +319,7 @@
                                     <td class="font-weight-semi-bold text-center">
                                         <span v-if="!row.writer"> - </span>
                                         <router-link v-if="row.writer" :to="{ name: 'filter-'+refs, 
-                                            params:{filter_by: 'writer', 'filter':row.writer.title} }" 
+                                            params:{filter_by: 'writer', 'filter':row.writer.slug} }" 
                                             class="text-decoration-hover">
                                             <span class="badge badge-md badge-pill badge-danger-soft">
                                                 {{ row.writer.title }}
@@ -512,6 +530,8 @@
                 sortLoading: false,
                 showLoading: false,
                 orderLoading: false,
+                authorLoading: false,
+                writerLoading: false,
                 something_went_wrong: false,
                 rows: [],
                 show: 10,
@@ -601,6 +621,14 @@
                     this.order = 'DESC';
                 }
                 this.fetchData('', true);
+            },
+
+            removeFilter(){
+                this.authorLoading = true;
+                this.writerLoading = true;
+                this.filter = '';
+                this.filter_by = '';
+                this.$router.push({ name: this.refs });
             },
 
             changeTenant(id, name) {
@@ -695,6 +723,8 @@
                         this.showLoading = false;
                         this.orderLoading = false;
                         this.tenantLoading = false;
+                        this.authorLoading = false;
+                        this.writerLoading = false;
 
                         this.statusBar.all = res.data.statusBar.all;
                         this.statusBar.active = res.data.statusBar.active;
