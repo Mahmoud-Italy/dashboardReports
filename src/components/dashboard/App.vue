@@ -395,31 +395,31 @@
                                             aria-labelledby="dropMenuCountries">
                                         <span class="dropdown-item " 
                                                 :class="(pieDays == '0') ? 'active' : ''"
-                                                @click="fetchCountries(0)">Today
+                                                @click="fetchPieChart(0)">Today
                                         </span>
                                         <span class="dropdown-item "
                                                 :class="(pieDays == '1') ? 'active' : ''"
-                                                @click="fetchCountries(1)">Yesterday
+                                                @click="fetchPieChart(1)">Yesterday
                                         </span>
                                         <span class="dropdown-item "
                                                 :class="(pieDays == '7') ? 'active' : ''"
-                                                @click="fetchCountries(7)">Last 7 days
+                                                @click="fetchPieChart(7)">Last 7 days
                                         </span>
                                         <span class="dropdown-item "
                                                 :class="(pieDays == '28') ? 'active' : ''"
-                                                @click="fetchCountries(28)">Last 28 days
+                                                @click="fetchPieChart(28)">Last 28 days
                                         </span>
                                         <span class="dropdown-item "
                                                 :class="(pieDays == '90') ? 'active' : ''"
-                                                @click="fetchCountries(90)">Last 90 days
+                                                @click="fetchPieChart(90)">Last 90 days
                                         </span>
                                         <span class="dropdown-item "
                                                 :class="(pieDays == '180') ? 'active' : ''"
-                                                @click="fetchCountries(180)">Last 180 days
+                                                @click="fetchPieChart(180)">Last 180 days
                                         </span>
                                         <span class="dropdown-item "
                                                 :class="(pieDays == 'infinity') ? 'active' : ''"
-                                                @click="fetchCountries('infinity')">Last calendar year
+                                                @click="fetchPieChart('infinity')">Last calendar year
                                         </span>
                                     </div>
                                     <!-- End Dropdown -->
