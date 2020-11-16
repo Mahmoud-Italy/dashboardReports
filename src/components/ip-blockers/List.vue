@@ -167,8 +167,8 @@
 
                             <router-link class="pg-hd"
                                 :to="{ name: 'status-'+refs, params:{status: 'inactive'} }" 
-                                :class="(status == 'inactive') ? 'active' : '' ">Inactive</router-link>&nbsp;|&nbsp; 
-
+                                :class="(status == 'inactive') ? 'active' : '' ">Inactive</router-link>
+                            <span class="pg-hd no-decoration f14"> ({{statusBar.inactive}}) </span>&nbsp;|&nbsp;  
                             <router-link class="pg-hd"
                                 :to="{ name: 'status-'+refs, params:{status: 'trash'} }" 
                                 :class="(status == 'trash') ? 'active' : '' ">Trash</router-link>
