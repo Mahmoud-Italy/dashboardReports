@@ -60,7 +60,7 @@ window.editor_toolbar = 'undo redo | formatselect | bold italic backcolor | \
 /* Vue End Editor */
 
 // baseURL
-window.baseURL = 'https://apibema.mazadak.net/v1/dashboard';
+window.baseURL = 'https://apibemo.mazadak.net/v1/dashboard';
 Vue.config.productionTip = false
 
 new Vue({

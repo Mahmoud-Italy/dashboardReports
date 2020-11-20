@@ -104,18 +104,8 @@
                                     <!-- Body -->
                                     <div class="form-group">
                                         <label for="input3">Message</label>
-                                        <editor
-                                            id="input3"
-                                            v-model="row.body"
-                                            disabled=""
-                                            :api-key="editor.api_key"
-                                            :init="{
-                                                height: 600,
-                                                menubar: editor.menubar,
-                                                plugins: editor.plugins,
-                                                toolbar: editor.toolbar
-                                            }"
-                                        />
+                                        <textarea rows="9" class="form-control" v-model="row.message" disabled=""></textarea>
+                                       
                                     </div>
                                     <!-- End Body -->
 
@@ -167,7 +157,7 @@
     import Header from '../layouts/Header.vue';
     import Navigation from '../layouts/Navigation';
     import Footer from '../layouts/Footer.vue';
-    import Editor from '@tinymce/tinymce-vue';
+    //import Editor from '@tinymce/tinymce-vue';
     import iziToast from 'izitoast';
     
     export default {
@@ -176,7 +166,7 @@
             Header,
             Navigation,
             Footer,
-            Editor
+            //Editor
         },
         data(){
             return {
@@ -189,7 +179,7 @@
                     preview: '',
                     name: '',
                     email: '',
-                    body: '',
+                    message: '',
                 },
                 editor: {
                     api_key: window.editor_apiKey,
@@ -235,11 +225,10 @@
                 this.axios(options)
                     .then(res => {
                     this.pgLoading = false;
-                    
                     //this.row.preview = res.data.row.image;
                     this.row.name = res.data.row.name;
                     this.row.email = res.data.row.email;
-                    this.row.body = res.data.row.body;
+                    this.row.message = res.data.row.message;
                     })
                     .catch(err => {
                         this.btnLoading = false;

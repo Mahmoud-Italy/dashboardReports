@@ -1,4 +1,4 @@
-# vue.multitenancy
+# vue.dashboard
 
 ## Project setup
 ```

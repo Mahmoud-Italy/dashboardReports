@@ -141,7 +141,7 @@
                                                             @change="isChecked($event, permission[idx].id)"
                                                             :id="permission[idx].id"
                                                             :value="permission[idx].id"
-                                                            :checked="(row.permissions_ids.indexOf(permission[idx].id) !== -1) ? true : ''">>
+                                                            :checked="(row.permissions_ids.indexOf(permission[idx].id) !== -1) ? true : ''">
                                                         <label class="custom-control-label" 
                                                             :for="permission[idx].id">
                                                             {{ permission[idx].name }}
@@ -334,7 +334,6 @@
                     this.row.name = res.data.row.name;
 
                     // navbar
-                    this.row.authority = res.data.row.authority;
                     this.row.permissions_ids = res.data.row.permissions_ids;
 
                     // status & visiblity
@@ -438,6 +437,8 @@
                 }
             },
 
+
+
             // remove sessions
             removeLocalStorage() {
                 localStorage.removeItem('access_token');
@@ -445,7 +446,6 @@
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
-                localStorage.removeItem('tenant_id');
             },
 
              // toggleCollapse

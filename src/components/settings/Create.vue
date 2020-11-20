@@ -83,7 +83,8 @@
                                     <!-- Body -->
                                     <div class="form-group">
                                         <label for="inputText1">Body</label>
-                                        <editor
+                                        <textarea rows="9" class="form-control" v-model="row.body"></textarea>
+                                        <!-- <editor
                                             id="inputText1"
                                             v-model="row.body"
                                             :api-key="editor.api_key"
@@ -93,7 +94,7 @@
                                                 plugins: editor.plugins,
                                                 toolbar: editor.toolbar
                                             }"
-                                        />
+                                        /> -->
                                     </div>
                                     <!-- End Body -->
 
@@ -260,7 +261,7 @@
     import Header from '../layouts/Header.vue';
     import Navigation from '../layouts/Navigation';
     import Footer from '../layouts/Footer.vue';
-    import Editor from '@tinymce/tinymce-vue';
+    //import Editor from '@tinymce/tinymce-vue';
     import iziToast from 'izitoast';
     
     export default {
@@ -269,7 +270,7 @@
             Header,
             Navigation,
             Footer,
-            Editor
+            //Editor
         },
         data(){
             return {

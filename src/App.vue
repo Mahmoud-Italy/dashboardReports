@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <title>TI</title>
      <router-view/>
   </div>
 </template>

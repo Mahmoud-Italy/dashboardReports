@@ -248,7 +248,7 @@
                                         </router-link>
                                     </td>
 
-                                    <td class="font-weight-semi-bold">
+                                    <td class="font-weight-semi-bold text-center">
                                         {{ row.email }}
                                     </td>
 
