@@ -23,7 +23,7 @@ Vue.component('downloadExcel', JsonExcel);
 
 /* Copy to Clipboard */
 import VueClipboard from 'vue-clipboard2';
-VueClipboard.config.autoSetContainer = true; // add this line
+VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
 /* End Copy to Clipboard */
 
@@ -60,8 +60,7 @@ window.editor_toolbar = 'undo redo | formatselect | bold italic backcolor | \
 /* Vue End Editor */
 
 // baseURL
-// window.baseURL = 'http://localhost:8000/v1/dashboard';
-window.baseURL = 'https://api.dubaidaytrips.com/v1/dashboard';
+window.baseURL = 'https://apibema.mazadak.net/v1/dashboard';
 Vue.config.productionTip = false
 
 new Vue({

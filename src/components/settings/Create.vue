@@ -10,14 +10,13 @@
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize"> {{ refs }}
 
-                        <!-- Tenants -->
-                        <div class="pull-right ui-mt-15">
-                            <span class="btn btn-dark btn-sm">
-                                <span class="btn-icon ti-home mr-2"></span>
-                                <span> {{ tenant_name }} </span>
+                        <!-- Role -->
+                        <div class="pull-rights ui-mt-15 pull-right">
+                            <span class="badge badge-md badge-pill badge-success-soft text-lowercase">
+                                {{ auth.role }}
                             </span>
                         </div>
-                        <!-- End Tenants -->
+                        <!-- End Role -->
 
                     </h1>
 
@@ -68,23 +67,12 @@
 
                                 <div class="col-12 pt-3">
                                     
-                                    <!-- Slug -->
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                            <label for="input0">Slug</label>
-                                            <input class="form-control text-lowercase" 
-                                                    id="input0" 
-                                                    type="text" 
-                                                    v-model="row.slug">
-                                        </div>
-                                    </div>
-                                    <!-- End Slug -->
 
                                     <!-- Title -->
                                     <div class="form-group">
                                         <div class="form-group">
                                             <label for="input1">Title</label>
-                                            <input class="form-control" 
+                                            <input class="form-control text-lowercase" 
                                                     id="input1" 
                                                     type="text" 
                                                     v-model="row.title">
@@ -92,12 +80,12 @@
                                     </div>
                                     <!-- End Title -->
 
-                                    <!-- Body1 -->
+                                    <!-- Body -->
                                     <div class="form-group">
-                                        <label for="inputText1">Body1</label>
+                                        <label for="inputText1">Body</label>
                                         <editor
                                             id="inputText1"
-                                            v-model="row.body1"
+                                            v-model="row.body"
                                             :api-key="editor.api_key"
                                             :init="{
                                                 height: 300,
@@ -107,75 +95,7 @@
                                             }"
                                         />
                                     </div>
-                                    <!-- End Body1 -->
-
-                                    <!-- Body2 -->
-                                    <div class="form-group">
-                                        <label for="inputText2">Body2</label>
-                                        <editor
-                                            id="inputText2"
-                                            v-model="row.body2"
-                                            :api-key="editor.api_key"
-                                            :init="{
-                                                height: 300,
-                                                menubar: editor.menubar,
-                                                plugins: editor.plugins,
-                                                toolbar: editor.toolbar
-                                            }"
-                                        />
-                                    </div>
-                                    <!-- End Body2 -->
-
-                                    <!-- Body3 -->
-                                    <div class="form-group">
-                                        <label for="inputText3">Body3</label>
-                                        <editor
-                                            id="inputText3"
-                                            v-model="row.body3"
-                                            :api-key="editor.api_key"
-                                            :init="{
-                                                height: 300,
-                                                menubar: editor.menubar,
-                                                plugins: editor.plugins,
-                                                toolbar: editor.toolbar
-                                            }"
-                                        />
-                                    </div>
-                                    <!-- End Body3 -->
-
-                                    <!-- Body4 -->
-                                    <div class="form-group">
-                                        <label for="inputText4">Body4</label>
-                                        <editor
-                                            id="inputText4"
-                                            v-model="row.body4"
-                                            :api-key="editor.api_key"
-                                            :init="{
-                                                height: 300,
-                                                menubar: editor.menubar,
-                                                plugins: editor.plugins,
-                                                toolbar: editor.toolbar
-                                            }"
-                                        />
-                                    </div>
-                                    <!-- End Body4 -->
-
-                                    <!-- Body5 -->
-                                    <div class="form-group">
-                                        <label for="inputText5">Body5</label>
-                                        <editor
-                                            id="inputText5"
-                                            v-model="row.body5"
-                                            :api-key="editor.api_key"
-                                            :init="{
-                                                height: 300,
-                                                menubar: editor.menubar,
-                                                plugins: editor.plugins,
-                                                toolbar: editor.toolbar
-                                            }"
-                                        />
-                                    </div>
-                                    <!-- End Body5 -->
+                                    <!-- End Body -->
 
                                 </div>
                                 
@@ -360,13 +280,8 @@
                 },
                 row: {
                     // row
-                    slug: '',
                     title: '',
-                    body1: '',
-                    body2: '',
-                    body3: '',
-                    body4: '',
-                    body5: '',
+                    body: '',
                     
                     // image
                     image_preview: '',
@@ -387,9 +302,6 @@
                 pgLoading: false,
                 btnLoading: false,
 
-                // Tenants
-                tenant_id: 0,
-                tenant_name: '',
                 refs: 'settings'
             }
         },
@@ -404,29 +316,13 @@
                 this.auth.access_token = localStorage.getItem('access_token');
             }
 
-            // Tenants
-            if(localStorage.getItem('tenant_id')) {
-                this.tenant_id = localStorage.getItem('tenant_id');
-            }
-            if(localStorage.getItem('tenant_name')) {
-                this.tenant_name = localStorage.getItem('tenant_name');
-            }
-
         },
         methods: {
             
 
             // Add New
             addNew(){
-                if(this.tenant_id == 0) {
-                    
-                    iziToast.warning({
-                        icon: 'ti-alert',
-                        title: 'Wow-man,',
-                        message: 'No tenany selected.'
-                    });
 
-                } else {
                     this.btnLoading = true;
                     this.axios.defaults.headers.common = {
                         'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
@@ -437,15 +333,9 @@
                         url: window.baseURL+'/'+this.refs,
                         method: 'POST',
                         data: {
-                            tenant_id: this.tenant_id,
                             // row
-                            slug: this.row.slug,
                             title: this.row.title,
-                            body1: this.row.body1,
-                            body2: this.row.body2,
-                            body3: this.row.body3,
-                            body4: this.row.body4,
-                            body5: this.row.body5,
+                            body: this.row.body,
                             
                             // image
                             image_base64: this.row.image_base64,
@@ -483,7 +373,7 @@
                             }
                         })
                         .finally(() => {})
-                }
+                
             },
 
 
@@ -517,7 +407,6 @@
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
-                localStorage.removeItem('tenant_id');
             },
 
             // toggleCollapse

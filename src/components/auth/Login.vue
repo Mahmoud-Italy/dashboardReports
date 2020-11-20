@@ -138,15 +138,10 @@
 
                     // LocalStorage
                     localStorage.setItem('access_token', res.data.access_token);
-                    localStorage.setItem('user_image', res.data.user.image.image_url);
+                    localStorage.setItem('user_image', res.data.user.image);
                     localStorage.setItem('user_name', res.data.user.name);
                     localStorage.setItem('user_id', res.data.user.id);
                     localStorage.setItem('role', res.data.user.role);
-
-                    if(res.data.user.role == 'root') {
-                        localStorage.setItem('tenant_id', 0);
-                        localStorage.setItem('tenant_name', 'All Tenants');
-                    }
 
                     this.$router.push({ name: 'dashboard' })
                 })

@@ -10,6 +10,14 @@
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize">{{ refs }}
 
+                        <!-- Role -->
+                        <div class="pull-rights ui-mt-15 pull-right">
+                            <span class="badge badge-md badge-pill badge-success-soft text-lowercase">
+                                {{ auth.role }}
+                            </span>
+                        </div>
+                        <!-- End Role -->
+
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -92,6 +100,7 @@
                                             <input class="form-control"
                                                     id="inputUser3" 
                                                     type="password"  
+                                                    autocomplete="off" 
                                                     placeholder="********************" 
                                                     v-model="row.password">
                                         </div>
@@ -331,9 +340,6 @@
                 pgLoading: true,
                 btnLoading: false,
 
-                // Tenants
-                tenant_id: 0,
-                tenant_name: 'All Tenants',
                 refs: 'users'
             }
         },
@@ -348,13 +354,6 @@
                 this.auth.access_token = localStorage.getItem('access_token');
             }
 
-             // Tenants
-            if(localStorage.getItem('tenant_id')) {
-                this.tenant_id = localStorage.getItem('tenant_id');
-            }
-            if(localStorage.getItem('tenant_name')) {
-                this.tenant_name = localStorage.getItem('tenant_name');
-            }
 
             this.fetchRow();
         },
@@ -382,14 +381,13 @@
                     // row
                     this.row.name = res.data.row.name;
                     this.row.email = res.data.row.email;
-                    this.row.password = res.data.row.password;
 
                     // navbar
                     this.row.role = res.data.row.role;
 
                     // image
-                    this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
+                    this.row.image_preview = (res.data.row.image) ? res.data.row.image : null;
+                    this.row.image_base64 = (res.data.row.image) ? res.data.row.image : null;
 
                     // status & visibility
                     this.row.status = res.data.row.status;
@@ -529,7 +527,6 @@
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
-                localStorage.removeItem('tenant_id');
             },
 
             // toggleCollapse

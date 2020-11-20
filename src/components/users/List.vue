@@ -10,47 +10,19 @@
 
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize"> {{ refs }}
-                        <router-link v-if="permissions.add"
+                        <router-link  v-if="permissions.add"
                             :to="{ name: 'create-'+refs }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
 
-                        <!-- Tenants -->
+                        <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right">
-                            <div class="dropdown">
-                                <button type="button" 
-                                    class="btn btn-dark btn-sm dropdown-toggle" 
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true" 
-                                    aria-expanded="false" 
-                                    :disabled="tenantLoading">
-                                    <span class="btn-icon ti-home mr-2"></span>
-                                    <span v-if="!tenantLoading" class="ui-mr5"> {{ tenant_name }}</span>
-                                    <span v-if="tenantLoading">
-                                        <span class="spinner-grow spinner-grow-sm mr-1" 
-                                            role="status" 
-                                            aria-hidden="true">
-                                        </span>Loading...
-                                    </span>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a v-if="auth.role == 'root'"
-                                        class="dropdown-item dropdown-pad" 
-                                        href="javascript:;"
-                                        @click="changeTenant(0, 'All Tenants')"> All Tenants
-                                    </a>
-                                    <a class="dropdown-pad dropdown-item" 
-                                        href="javascript:;"
-                                        v-for="(tenant, index) in tenants"
-                                        :key="index"
-                                        @click="changeTenant(tenant.id, tenant.name)"> 
-                                           &nbsp; {{ tenant.name }} &nbsp;
-                                    </a>
-                                </div>
-                            </div>
+                            <span class="badge badge-md badge-pill badge-success-soft text-lowercase">
+                                {{ auth.role }}
+                            </span>
                         </div>
-                        <!-- End Tenants -->
+                        <!-- End Role -->
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -167,7 +139,6 @@
                                 :to="{ name: 'status-'+refs, params:{status: 'active'} }" 
                                 :class="(status == 'active') ? 'active' : '' ">Active</router-link>
                            <span class="pg-hd no-decoration f14"> ({{statusBar.active}}) </span>&nbsp;|&nbsp; 
-
                             <router-link class="pg-hd"
                                 :to="{ name: 'status-'+refs, params:{status: 'inactive'} }" 
                                 :class="(status == 'inactive') ? 'active' : '' ">Inactive</router-link>
@@ -249,7 +220,7 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th style="width: 15%">Email Address</th>
+                                        <th style="width: 15%">Email address</th>
                                         <th class="text-center" style="width: 10%">Role
                                             <span v-if="!roleLoading && filter_by == 'role'"
                                                 @click="removeFilter()"
@@ -260,7 +231,6 @@
                                                     role="status" aria-hidden="true"></span>
                                             </span>
                                         </th>
-                                        <th class="text-center" style="width: 10%">Packages No.</th>
                                         <th class="text-center" style="width: 15%">Date</th>
                                         <th class="text-center" style="width: 10%">Actions</th>
                                     </tr>
@@ -268,7 +238,7 @@
 
                                 <tbody v-if="dataLoading">
                                     <tr>
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <div class="spinner-grow" role="status">
                                               <span class="sr-only">Loading...</span>
                                             </div>
@@ -278,7 +248,7 @@
 
                                 <tbody v-if="!dataLoading && !rows.length">
                                     <tr>
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <span>No results found.</span>
                                         </td>
                                     </tr>
@@ -305,7 +275,7 @@
                                             :to="{ name: 'edit-'+refs, params:{id:row.encrypt_id}}" 
                                             class="default-color text-decoration-hover">
                                             <img class="u-avatar-xs rounded-circle mr-2"
-                                                :src="row.image.image_url">
+                                                :src="row.image">
                                             {{ row.name }} 
                                         </router-link>
                                         <span v-if="!permissions.edit">{{ row.name }}</span>
@@ -327,9 +297,6 @@
                                         </router-link>
                                     </td>
 
-                                    <td class="font-weight-semi-bold text-center">
-                                        <span> {{ row.packages_no }} </span>
-                                    </td>
 
                                     <td v-html="(row.deleted_at) ? row.deleted_at : 
                                                 (row.updated_at) ? row.updated_at : row.created_at"
@@ -417,9 +384,8 @@
                                             </div>
                                         </th>
                                         <th>Name</th>
-                                        <th>Email Address</th>
+                                        <th>Email address</th>
                                         <th class="text-center">Role</th>
-                                        <th class="text-center">Packages No.</th>
                                         <th class="text-center">Date</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
@@ -531,12 +497,6 @@
                 show: 10,
                 pagination: {},
 
-                // Tenants
-                tenant_id: 0,
-                tenant_name: 'All Tenants',
-                tenantLoading: true,
-                tenants: [],
-
                 refs: 'users'
             }
         },
@@ -570,14 +530,6 @@
                 this.auth.access_token = localStorage.getItem('access_token');
             }
 
-            // Tenants
-            if(localStorage.getItem('tenant_id')) {
-                this.tenant_id = localStorage.getItem('tenant_id');
-            }
-            if(localStorage.getItem('tenant_name')) {
-                this.tenant_name = localStorage.getItem('tenant_name');
-            }
-
             // Status By
             if(this.$route.params.status) {
                 this.status = this.$route.params.status;
@@ -591,7 +543,7 @@
                 this.filter = this.$route.params.filter;
             }
 
-            this.fetchTenants();
+            this.fetchData();
         },
         methods: {
 
@@ -622,62 +574,6 @@
                 this.filter = '';
                 this.filter_by = '';
                 this.$router.push({ name: this.refs })
-            },
-
-            changeTenant(id, name) {
-                this.tenantLoading = true;
-                this.tenant_id = id;
-                this.tenant_name = name;
-                localStorage.setItem('tenant_id', id);
-                localStorage.setItem('tenant_name', name);
-                this.fetchData('', true);
-            },
-
-            fetchTenants(){
-                this.tenantLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
-                const options = {
-                    url: window.baseURL+'/tenants',
-                    method: 'GET',
-                    data: {},
-                    params: {
-                        status: 'active',
-                        paginate: 100
-                    },
-                }
-                this.axios(options)
-                    .then(res => {
-                        this.tenantLoading = false;
-                        this.tenants = res.data.rows;
-
-                        if(this.auth.role != 'root') {
-                            if(!localStorage.getItem('tenant_id')) {
-                                this.tenent_id = res.data.rows[0].id;
-                                this.tenant_name = res.data.rows[0].name;
-                            }
-                        }
-                        this.fetchData('', true); // fetch data
-                    })
-                    .catch(err => {
-                        // 403 Forbidden
-                        if(err.response && err.response.status == 401) {
-                            this.removeLocalStorage();
-                            this.$router.push({ name: 'login' });
-                        } else if(err.response && err.response.status == 403) {
-                            this.$router.push({ name: 'forbidden' });
-                        } else {
-                            this.btnLoading = false;
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow-man,',
-                                message: (err.response) ? err.response.data.message : ''+err
-                            });
-                        }
-                    })
-                    .finally(() => {})
             },
 
             // Fetch Data
@@ -715,7 +611,6 @@
                         this.showLoading = false;
                         this.orderLoading = false;
                         this.authorLoading = false;
-                        this.tenantLoading = false;
                         this.roleLoading = false;
 
                         this.statusBar.all = res.data.statusBar.all;
@@ -765,7 +660,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/'+this.refs+'/export?id='+this.selected+'&tenant_id='+this.tenant_id);
+                    this.axios.post(window.baseURL+'/'+this.refs+'/export?id='+this.selected);
                 return res.data.rows;
             },
             startDownload(){
@@ -787,7 +682,6 @@
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
-                localStorage.removeItem('tenant_id');
             },
         
 

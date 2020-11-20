@@ -10,14 +10,13 @@
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize">{{ refs }}
 
-                        <!-- Tenants -->
-                        <div class="pull-right ui-mt-15">
-                            <span class="btn btn-dark btn-sm">
-                                <span class="btn-icon ti-home mr-2"></span>
-                                <span> {{ tenant_name }} </span>
+                        <!-- Role -->
+                        <div class="pull-rights ui-mt-15 pull-right">
+                            <span class="badge badge-md badge-pill badge-success-soft text-lowercase">
+                                {{ auth.role }}
                             </span>
                         </div>
-                        <!-- End Tenants -->
+                        <!-- End Role -->
 
                     </h1>
 
@@ -202,9 +201,6 @@
                 pgLoading: true,
                 btnLoading: false,
 
-                // Tenants
-                tenant_id: 0,
-                tenant_name: '',
                 refs: 'inbox'
             }
         },
@@ -217,14 +213,6 @@
             }
             if(localStorage.getItem('access_token')) {
                 this.auth.access_token = localStorage.getItem('access_token');
-            }
-
-            // Tenants
-            if(localStorage.getItem('tenant_id')) {
-                this.tenant_id = localStorage.getItem('tenant_id');
-            }
-            if(localStorage.getItem('tenant_name')) {
-                this.tenant_name = localStorage.getItem('tenant_name');
             }
 
             this.fetchRow();
@@ -247,10 +235,6 @@
                 this.axios(options)
                     .then(res => {
                     this.pgLoading = false;
-
-                    // tenant
-                    this.tenant_id = res.data.row.tenant_id;
-                    this.tenant_name = res.data.row.tenant_name;
                     
                     //this.row.preview = res.data.row.image;
                     this.row.name = res.data.row.name;

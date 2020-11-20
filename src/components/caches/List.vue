@@ -12,14 +12,10 @@
                     <h1 class="h2 mb-2">Cache Management
 
                         <!-- Role -->
-                        <div class="col-md-12">
-                            <div class="pull-rights ui-mt-15 pull-right ">
-                                <div class="dropdown">
-                                    <span class="badge badge-md badge-pill badge-secondary-soft">
-                                        {{ auth.role }}
-                                    </span>
-                                </div>
-                            </div>
+                        <div class="pull-rights ui-mt-15 pull-right">
+                            <span class="badge badge-md badge-pill badge-success-soft text-lowercase">
+                                {{ auth.role }}
+                            </span>
                         </div>
                         <!-- End Role -->
 

@@ -30,11 +30,11 @@
 
                         <li v-for="(nav, index) in navigation" 
                                 :key="index" 
-                                :class="(nav.authority) ? '' : 'hidden'"
                                 class="u-sidebar-nav-menu__item">
                             <router-link :to="{ name: nav.url }" 
                                 class="u-sidebar-nav-menu__link"
                                 :class="(path == '/'+nav.url ||
+                                         path == '/'+nav.url+'/create' ||
                                          path == '/'+nav.url+'/status/active' ||
                                          path == '/'+nav.url+'/status/inactive' ||
                                          path == '/'+nav.url+'/trash') 
@@ -64,7 +64,6 @@
 <script>
     export default {
         name: 'Navigation',
-        props: [ 'tenant' ],
         data(){
             return {
                 //
@@ -75,26 +74,11 @@
 
                 pgLoading: true,
                 navigation: [], 
-
-                tenant_id: 0,
-
                 path: '/',
             }
         },
         mounted() {},
-        watch: {
-            tenant: function(newVal) {
-                this.tenant_id = newVal;
-                this.fetchNavigation();
-            },
-            $route() {
-                //
-                if(localStorage.getItem('tenant_id')) {
-                    this.tenant_id = localStorage.getItem('tenant_id');
-                }
-                this.fetchNavigation();
-            }
-        },
+        watch: {},
         created() {
             // AccessToken & Role
             if(localStorage.getItem('role')) {
@@ -109,10 +93,6 @@
                 this.path = this.$route.path;
             }
 
-            // Tenants
-            if(localStorage.getItem('tenant_id')) {
-                this.tenant_id = localStorage.getItem('tenant_id');
-            }
 
             this.fetchNavigation();
         },
@@ -140,9 +120,7 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        tenant_id: this.tenant_id,
-                        status: this.status,
-                        search: this.search,
+                        status: 'active',
                         paginate: 100,
                     },
                 }
@@ -151,17 +129,25 @@
                         this.pgLoading = false;
                         this.navigation = res.data.rows;
                     })
-                    .catch(() => { })
+                    .catch((err) => {
+                        if(err.response && err.response.status == 401) {
+                            this.removeLocalStorage();
+                            this.$router.push({ name: 'login' });
+                        }
+                    })
                     .finally(() => { })
             },
 
-        },
 
-        beforeRouteEnter (to, from, next) { 
-          next(() => { 
-            //next();
-            //console.log('here'+vm);
-          }) 
+            // remove sessions
+            removeLocalStorage() {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_image');
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('role');
+            },
+
         },
     }
 </script>

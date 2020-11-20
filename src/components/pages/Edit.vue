@@ -10,14 +10,13 @@
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize"> {{ refs }}
 
-                        <!-- Tenants -->
-                        <div class="pull-right ui-mt-15">
-                            <span class="btn btn-dark btn-sm">
-                                <span class="btn-icon ti-home mr-2"></span>
-                                <span> {{ tenant_name }} </span>
+                        <!-- Role -->
+                        <div class="pull-rights ui-mt-15 pull-right">
+                            <span class="badge badge-md badge-pill badge-success-soft text-lowercase">
+                                {{ auth.role }}
                             </span>
                         </div>
-                        <!-- End Tenants -->
+                        <!-- End Role -->
 
                     </h1>
 
@@ -148,16 +147,6 @@
                                         data-parent="#accordion">
 
                                 <div class="col-12 pt-3">
-                                        
-                                    <!-- Page Title -->
-                                    <div class="form-group">
-                                        <label for="inputText0">Page Title</label>
-                                        <input class="form-control" 
-                                                id="inputText0" 
-                                                type="text" 
-                                                v-model="row.page_title">
-                                    </div>
-                                    <!-- End Page Title -->
 
                                     <!-- Title -->
                                     <div class="form-group">
@@ -184,14 +173,14 @@
                                     <!-- End Slug -->
 
                                     <!-- Sort -->
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label for="inputText3">Sort</label>
                                         <input class="form-control" 
                                                 id="inputText3" 
                                                 type="number" 
                                                 min="0"
                                                 v-model.number="row.sort">
-                                    </div>
+                                    </div> -->
                                     <!-- End Sort -->
 
 
@@ -322,6 +311,21 @@
                                                 </div>
                                             </div>
                                             <!-- Status -->
+                                            <!-- Index -->
+                                            <div class="form-group">
+                                                <div class="custom-control custom-switch mb-2">
+                                                    <input type="checkbox" 
+                                                        class="custom-control-input" 
+                                                        id="customSwitch2" 
+                                                        :checked="row.index"
+                                                        @click="onIndex">
+                                                    <label class="custom-control-label" 
+                                                        for="customSwitch2"
+                                                        v-html="(row.index) ? 'Index' : 'No Index'">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <!-- End Index -->
                                         </div>
                                     </div>
                                 </div>
@@ -401,7 +405,6 @@
                     meta_description: '',
 
                     // row
-                    page_title: '',
                     slug: '',
                     title: '',
                     body: '',
@@ -415,6 +418,7 @@
 
                     // status & visibility
                     status: 1,
+                    index: 0
                 },
                 editor: {
                     api_key: window.editor_apiKey,
@@ -426,9 +430,6 @@
                 pgLoading: true,
                 btnLoading: false,
 
-                // Tenants
-                tenant_id: 0,
-                tenant_name: '',
                 refs: 'pages'
             }
         },
@@ -441,14 +442,6 @@
             }
             if(localStorage.getItem('access_token')) {
                 this.auth.access_token = localStorage.getItem('access_token');
-            }
-
-            // Tenants
-            if(localStorage.getItem('tenant_id')) {
-                this.tenant_id = localStorage.getItem('tenant_id');
-            }
-            if(localStorage.getItem('tenant_name')) {
-                this.tenant_name = localStorage.getItem('tenant_name');
             }
 
             this.fetchRow();
@@ -473,17 +466,12 @@
                     .then(res => {
                     this.pgLoading = false;
 
-                    // tenant
-                    this.tenant_id = res.data.row.tenant_id;
-                    this.tenant_name = res.data.row.tenant_name;
-
                     // meta
                     this.row.meta_title = (res.data.row.meta) ? res.data.row.meta.meta_title : null;
                     this.row.meta_keywords = (res.data.row.meta) ? res.data.row.meta.meta_keywords : null;
                     this.row.meta_description = (res.data.row.meta) ? res.data.row.meta.meta_description : null;
 
                     // row
-                    this.row.page_title = res.data.row.page_title;
                     this.row.slug = res.data.row.slug;
                     this.row.title = res.data.row.title;
                     this.row.body = res.data.row.body;
@@ -492,11 +480,12 @@
                     // image
                     this.row.image_preview = (res.data.row.image) ? res.data.row.image.image_url : null;
                     this.row.image_base64 = (res.data.row.image) ? res.data.row.image.image_url : null;
-                    this.row.image_alt = (res.data.row.image ) ? res.data.row.image.image_alt : null;
-                    this.row.image_title = (res.data.row.image ) ? res.data.row.image.image_title : null;
+                    this.row.image_alt = (res.data.row.image) ? res.data.row.image.image_alt : null;
+                    this.row.image_title = (res.data.row.image) ? res.data.row.image.image_title : null;
 
                     // status & visiblity
                     this.row.status = res.data.row.status;
+                    this.row.index  = res.data.row.index;
 
                     })
                     .catch(() => {})
@@ -506,15 +495,6 @@
 
             // edit Row
             editRow(){
-                if(this.tenant_id == 0) {
-                    
-                    iziToast.warning({
-                        icon: 'ti-alert',
-                        title: 'Wow-man,',
-                        message: 'No tenany selected.'
-                    });
-
-                } else {
                     this.btnLoading = true;
                     this.axios.defaults.headers.common = {
                         'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
@@ -525,14 +505,12 @@
                         url: window.baseURL+'/'+this.refs+'/'+this.$route.params.id,
                         method: 'PUT',
                         data: {
-                            tenant_id: this.tenant_id,
                             // meta 
                             meta_title: this.row.meta_title,
                             meta_keywords: this.row.meta_keywords,
                             meta_description: this.row.meta_description,
 
                             // row
-                            page_title: this.row.page_title,
                             slug: this.row.slug,
                             title: this.row.title,
                             body: this.row.body,
@@ -545,6 +523,7 @@
 
                             // status & visibility
                             status: this.row.status,
+                            index: this.row.index
                         }
                     }
                     this.axios(options, config)
@@ -574,7 +553,6 @@
                             }
                         })
                         .finally(() => {})
-                }
             },
 
             // Title
@@ -612,6 +590,12 @@
                 else
                     this.row.status = 1;
             },
+            onIndex(){
+                if(this.row.index)
+                    this.row.index = 0;
+                else
+                    this.row.index = 1;
+            },
 
             // remove sessions
             removeLocalStorage() {
@@ -620,7 +604,6 @@
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
-                localStorage.removeItem('tenant_id');
             },
 
             // toggleCollapse

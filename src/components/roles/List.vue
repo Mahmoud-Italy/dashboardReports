@@ -10,14 +10,19 @@
 
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize">{{ refs }}
-                        <router-link v-if="permissions.add"
+                        <router-link
                             :to="{ name: 'create-'+refs }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
 
-                        <div class="pull-rights ui-mt-15 pull-right ">
+                        <!-- Role -->
+                        <div class="pull-rights ui-mt-15 pull-right">
+                            <span class="badge badge-md badge-pill badge-success-soft text-lowercase">
+                                {{ auth.role }}
+                            </span>
                         </div>
+                        <!-- End Role -->
                     </h1>
 
                     <!-- Breadcrumb -->

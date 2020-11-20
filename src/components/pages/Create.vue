@@ -10,14 +10,13 @@
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize">{{ refs }}
 
-                        <!-- Tenants -->
-                        <div class="pull-right ui-mt-15">
-                            <span class="btn btn-dark btn-sm">
-                                <span class="btn-icon ti-home mr-2"></span>
-                                <span> {{ tenant_name }} </span>
+                        <!-- Role -->
+                        <div class="pull-rights ui-mt-15 pull-right">
+                            <span class="badge badge-md badge-pill badge-success-soft text-lowercase">
+                                {{ auth.role }}
                             </span>
                         </div>
-                        <!-- End Tenants -->
+                        <!-- End Role -->
 
                     </h1>
 
@@ -142,16 +141,6 @@
                                         data-parent="#accordion">
 
                                 <div class="col-12 pt-3">
-                                    
-                                    <!-- Page Title -->
-                                    <div class="form-group">
-                                        <label for="inputText0">Page Title</label>
-                                        <input class="form-control" 
-                                                id="inputText0" 
-                                                type="text" 
-                                                v-model="row.page_title">
-                                    </div>
-                                    <!-- End Page Title -->
 
                                     <!-- Title -->
                                     <div class="form-group">
@@ -178,14 +167,14 @@
                                     <!-- End Slug -->
 
                                     <!-- Sort -->
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label for="inputText3">Sort</label>
                                         <input class="form-control" 
                                                 id="inputText3" 
                                                 type="number" 
                                                 min="0"
                                                 v-model.number="row.sort">
-                                    </div>
+                                    </div> -->
                                     <!-- End Sort -->
 
                                     <!-- Body -->
@@ -314,6 +303,21 @@
                                                 </div>
                                             </div>
                                             <!-- End Status -->
+                                            <!-- Index -->
+                                            <div class="form-group">
+                                                <div class="custom-control custom-switch mb-2">
+                                                    <input type="checkbox" 
+                                                        class="custom-control-input" 
+                                                        id="customSwitch2" 
+                                                        :checked="row.index"
+                                                        @click="onIndex">
+                                                    <label class="custom-control-label" 
+                                                        for="customSwitch2"
+                                                        v-html="(row.index) ? 'Index' : 'No Index'">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <!-- End Index -->
                                         </div>
                                     </div>
                                 </div>
@@ -393,7 +397,6 @@
                     meta_description: '',
 
                     // row
-                    page_title: '',
                     slug: '',
                     title: '',
                     body: '',
@@ -407,6 +410,7 @@
 
                     // status & visibility
                     status: 1,
+                    index: 0
                 },
                 editor: {
                     api_key: window.editor_apiKey,
@@ -418,9 +422,6 @@
                 pgLoading: false,
                 btnLoading: false,
 
-                // Tenants
-                tenant_id: 0,
-                tenant_name: '',
                 refs: 'pages'
             }
         },
@@ -435,27 +436,11 @@
                 this.auth.access_token = localStorage.getItem('access_token');
             }
 
-            // Tenants
-            if(localStorage.getItem('tenant_id')) {
-                this.tenant_id = localStorage.getItem('tenant_id');
-            }
-            if(localStorage.getItem('tenant_name')) {
-                this.tenant_name = localStorage.getItem('tenant_name');
-            }
         },
         methods: {
      
             // Add New
             addNew(){
-                if(this.tenant_id == 0) {
-                    
-                    iziToast.warning({
-                        icon: 'ti-alert',
-                        title: 'Wow-man,',
-                        message: 'No tenany selected.'
-                    });
-
-                } else {
                     this.btnLoading = true;
                     this.axios.defaults.headers.common = {
                         'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
@@ -486,6 +471,7 @@
 
                             // status & visibility
                             status: this.row.status,
+                            index: this.row.index,
                         }
                     }
                     this.axios(options, config)
@@ -515,7 +501,7 @@
                             }
                         })
                         .finally(() => {})
-                }
+                
             },
 
             // Title
@@ -556,6 +542,12 @@
                     this.row.status = 0;
                 else
                     this.row.status = 1;
+            },
+            onIndex(){
+                if(this.row.index)
+                    this.row.index = 0;
+                else
+                    this.row.index = 1;
             },
 
             // remove sessions

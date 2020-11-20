@@ -10,6 +10,14 @@
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize">{{ refs }}
                         
+                        <!-- Role -->
+                        <div class="pull-rights ui-mt-15 pull-right">
+                            <span class="badge badge-md badge-pill badge-success-soft text-lowercase">
+                                {{ auth.role }}
+                            </span>
+                        </div>
+                        <!-- End Role -->
+                        
                     </h1>
 
                     <!-- Breadcrumb -->
@@ -81,7 +89,7 @@
 
                         <!-- Loading -->
                         <div class="col-12 text-center">
-                            <div v-if="tenantLoading" class="form-group">
+                            <div v-if="permissionLoading" class="form-group">
                                 <div class="mt-5 mb-5 spinner-grow" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
@@ -89,33 +97,31 @@
                         </div>
                         <!-- End Loading -->
 
-                        <!-- Card Tenants -->
-                        <div class="card mt-5"
-                            v-for="(tenant, index) in tenants"
-                            :key="index">
+                        <!-- Card Permissions -->
+                        <div class="card mt-5" v-if="!permissionLoading">
                             <div class="card-body">
                                 <div id="accordion" class="accordion">
-                                    <div :id="'TabTenant'+index" class="card-header">
+                                    <div class="card-header">
                                         <h2 class="h4 card-header-title" 
-                                            @click="collapseToggle('Tenant'+index)"
+                                            @click="collapseToggle('Permissions')"
                                             aria-expanded="false" 
-                                            :aria-controls="'collapseTenant'+index" 
+                                            aria-controls="collapsePermissions" 
                                             data-toggle="collapse"
-                                            :data-target="'#collapseTenant'+index">{{ tenant.name }}
-                                            <span :id="'iconToggleTenant'+index" 
+                                            data-target="#collapsePermissions">Permissions
+                                            <span id="iconTogglePermissions" 
                                                 class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
                                             </span>
                                         </h2>
                                     </div>
-                                    <div :id="'collapseTenant'+index" 
+                                    <div id="collapsePermissions" 
                                         class="collapse" 
-                                        :aria-labelledby="'TabTenant'+index" 
+                                        aria-labelledby="collapsePermissions" 
                                         data-parent="#accordion">
 
                                         <!-- Permissions -->
                                         <div class="col-12 pt-3">
                                             <div class="form-group"
-                                                v-for="(permission, index) in tenant.permissions"
+                                                v-for="(permission, index) in permissions"
                                                 :key="index">
                                                 <h4 class="mb-3 mt-5 ucfirst">{{ index }} </h4>
                                                 <div class="row col-12 text-center">
@@ -149,49 +155,8 @@
                     <!-- ******* SideNavbar ******** -->
                     <div class="col-md-4 mb-5">
 
-                        <!-- NavAuthority -->
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="accordionNav" class="accordion">
-                                    <div id="NavAuthority" class="card-header">
-                                        <h2 class="h4 card-header-title"
-                                            @click="collapseToggle('Authority')"  
-                                            aria-expanded="false" 
-                                            aria-controls="collapseNavAuthority" 
-                                            data-toggle="collapse" 
-                                            data-target="#collapseNavAuthority">Authority
-                                            <span id="iconToggleAuthority" 
-                                                class="ti-angle-up u-sidebar-nav-menu__item-arrow pull-right black">
-                                            </span>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseNavAuthority" 
-                                        class="collapse" 
-                                        aria-labelledby="NavAuthority" 
-                                        data-parent="#accordionNav">
-                                        <div class="col-12 pt-3">
-
-                                        <!-- Authority -->
-                                        <div class="form-group">
-                                            <select class="form-control custom-select"
-                                                v-model="row.authority">
-                                                <option value="">Select Authority</option>
-                                                <option value="1">High Authority</option>
-                                                <option value="0">Low Authority</option>
-                                            </select>
-                                        </div>
-                                        <!-- Authority -->
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End NavAuthority -->
-
-
                         <!-- NavStatus -->
-                        <div class="card mt-5">
+                        <div class="card">
                             <div class="card-body">
                                 <div id="accordionNav" class="accordion">
                                     <div id="NavStatus" class="card-header">
@@ -316,8 +281,8 @@
                     toolbar: window.editor_toolbar,
                 },
 
-                tenants: [],
-                tenantLoading: true,
+                permissions: [],
+                permissionLoading: true,
 
                 pgLoading: false,
                 btnLoading: false,
@@ -336,28 +301,28 @@
                 this.auth.access_token = localStorage.getItem('access_token');
             }
 
-            this.fetchTenants();
+            this.fetchPermissions();
         },
         methods: {
             
 
-            // fetch Tenants
-            fetchTenants() {
+            // fetch Permissions
+            fetchPermissions() {
                 this.tenantLoading = true;
                 this.axios.defaults.headers.common = {
                     'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
                     'Authorization': `Bearer ` + this.auth.access_token,
                 };
                 const options = {
-                    url: window.baseURL+'/tenants',
+                    url: window.baseURL+'/permissions',
                     method: 'GET',
                     data: {},
                     params: {},
                 }
                 this.axios(options)
                 .then(res => {
-                    this.tenantLoading = false;
-                    this.tenants = res.data.rows;
+                    this.permissionLoading = false;
+                    this.permissions = res.data.rows;
                 })
                 .catch(() => {})
                 .finally(() => {});

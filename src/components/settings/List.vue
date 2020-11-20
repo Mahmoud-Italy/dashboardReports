@@ -4,53 +4,24 @@
 
         <!-- Main -->
         <main class="u-main">
-            <Navigation :tenant="tenant_id"></Navigation>
+            <Navigation></Navigation>
 
             <div class="u-content">
                 <div class="u-body min-h-700">
                     <h1 class="h2 mb-2 text-capitalize"> {{ refs }}
-                        <router-link v-if="permissions.add && tenant_id != 0"
+                        <router-link
                             :to="{ name: 'create-'+refs }" 
                             class="btn btn-primary btn-sm btn-pill ui-mt-10 ui-mb-2">
                             <span>Add New</span>
                         </router-link>
                         
-                        <!-- Tenants -->
+                        <!-- Role -->
                         <div class="pull-rights ui-mt-15 pull-right">
-                            <div class="dropdown">
-                                <button type="button" 
-                                    class="btn btn-dark btn-sm dropdown-toggle" 
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true" 
-                                    aria-expanded="false" 
-                                    :disabled="tenantLoading">
-                                    <span class="btn-icon ti-home mr-2"></span>
-                                    <span v-if="!tenantLoading" class="ui-mr5"> {{ tenant_name }}</span>
-                                    <span v-if="tenantLoading">
-                                        <span class="spinner-grow spinner-grow-sm mr-1" 
-                                            role="status" 
-                                            aria-hidden="true">
-                                        </span>Loading...
-                                    </span>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a v-if="auth.role == 'root'"
-                                        class="dropdown-item dropdown-pad" 
-                                        href="javascript:;"
-                                        @click="changeTenant(0, 'All Tenants')"> All Tenants
-                                    </a>
-                                    <a class="dropdown-pad dropdown-item" 
-                                        href="javascript:;"
-                                        v-for="(tenant, index) in tenants"
-                                        :key="index"
-                                        :class="(tenant.authority) ? '' : 'hidden'"
-                                        @click="changeTenant(tenant.id, tenant.name)"> 
-                                           &nbsp; {{ tenant.name }} &nbsp;
-                                    </a>
-                                </div>
-                            </div>
+                            <span class="badge badge-md badge-pill badge-success-soft text-lowercase">
+                                {{ auth.role }}
+                            </span>
                         </div>
-                        <!-- End Tenants -->
+                        <!-- End Role -->
                     </h1>
 
                     
@@ -310,7 +281,7 @@
                                             class="text-decoration-hover black">
                                             <div v-if="row.user" class="align-items-center">
                                                 <img class="u-avatar-xs rounded-circle mr-2"
-                                                    :src="row.user.image.image_url">
+                                                    :src="row.user.image">
                                                 <span class="media-body">{{ row.user.name }}</span>
                                             </div>
                                         </router-link>
@@ -517,12 +488,6 @@
                 edit: false,
                 btn_status: 'Create',
 
-                // Tenants
-                tenant_id: 0,
-                tenant_name: 'All Tenants',
-                tenantLoading: true,
-                tenants: [],
-
                 refs: 'settings'
             }
         },
@@ -556,14 +521,6 @@
                 this.auth.access_token = localStorage.getItem('access_token');
             }
 
-            // Tenants
-            if(localStorage.getItem('tenant_id')) {
-                this.tenant_id = localStorage.getItem('tenant_id');
-            }
-            if(localStorage.getItem('tenant_name')) {
-                this.tenant_name = localStorage.getItem('tenant_name');
-            }
-
             // Status By
             if(this.$route.params.status) {
                 this.status = this.$route.params.status;
@@ -577,7 +534,7 @@
                 this.filter = this.$route.params.filter;
             }
 
-            this.fetchTenants();
+            this.fetchData();
         },
         methods: {
 
@@ -611,62 +568,7 @@
                 this.$router.push({ name: this.refs })
             },
 
-            changeTenant(id, name) {
-                this.tenantLoading = true;
-                this.tenant_id = id;
-                this.tenant_name = name;
-                localStorage.setItem('tenant_id', id);
-                localStorage.setItem('tenant_name', name);
-                this.fetchData('', true);
-            },
-
-            fetchTenants(){
-                this.tenantLoading = true;
-                this.axios.defaults.headers.common = {
-                    'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
-                    'Authorization': `Bearer ` + this.auth.access_token,
-                };
-                const options = {
-                    url: window.baseURL+'/tenants',
-                    method: 'GET',
-                    data: {},
-                    params: {
-                        status: 'active',
-                        paginate: 100
-                    },
-                }
-                this.axios(options)
-                    .then(res => {
-                        this.tenantLoading = false;
-                        this.tenants = res.data.rows;
-
-                        if(this.auth.role != 'root') {
-                            if(!localStorage.getItem('tenant_id')) {
-                                this.tenant_id = res.data.rows[0].id;
-                                this.tenant_name = res.data.rows[0].name;
-                            }
-                        }
-                        this.fetchData('', true); // fetch data
-                    })
-                    .catch(err => {
-                        // 403 Forbidden
-                        if(err.response && err.response.status == 401) {
-                            this.removeLocalStorage();
-                            this.$router.push({ name: 'login' });
-                        } else if(err.response && err.response.status == 403) {
-                            this.$router.push({ name: 'forbidden' });
-                        } else {
-                            this.btnLoading = false;
-                            iziToast.warning({
-                                icon: 'ti-alert',
-                                title: 'Wow-man,',
-                                message: (err.response) ? err.response.data.message : ''+err
-                            });
-                        }
-                    })
-                    .finally(() => {})
-            },
-
+            
             // Fetch Data
             fetchData(page_url, loading=false) {
                 if(loading) { this.dataLoading = true; }
@@ -685,7 +587,6 @@
                     method: 'GET',
                     data: {},
                     params: {
-                        tenant_id: this.tenant_id,
                         status: this.status,
                         filter_by: this.filter_by,
                         filter: this.filter,
@@ -703,7 +604,6 @@
                         this.showLoading = false;
                         this.orderLoading = false;
                         this.authorLoading = false;
-                        this.tenantLoading = false;
                         this.edit = false;
                         this.btn_status = 'Create';
 
@@ -759,7 +659,7 @@
             // Fetch Export to Excel, CSV
             async fetchExport(){
                 const res = await 
-                    this.axios.post(window.baseURL+'/'+this.refs+'/export?id='+this.selected+'&tenant_id='+this.tenant_id);
+                    this.axios.post(window.baseURL+'/'+this.refs+'/export?id='+this.selected);
                 return res.data.rows;
             },
             startDownload(){
@@ -781,7 +681,6 @@
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_id');
                 localStorage.removeItem('role');
-                localStorage.removeItem('tenant_id');
             },
 
 
@@ -797,15 +696,6 @@
 
             // createOrUpdate
             createOrUpdate() {
-                if(this.tenant_id == 0) {
-                    
-                    iziToast.warning({
-                        icon: 'ti-alert',
-                        title: 'Wow-man,',
-                        message: 'No tenany selected.'
-                    });
-
-                } else {
                     this.btnLoading = true;
                     this.axios.defaults.headers.common = {
                         'X-Requested-With': 'XMLHttpRequest', // security to prevent CSRF attacks
@@ -823,7 +713,6 @@
                         url: window.baseURL+'/'+path,
                         method: type,
                         data: {
-                            tenant_id: this.tenant_id,
                             title: this.row.title,
                             body1: this.row.body1
                         }
@@ -861,7 +750,7 @@
                         }
                     })
                     .finally(() => {});
-                }
+                
             },
         
 
