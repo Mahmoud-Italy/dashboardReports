@@ -1,3 +1,6 @@
+# Demo
+https://www.loom.com/share/53d6174ffd42472298e97074657c3d35
+
 # vue.dashboard
 
 ## Project setup
