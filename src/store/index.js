@@ -33,7 +33,7 @@ export default new Vuex.Store({
     doLogin({ commit }) {
       commit('loginStart');
 
-      axios.post(window.domianName+'/api/v1/dashboard/auth/login', {
+      axios.post(window.domianName+'/api/v1/auth/login', {
         //...loginData
       })
       .then(response => {
